@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eleven Loves — SEO Rank Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f1117;color:#e0e0e0;line-height:1.5}
+a{color:#60a5fa;text-decoration:none}a:hover{text-decoration:underline}
+
+/* Header */
+.header{background:linear-gradient(135deg,#1a1d29 0%,#2d1f3d 50%,#1a2940 100%);padding:24px 36px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.header-inner{max-width:1900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.header h1{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.5px}
+.header h1 span{color:#a78bfa}
+.header-meta{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px}
+.header-meta strong{color:#a78bfa}
+.header-right{display:flex;align-items:center;gap:12px}
+
+/* Buttons */
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#e0e0e0}
+.btn-outline:hover{border-color:#a78bfa;color:#a78bfa}
+
+/* Container */
+.container{max-width:1900px;margin:0 auto;padding:20px}
+
+/* Source pills row */
+.source-pills{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.source-pill{background:#1e2030;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:10px;min-width:160px}
+.source-pill .dot{width:10px;height:10px;border-radius:50%}
+.source-pill .dot.discovered{background:#a78bfa}
+.source-pill .dot.both{background:#34d399}
+.source-pill .dot.tracked{background:#60a5fa}
+.source-pill .label{font-size:11px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:.5px}
+.source-pill .val{font-size:20px;font-weight:700;color:#fff}
+
+/* KPI Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:20px}
+.kpi-card{background:linear-gradient(135deg,#1e2030 0%,#1a1d29 100%);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.kpi-card.purple::before{background:linear-gradient(90deg,#a78bfa,#7c3aed)}
+.kpi-card.blue::before{background:linear-gradient(90deg,#60a5fa,#3b82f6)}
+.kpi-card.green::before{background:linear-gradient(90deg,#34d399,#10b981)}
+.kpi-card.amber::before{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+.kpi-card.rose::before{background:linear-gradient(90deg,#fb7185,#e11d48)}
+.kpi-card.cyan::before{background:linear-gradient(90deg,#22d3ee,#06b6d4)}
+.kpi-card.teal::before{background:linear-gradient(90deg,#2dd4bf,#14b8a6)}
+.kpi-card h3{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-weight:500}
+.kpi-value{font-size:26px;font-weight:700;color:#fff;line-height:1}
+.kpi-delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;margin-top:5px;padding:2px 7px;border-radius:20px;font-weight:600}
+.kpi-delta.up{background:rgba(16,185,129,0.15);color:#34d399}
+.kpi-delta.down{background:rgba(239,68,68,0.15);color:#f87171}
+.kpi-delta.neutral{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4)}
+
+/* Charts */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.chart-card{background:#1e2030;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px}
+.chart-card h3{font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);margin-bottom:14px}
+.chart-container{position:relative;height:280px}
+
+/* Sections */
+.section{background:#1e2030;border:1px solid rgba(255,255,255,0.06);border-radius:12px;margin-bottom:20px;overflow:hidden}
+.section-header{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.section-header h3{font-size:15px;font-weight:600;color:#fff}
+
+/* Tabs */
+.tab-bar{display:flex;border-bottom:1px solid rgba(255,255,255,0.06);padding:0 20px}
+.tab-btn{padding:12px 18px;background:transparent;border:none;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;border-bottom:2px solid transparent;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.tab-btn:hover{color:rgba(255,255,255,0.7)}
+.tab-btn.active{color:#a78bfa;border-bottom-color:#a78bfa}
+.tab-panel{display:none;padding:0}.tab-panel.active{display:block}
+
+/* Tables */
+.data-table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{background:rgba(255,255,255,0.02);padding:9px 14px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,0.35);font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer;white-space:nowrap;user-select:none}
+.data-table th:hover{color:#a78bfa}
+.data-table th.sorted-asc::after{content:' ▲';color:#a78bfa}
+.data-table th.sorted-desc::after{content:' ▼';color:#a78bfa}
+.data-table td{padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.03);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.data-table tr:hover{background:rgba(167,139,250,0.03)}
+.kw-name{color:#fff;font-weight:500}
+.url-cell{color:rgba(255,255,255,0.3);font-size:11px}
+.url-cell a{color:#60a5fa;text-decoration:none}.url-cell a:hover{text-decoration:underline}
+
+/* Position styling */
+.pos-cell{font-weight:700;font-size:13px}
+.pos-cell.p1-3{color:#34d399}.pos-cell.p4-10{color:#60a5fa}.pos-cell.p11-20{color:#fbbf24}.pos-cell.p21-50{color:#fb923c}.pos-cell.p51-100{color:#f87171}.pos-cell.p100{color:rgba(255,255,255,0.15)}
+.pos-up{color:#34d399;font-weight:600}.pos-down{color:#f87171;font-weight:600}.pos-new{color:#60a5fa;font-weight:600}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+.badge.transactional{background:rgba(16,185,129,0.12);color:#34d399}
+.badge.informational{background:rgba(96,165,250,0.12);color:#60a5fa}
+.badge.commercial{background:rgba(251,191,36,0.12);color:#fbbf24}
+.badge.navigational{background:rgba(167,139,250,0.12);color:#a78bfa}
+.badge.unknown{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.3)}
+
+.source-badge{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+.source-badge.discovered{background:rgba(167,139,250,0.12);color:#a78bfa}
+.source-badge.both{background:rgba(52,211,153,0.12);color:#34d399}
+.source-badge.tracked-only{background:rgba(96,165,250,0.12);color:#60a5fa}
+
+.serp-tag{display:inline-block;padding:1px 5px;border-radius:3px;font-size:9px;margin:1px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4)}
+.serp-tag.people_also_ask{background:rgba(96,165,250,0.12);color:#60a5fa}
+.serp-tag.video{background:rgba(239,68,68,0.12);color:#f87171}
+.serp-tag.images{background:rgba(52,211,153,0.12);color:#34d399}
+.serp-tag.ai_overview{background:rgba(167,139,250,0.15);color:#a78bfa}
+.serp-tag.featured_snippet{background:rgba(251,191,36,0.15);color:#fbbf24}
+.serp-tag.popular_products{background:rgba(251,146,60,0.12);color:#fb923c}
+
+/* W&L */
+.wl-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.wl-card{background:#1e2030;border:1px solid rgba(255,255,255,0.06);border-radius:12px;overflow:hidden}
+.wl-card h3{padding:14px 20px 10px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.wl-card h3 .count{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
+.winners h3{color:#34d399}.winners .count{background:rgba(16,185,129,0.12);color:#34d399}
+.losers h3{color:#f87171}.losers .count{background:rgba(239,68,68,0.12);color:#f87171}
+
+/* Filters */
+.filter-bar{background:#1e2030;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:3px}
+.filter-group label{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.5px}
+.filter-group select,.filter-group input{background:#151722;border:1px solid rgba(255,255,255,0.08);color:#e0e0e0;padding:7px 11px;border-radius:7px;font-size:12px;min-width:130px}
+.filter-group select:focus,.filter-group input:focus{outline:none;border-color:#a78bfa}
+
+/* Pagination */
+.pagination{display:flex;justify-content:center;align-items:center;gap:6px;padding:14px}
+.pagination button{background:#151722;border:1px solid rgba(255,255,255,0.08);color:#e0e0e0;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px}
+.pagination button:hover{border-color:#a78bfa;color:#a78bfa}
+.pagination button.active{background:#a78bfa;color:#fff;border-color:#a78bfa}
+.pagination button:disabled{opacity:.3;cursor:default}
+.pagination .page-info{font-size:11px;color:rgba(255,255,255,0.35)}
+
+/* Summary panel */
+.summary-panel{background:linear-gradient(135deg,#1e2030 0%,#1a1d29 100%);border:1px solid rgba(255,255,255,0.06);border-radius:12px;margin-bottom:20px;overflow:hidden}
+.summary-header{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.summary-header h3{font-size:17px;font-weight:700;color:#fff}
+.summary-header .period{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px}
+.summary-body{padding:16px 24px 24px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.summary-col h4{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,0.35);margin-bottom:10px;font-weight:500}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.summary-row:last-child{border-bottom:none}
+.summary-label{font-size:13px;color:rgba(255,255,255,0.7)}
+.summary-val{font-size:13px;font-weight:600;color:#fff}
+.summary-delta{font-size:11px;font-weight:600;margin-left:8px;padding:1px 6px;border-radius:10px}
+.summary-delta.up{background:rgba(16,185,129,0.12);color:#34d399}
+.summary-delta.down{background:rgba(239,68,68,0.12);color:#f87171}
+.summary-narrative{grid-column:1/-1;background:rgba(255,255,255,0.02);border-radius:10px;padding:16px 20px;margin-top:4px}
+.summary-narrative p{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7}
+.summary-narrative strong{color:#fff}
+.summary-narrative .highlight{color:#a78bfa;font-weight:600}
+.summary-narrative .good{color:#34d399;font-weight:600}
+.summary-narrative .warn{color:#fbbf24;font-weight:600}
+.summary-narrative .bad{color:#f87171;font-weight:600}
+
+/* Tooltips */
+[title]{cursor:help}
+.kpi-card[title]{cursor:help}
+.source-pill[title]{cursor:help}
+.summary-row[title]{cursor:help}
+.chart-card h3[title]{cursor:help;border-bottom:1px dashed rgba(255,255,255,0.15);display:inline}
+.data-table th[title]{cursor:help}
+.filter-group[title]{cursor:help}
+.tab-btn[title]{cursor:pointer}
+
+/* Responsive */
+@media(max-width:1200px){.charts-row,.wl-grid{grid-template-columns:1fr}.three-col{grid-template-columns:1fr}}
+@media(max-width:768px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.source-pills{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>Eleven <span>Loves</span> — Rank Tracker</h1>
+      <div class="header-meta">Domain: <strong>elevenloves.co.uk</strong> &nbsp;|&nbsp; Market: <strong>Google UK</strong> &nbsp;|&nbsp; Data: <strong>DataForSEO Live</strong> &nbsp;|&nbsp; Updated: <strong id="lastUpdated"></strong></div>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-outline" onclick="exportCSV()">&#x2B73; Export CSV</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Source breakdown -->
+  <div class="source-pills" id="sourcePills"></div>
+
+  <!-- KPI Row -->
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <!-- Charts Row 1 -->
+  <div class="charts-row">
+    <div class="chart-card"><h3 title="Tracks two key health indicators over the past 6 months. The purple area shows estimated monthly organic visits (calculated from ranking positions and search volumes). The dashed green line shows how many keywords sit on page 1 (positions 1–10). Both rising together signals strong, sustainable growth.">Estimated Traffic & Top 10 Keywords (6 months)</h3><div class="chart-container"><canvas id="etvChart"></canvas></div></div>
+    <div class="chart-card"><h3 title="Shows how all ranking keywords are distributed across position buckets each month. Watch for keywords migrating upward from red/orange segments into green (top 3) over time. A healthy site shows the green and blue segments growing while lower segments shrink.">Rank Distribution Over Time</h3><div class="chart-container"><canvas id="rankDistChart"></canvas></div></div>
+  </div>
+
+  <!-- Charts Row 2 -->
+  <div class="three-col">
+    <div class="chart-card"><h3 title="A snapshot of where all keywords currently sit. Positions 1–3 capture ~45% of clicks, 4–10 share ~25%, and page 2+ receives very little traffic. The 'Not ranking' segment shows tracked keywords where the site has no top-100 presence.">Current Position Distribution</h3><div class="chart-container"><canvas id="posDistChart"></canvas></div></div>
+    <div class="chart-card"><h3 title="Month-by-month breakdown of keyword movement. 'New' = entered the top 100 for the first time. 'Improved' = moved to a better position. 'Declined' = dropped to a worse position. 'Lost' = fell out of the top 100 entirely. More green than red indicates positive momentum.">Monthly Movement</h3><div class="chart-container"><canvas id="moveChart"></canvas></div></div>
+    <div class="chart-card"><h3 title="Shows how many keywords trigger special SERP features beyond the standard 10 blue links. Features like People Also Ask, videos, images, AI overviews, and product packs change the click distribution on the results page and present additional ranking opportunities.">SERP Features Landscape</h3><div class="chart-container"><canvas id="serpChart"></canvas></div></div>
+  </div>
+
+  <!-- February Performance Summary -->
+  <div class="summary-panel" id="summaryPanel"></div>
+
+  <!-- Winners & Losers -->
+  <div class="wl-grid">
+    <div class="wl-card winners">
+      <h3 title="Keywords with the biggest positive ranking improvements this month, weighted by search volume. High-volume keywords that jump multiple positions appear first because they deliver the most traffic impact.">&#9650; Biggest Winners <span class="count" id="wCount"></span></h3>
+      <table class="data-table"><thead><tr><th title="The search query being tracked in Google UK.">Keyword</th><th title="Average monthly search volume from Google Ads data for the UK market.">Volume</th><th title="Current Google UK organic ranking position (1 = top result).">Pos</th><th title="Number of positions gained since last month. Higher numbers indicate stronger improvement.">Change</th><th title="Where this keyword was found — Discovered (DataForSEO only), Both (tracked + DataForSEO), or Tracked Only (your CSV list).">Source</th><th title="The specific URL on elevenloves.co.uk that ranks for this keyword.">URL</th></tr></thead><tbody id="wBody"></tbody></table>
+    </div>
+    <div class="wl-card losers">
+      <h3 title="Keywords with the biggest ranking drops this month, weighted by search volume. High-volume keywords that fall multiple positions appear first because they represent the most traffic lost.">&#9660; Biggest Losers <span class="count" id="lCount"></span></h3>
+      <table class="data-table"><thead><tr><th title="The search query being tracked in Google UK.">Keyword</th><th title="Average monthly search volume from Google Ads data for the UK market.">Volume</th><th title="Current Google UK organic ranking position (1 = top result).">Pos</th><th title="Number of positions lost since last month. Higher numbers indicate steeper declines.">Change</th><th title="Where this keyword was found — Discovered (DataForSEO only), Both (tracked + DataForSEO), or Tracked Only (your CSV list).">Source</th><th title="The specific URL on elevenloves.co.uk that ranks for this keyword.">URL</th></tr></thead><tbody id="lBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- Tabbed Section: Keywords / Landing Pages / Clusters -->
+  <div class="section">
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="keywords" title="Full keyword-level table with every tracked and discovered keyword. Filter, sort, and search across all ranking data.">All Keywords</button>
+      <button class="tab-btn" data-tab="pages" title="Performance grouped by landing page URL. See which pages drive the most organic traffic and what keywords they rank for.">Top Landing Pages</button>
+      <button class="tab-btn" data-tab="clusters" title="Performance grouped by topical keyword cluster. See how entire topic areas perform rather than individual keywords.">Cluster Performance</button>
+    </div>
+
+    <!-- TAB: Keywords -->
+    <div class="tab-panel active" id="tab-keywords">
+      <div class="filter-bar">
+        <div class="filter-group" title="Type any text to filter the keyword list in real time. Matches against the keyword name."><label>Search</label><input type="text" id="fSearch" placeholder="Filter keywords..."></div>
+        <div class="filter-group" title="Filter by current ranking position bucket. 'Top 3' shows positions 1–3, 'Page 1' shows 1–10, etc. 'Not ranking' shows keywords with no top-100 presence."><label>Position</label><select id="fPos"><option value="all">All</option><option value="1-3">Top 3</option><option value="1-10">Page 1</option><option value="11-20">Page 2</option><option value="21-50">21-50</option><option value="51-100">51-100</option><option value="101">Not ranking</option></select></div>
+        <div class="filter-group" title="Filter by data source. 'Discovered' = found by DataForSEO only. 'Both' = in your tracked list AND confirmed by DataForSEO. 'Tracked Only' = in your CSV but not currently ranking."><label>Source</label><select id="fSource"><option value="all">All sources</option><option value="Discovered">Discovered (DataForSEO)</option><option value="Both">Both (Tracked + DFS)</option><option value="Tracked Only">Tracked Only</option></select></div>
+        <div class="filter-group" title="Filter by dominant search intent. Transactional = buyer intent. Informational = learning intent. Commercial = comparison/research intent. Only available for keywords in the tracked list."><label>Intent</label><select id="fIntent"><option value="all">All</option><option value="Transactional">Transactional</option><option value="Informational">Informational</option><option value="Commercial">Commercial</option></select></div>
+        <div class="filter-group" title="Filter by ranking movement. 'Improved' = gained positions this month. 'Declined' = lost positions. 'New' = entered the top 100 for the first time."><label>Movement</label><select id="fMove"><option value="all">All</option><option value="up">Improved</option><option value="down">Declined</option><option value="new">New</option></select></div>
+        <div class="filter-group" title="Set a minimum monthly search volume threshold. Only keywords with at least this many monthly searches will be shown. Useful for focusing on high-impact terms."><label>Min Vol</label><input type="number" id="fVol" value="0" style="width:80px"></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="kwTable">
+          <thead><tr>
+            <th data-sort="keyword" title="The exact search query being tracked. Click to sort alphabetically.">Keyword</th>
+            <th data-sort="search_volume" data-type="num" title="Average monthly searches in Google UK from Google Ads data. Reflects how many people search for this term each month. Click to sort.">Volume</th>
+            <th data-sort="position" data-type="num" title="Current organic ranking position in Google UK (1 = top of page 1). A dash means the site does not appear in the top 100 results. Click to sort.">Position</th>
+            <th data-sort="pos_change" data-type="num" title="Position change vs the previous month. Green up arrow = improved (e.g. moved from 15 to 8). Red down arrow = declined. 'NEW' = entered the top 100 for the first time. Click to sort.">Change</th>
+            <th data-sort="etv" data-type="num" title="Estimated monthly organic traffic for this keyword, based on its ranking position and search volume multiplied by the expected click-through rate. Click to sort.">Est Traffic</th>
+            <th data-sort="difficulty" data-type="num" title="Keyword Difficulty score (0–100) from DataForSEO. Indicates how hard it is to rank on page 1 for this keyword. Green (0–19) = easy, Blue (20–39) = moderate, Amber (40–69) = hard, Red (70–100) = very hard. Click to sort.">KD</th>
+            <th data-sort="source" title="Where this keyword was identified. 'Discovered' = found by DataForSEO as a keyword the domain ranks for. 'Both' = in your tracked list AND confirmed ranking by DataForSEO. 'Tracked Only' = in your CSV but not currently ranking. Click to sort.">Source</th>
+            <th title="The dominant search intent behind this keyword. Transactional = user wants to buy. Informational = user wants to learn. Commercial = user is comparing/researching before buying. Navigational = user is looking for a specific site.">Intent</th>
+            <th title="Special result types that appear on the Google results page for this keyword, such as People Also Ask boxes, video carousels, image packs, AI overviews, featured snippets, and product listings. These features change the click distribution.">SERP Features</th>
+            <th title="The specific page on elevenloves.co.uk that Google is ranking for this keyword. This is the landing page that receives the organic traffic.">URL</th>
+          </tr></thead>
+          <tbody id="kwBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="kwPag"></div>
+    </div>
+
+    <!-- TAB: Landing Pages -->
+    <div class="tab-panel" id="tab-pages">
+      <div style="overflow-x:auto;padding:0">
+        <table class="data-table">
+          <thead><tr><th title="The specific URL on elevenloves.co.uk that Google ranks for one or more keywords. Pages are sorted by estimated traffic — the highest-traffic pages appear first.">Landing Page</th><th title="Total number of keywords this page ranks for in the top 100. A high count means the page has broad topical relevance.">Keywords</th><th title="How many of this page's keywords rank on page 1 (positions 1–10). A high ratio of top-10 keywords to total keywords indicates a strong, authoritative page.">In Top 10</th><th title="Combined estimated monthly organic visits across all keywords this page ranks for. Calculated from search volumes and position-based CTR rates.">Est Traffic</th><th title="The highest-volume keywords this page ranks for, showing the position and monthly search volume for each. These are the page's most valuable organic assets.">Top Keywords</th></tr></thead>
+          <tbody id="pagesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: Clusters -->
+    <div class="tab-panel" id="tab-clusters">
+      <div style="overflow-x:auto;padding:0">
+        <table class="data-table">
+          <thead><tr><th title="A topical keyword cluster — a group of related search queries that share the same core topic. Clusters help you see performance at the topic level rather than individual keywords.">Cluster</th><th title="Total number of keywords within this cluster.">Keywords</th><th title="Combined monthly search volume across all keywords in the cluster. Indicates the total search demand for this topic.">Total Volume</th><th title="How many keywords in this cluster rank in positions 1–3. These are the cluster's strongest performers.">Top 3</th><th title="How many keywords in this cluster rank on page 1 (positions 1–10). A high count relative to total keywords means the cluster is well-optimised.">Top 10</th><th title="How many keywords in this cluster rank on pages 1–2 (positions 1–20). Keywords in positions 11–20 are prime candidates for optimisation into the top 10.">Top 20</th><th title="Volume-weighted average ranking position across all keywords in this cluster. Lower is better. A weighted average gives more influence to high-volume keywords.">Avg Pos</th><th title="Combined estimated monthly organic visits from all keywords in this cluster. Shows the traffic value of the entire topic area.">Est Traffic</th></tr></thead>
+          <tbody id="clustersBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="rank_tracker_data.js"></script>
+<script>
+const D = RANK_DATA, m = D.metrics;
+const PER_PAGE = 100;
+let page = 1, sortCol = 'search_volume', sortDir = 'desc', filtered = [...D.keywords];
+
+document.getElementById('lastUpdated').textContent = D.generated;
+
+// --- Source Pills ---
+document.getElementById('sourcePills').innerHTML = [
+  {label:'Total in Dashboard',val:m.total_all,dot:'',tip:'The combined total of all keywords — both from your tracked list and those discovered by DataForSEO that the domain currently ranks for.'},
+  {label:'Ranking (1-100)',val:m.total_ranking,dot:'',tip:'Keywords where elevenloves.co.uk currently holds a position between 1 and 100 in Google UK organic results.'},
+  {label:'Discovered via DataForSEO',val:m.total_discovered,dot:'discovered',tip:'Keywords found by DataForSEO that the domain ranks for, but which were NOT in your original tracked keyword list. These represent organic visibility you may not have been monitoring.'},
+  {label:'In Both Lists',val:m.total_both,dot:'both',tip:'Keywords that appear in both your tracked CSV list AND in the DataForSEO ranked keywords data — confirming the domain is actively ranking for these monitored terms.'},
+  {label:'Tracked Only (from CSV)',val:m.total_tracked_only,dot:'tracked',tip:'Keywords from your original tracked list that DataForSEO does not currently show the domain ranking for (position 100+). These are target keywords where the site has no visible organic presence yet.'},
+].map(s=>`<div class="source-pill" title="${s.tip}">${s.dot?`<div class="dot ${s.dot}"></div>`:''}<div><div class="label">${s.label}</div><div class="val">${s.val.toLocaleString()}</div></div></div>`).join('');
+
+// --- KPIs ---
+document.getElementById('kpiGrid').innerHTML = [
+  {l:'Visibility',v:m.visibility+'%',cls:'purple',tip:'CTR-weighted visibility score. Calculated by multiplying each keyword\'s search volume by the expected click-through rate at its current position, then dividing by total search volume. A higher percentage means the site captures more of the available clicks across all tracked keywords.'},
+  {l:'Weighted Avg Pos',v:m.weighted_avg_position,cls:'amber',tip:'The average Google ranking position across all keywords, weighted by search volume. High-volume keywords have more influence than low-volume ones. Lower is better — a value of 1.0 would mean ranking #1 for every keyword.'},
+  {l:'Top 3',v:m.top3,d:m.top3_change,cls:'green',tip:'Number of keywords ranking in positions 1–3. These positions receive roughly 40–50% of all clicks on a search results page. The delta shows the change vs the previous month.'},
+  {l:'Top 10',v:m.top10,d:m.top10_change,cls:'cyan',tip:'Number of keywords ranking on page 1 (positions 1–10). Being on page 1 is critical — fewer than 1% of searchers click through to page 2. The delta shows the change vs the previous month.'},
+  {l:'Top 20',v:m.top20,cls:'teal',tip:'Number of keywords ranking on pages 1–2 (positions 1–20). Keywords on page 2 (11–20) are in "striking distance" of page 1 and are prime candidates for optimisation.'},
+  {l:'Est. Traffic',v:m.total_etv.toLocaleString(),d:m.etv_change,cls:'blue',tip:'Estimated monthly organic visits from Google UK. Calculated by multiplying each keyword\'s search volume by the expected CTR at its current ranking position. This is a modelled estimate, not actual analytics data.'},
+  {l:'Winners',v:m.winners_count,cls:'green',tip:'Keywords that improved their ranking position compared to the previous data snapshot. A keyword moving from position 15 to position 8 counts as a winner (gained 7 positions).'},
+  {l:'Losers',v:m.losers_count,cls:'rose',tip:'Keywords that dropped in ranking position compared to the previous data snapshot. A keyword moving from position 5 to position 12 counts as a loser (lost 7 positions).'},
+  {l:'New Rankings',v:m.new_count,cls:'purple',tip:'Keywords where elevenloves.co.uk has entered the top 100 results for the first time in this data period. These represent newly acquired organic visibility.'},
+].map(k=>{
+  let dh='';
+  if(k.d!==undefined&&k.d!==null){const c=k.d>0?'up':k.d<0?'down':'neutral';const a=k.d>0?'&#9650;':k.d<0?'&#9660;':'—';dh=`<div class="kpi-delta ${c}">${a} ${Math.abs(k.d).toLocaleString()}</div>`;}
+  return `<div class="kpi-card ${k.cls}" title="${k.tip}"><h3>${k.l}</h3><div class="kpi-value">${typeof k.v==='number'?k.v.toLocaleString():k.v}</div>${dh}</div>`;
+}).join('');
+
+// --- Chart colours ---
+const C={purple:'rgba(167,139,250,0.8)',blue:'rgba(96,165,250,0.8)',green:'rgba(52,211,153,0.8)',amber:'rgba(251,191,36,0.8)',orange:'rgba(251,146,60,0.8)',red:'rgba(248,113,113,0.8)',gray:'rgba(255,255,255,0.12)',cyan:'rgba(34,211,238,0.8)'};
+Chart.defaults.color='rgba(255,255,255,0.45)';Chart.defaults.borderColor='rgba(255,255,255,0.05)';Chart.defaults.font.family='-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif';
+
+// ETV + Top10 trend
+new Chart(document.getElementById('etvChart'),{type:'line',data:{labels:D.historical.map(h=>h.label),datasets:[
+  {label:'Est. Traffic',data:D.historical.map(h=>h.etv),borderColor:C.purple,backgroundColor:'rgba(167,139,250,0.08)',fill:true,tension:.35,yAxisID:'y',pointRadius:4,pointBackgroundColor:C.purple},
+  {label:'Top 10',data:D.historical.map(h=>h.top10),borderColor:C.green,tension:.35,yAxisID:'y1',borderDash:[5,5],pointRadius:3}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},scales:{y:{position:'left',title:{display:true,text:'Est. Traffic'},grid:{color:'rgba(255,255,255,0.03)'}},y1:{position:'right',title:{display:true,text:'Top 10 KWs'},grid:{display:false}}},plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',boxWidth:6}}}}});
+
+// Rank distribution stacked
+new Chart(document.getElementById('rankDistChart'),{type:'bar',data:{labels:D.historical.map(h=>h.label),datasets:[
+  {label:'#1-3',data:D.historical.map(h=>h.top3),backgroundColor:C.green,stack:'s'},
+  {label:'#4-10',data:D.historical.map(h=>h.pos_4_10),backgroundColor:C.blue,stack:'s'},
+  {label:'#11-20',data:D.historical.map(h=>h.pos_11_20),backgroundColor:C.amber,stack:'s'},
+  {label:'#21-50',data:D.historical.map(h=>h.pos_21_50),backgroundColor:C.orange,stack:'s'},
+  {label:'#51-100',data:D.historical.map(h=>h.pos_51_100),backgroundColor:C.red,stack:'s'},
+]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'Keywords'}}},plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',boxWidth:6}}}}});
+
+// Position donut
+const dl=Object.keys(D.distribution),dv=Object.values(D.distribution);
+new Chart(document.getElementById('posDistChart'),{type:'doughnut',data:{labels:dl,datasets:[{data:dv,backgroundColor:[C.green,C.blue,C.amber,C.orange,C.red,C.gray],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:6,padding:10}}}}});
+
+// Movement bar
+new Chart(document.getElementById('moveChart'),{type:'bar',data:{labels:D.historical.map(h=>h.label),datasets:[
+  {label:'New',data:D.historical.map(h=>h.is_new),backgroundColor:'rgba(96,165,250,0.5)'},
+  {label:'Improved',data:D.historical.map(h=>h.is_up),backgroundColor:'rgba(52,211,153,0.5)'},
+  {label:'Declined',data:D.historical.map(h=>h.is_down),backgroundColor:'rgba(248,113,113,0.5)'},
+  {label:'Lost',data:D.historical.map(h=>h.is_lost),backgroundColor:'rgba(255,255,255,0.08)'},
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'Keywords'}}},plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',boxWidth:6}}}}});
+
+// SERP features
+const sf=D.serp_features,sfl=Object.keys(sf).map(s=>s.replace(/_/g,' ')),sfv=Object.values(sf);
+new Chart(document.getElementById('serpChart'),{type:'bar',data:{labels:sfl,datasets:[{data:sfv,backgroundColor:C.purple,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:{title:{display:true,text:'Keywords'}}},plugins:{legend:{display:false}}}});
+
+// --- February Performance Summary ---
+(function(){
+  const h=D.historical, curr=h[h.length-1], prev=h[h.length-2], three=h.length>=4?h[h.length-4]:h[0];
+  if(!curr||!prev) return;
+
+  const delta=(a,b)=>a-b;
+  const pct=(a,b)=>b===0?0:Math.round((a-b)/b*100);
+  const tag=(v,invert)=>{const pos=invert?v<0:v>0;const cls=pos?'up':'down';const arrow=pos?'&#9650;':'&#9660;';return `<span class="summary-delta ${cls}">${arrow} ${Math.abs(v).toLocaleString()}</span>`;};
+  const tagPct=(v,invert)=>{const pos=invert?v<0:v>0;const cls=pos?'up':'down';const sign=v>0?'+':'';return `<span class="summary-delta ${cls}">${sign}${v}%</span>`;};
+
+  const dTop3=delta(curr.top3,prev.top3);
+  const dTop10=delta(curr.top10,prev.top10);
+  const dTop20=delta(curr.top20,prev.top20);
+  const dEtv=delta(curr.etv,prev.etv);
+  const dCount=delta(curr.count,prev.count);
+
+  // 3-month deltas
+  const d3Top3=delta(curr.top3,three.top3);
+  const d3Top10=delta(curr.top10,three.top10);
+  const d3Etv=delta(curr.etv,three.etv);
+  const d3Count=delta(curr.count,three.count);
+
+  // Build narrative
+  const topKwsImproved=curr.is_up;
+  const topKwsDeclined=curr.is_down;
+  const topKwsNew=curr.is_new;
+  const topKwsLost=curr.is_lost;
+  const netMove=topKwsImproved-topKwsDeclined;
+  const netNew=topKwsNew-topKwsLost;
+
+  let narrativeHTML=`<p><strong>February 2026 Performance Summary</strong></p><p>`;
+
+  // Top-line
+  if(dTop3>0) narrativeHTML+=`Eleven Loves gained <span class="good">+${dTop3} keywords in the top 3</span> month-over-month, bringing the total to <strong>${curr.top3}</strong> — a strong signal of growing authority on core terms. `;
+  else if(dTop3<0) narrativeHTML+=`Top 3 positions dipped by <span class="bad">${Math.abs(dTop3)} keywords</span> to <strong>${curr.top3}</strong>. `;
+  else narrativeHTML+=`Top 3 positions held steady at <strong>${curr.top3}</strong>. `;
+
+  if(dTop10>0) narrativeHTML+=`Page 1 visibility also grew with <span class="good">+${dTop10} keywords</span> now in the top 10 (<strong>${curr.top10}</strong> total). `;
+  else if(dTop10<0) narrativeHTML+=`However, top 10 visibility slipped slightly by <span class="warn">${Math.abs(dTop10)}</span> to <strong>${curr.top10}</strong>. `;
+
+  // ETV
+  if(dEtv>0) narrativeHTML+=`Estimated organic traffic rose by <span class="good">+${dEtv.toLocaleString()}</span> to <strong>${curr.etv.toLocaleString()}</strong> visits/month. `;
+  else narrativeHTML+=`Estimated traffic dipped by <span class="bad">${Math.abs(dEtv).toLocaleString()}</span> to <strong>${curr.etv.toLocaleString()}</strong> visits/month, likely due to seasonal shifts or SERP volatility. `;
+
+  // Movement
+  narrativeHTML+=`</p><p>During February, <span class="good">${topKwsImproved.toLocaleString()} keywords improved</span> positions while <span class="bad">${topKwsDeclined.toLocaleString()} declined</span>`;
+  if(netMove>0) narrativeHTML+=` — a net positive movement of <span class="good">+${netMove.toLocaleString()}</span>. `;
+  else narrativeHTML+=` — a net negative movement of <span class="bad">${netMove.toLocaleString()}</span>. `;
+
+  narrativeHTML+=`<span class="highlight">${topKwsNew.toLocaleString()} new keywords</span> entered the rankings, while ${topKwsLost.toLocaleString()} were lost. `;
+
+  // Footprint
+  if(dCount>0) narrativeHTML+=`The overall keyword footprint ${dCount>0?'grew':'shrank'} by <strong>${Math.abs(dCount).toLocaleString()}</strong> to <strong>${curr.count.toLocaleString()}</strong> ranking keywords. `;
+  else narrativeHTML+=`The total keyword footprint contracted by <strong>${Math.abs(dCount).toLocaleString()}</strong> to <strong>${curr.count.toLocaleString()}</strong> ranking keywords — worth monitoring but not unusual given index fluctuations. `;
+
+  // 3-month trend
+  narrativeHTML+=`</p><p><strong>3-month trend (Dec–Feb):</strong> `;
+  if(d3Top3>0) narrativeHTML+=`Top 3 keywords are up <span class="good">+${d3Top3}</span>. `;
+  else narrativeHTML+=`Top 3 keywords are down <span class="bad">${d3Top3}</span>. `;
+  if(d3Top10>0) narrativeHTML+=`Top 10 keywords up <span class="good">+${d3Top10}</span>. `;
+  else narrativeHTML+=`Top 10 keywords down <span class="bad">${d3Top10}</span>. `;
+  if(d3Etv>0) narrativeHTML+=`Estimated traffic up <span class="good">+${d3Etv.toLocaleString()}</span>. `;
+  else narrativeHTML+=`Estimated traffic down <span class="bad">${Math.abs(d3Etv).toLocaleString()}</span>. `;
+  narrativeHTML+=`Overall, the site is <strong>${d3Top3>0&&d3Etv>0?'trending positively':'showing mixed signals'}</strong> over the quarter.</p>`;
+
+  document.getElementById('summaryPanel').innerHTML=`
+    <div class="summary-header">
+      <div><h3>February 2026 — Monthly Performance</h3><div class="period">vs January 2026 &nbsp;&bull;&nbsp; elevenloves.co.uk &nbsp;&bull;&nbsp; Google UK</div></div>
+    </div>
+    <div class="summary-body">
+      <div>
+        <h4>Month-over-Month Changes</h4>
+        <div class="summary-row" title="Total number of keywords where elevenloves.co.uk appears in the top 100 Google UK results. The delta shows the change compared to last month — a decrease can indicate lost rankings or Google index fluctuations."><span class="summary-label">Ranking Keywords</span><span class="summary-val">${curr.count.toLocaleString()} ${tag(dCount)}</span></div>
+        <div class="summary-row" title="Keywords ranking in positions 1, 2, or 3. These positions receive the vast majority of clicks (~45% combined). Growing this number is the highest-impact SEO goal."><span class="summary-label">Top 3 Positions</span><span class="summary-val">${curr.top3} ${tag(dTop3)}</span></div>
+        <div class="summary-row" title="Keywords appearing on page 1 of Google (positions 1–10). Page 1 captures over 90% of all organic clicks. The delta shows how many keywords entered or left page 1 since last month."><span class="summary-label">Top 10 Positions</span><span class="summary-val">${curr.top10} ${tag(dTop10)}</span></div>
+        <div class="summary-row" title="Keywords ranking on pages 1 and 2 (positions 1–20). Page 2 keywords are considered 'striking distance' — with targeted optimisation they can be pushed onto page 1."><span class="summary-label">Top 20 Positions</span><span class="summary-val">${curr.top20} ${tag(dTop20)}</span></div>
+        <div class="summary-row" title="Estimated organic visits per month based on current ranking positions and keyword search volumes. Uses a CTR model that assigns expected click-through rates to each position (e.g. ~19.6% for position 1, ~2.2% for position 10)."><span class="summary-label">Est. Monthly Traffic</span><span class="summary-val">${curr.etv.toLocaleString()} ${tag(dEtv)}</span></div>
+      </div>
+      <div>
+        <h4>February Movement Breakdown</h4>
+        <div class="summary-row" title="Keywords that moved to a higher (better) ranking position this month compared to last month. For example, a keyword moving from position 12 to position 7 counts as improved."><span class="summary-label">Keywords Improved</span><span class="summary-val" style="color:#34d399">${topKwsImproved.toLocaleString()}</span></div>
+        <div class="summary-row" title="Keywords that dropped to a lower (worse) ranking position this month compared to last month. For example, a keyword moving from position 7 to position 15 counts as declined."><span class="summary-label">Keywords Declined</span><span class="summary-val" style="color:#f87171">${topKwsDeclined.toLocaleString()}</span></div>
+        <div class="summary-row" title="Keywords where elevenloves.co.uk has entered the Google top 100 for the first time this month. This indicates expanding organic visibility into new search queries."><span class="summary-label">New Rankings Gained</span><span class="summary-val" style="color:#60a5fa">${topKwsNew.toLocaleString()}</span></div>
+        <div class="summary-row" title="Keywords where elevenloves.co.uk has dropped out of the top 100 entirely this month. The domain no longer has visible organic presence for these terms."><span class="summary-label">Rankings Lost</span><span class="summary-val" style="color:rgba(255,255,255,0.4)">${topKwsLost.toLocaleString()}</span></div>
+        <div class="summary-row" title="The difference between keywords that improved and keywords that declined. A positive net movement means more keywords are climbing than falling — a sign of healthy forward momentum."><span class="summary-label">Net Movement</span><span class="summary-val">${netMove>0?'+':''}${netMove.toLocaleString()} ${tag(netMove)}</span></div>
+      </div>
+      <div class="summary-narrative">${narrativeHTML}</div>
+    </div>`;
+})();
+
+// --- Winners & Losers ---
+document.getElementById('wCount').textContent=m.winners_count+' improved';
+document.getElementById('lCount').textContent=m.losers_count+' declined';
+function renderWL(data,id,win){
+  document.getElementById(id).innerHTML=data.slice(0,20).map(k=>{
+    const cls=win?'pos-up':'pos-down';const arr=win?'&#9650;':'&#9660;';
+    const pc=getPosClass(k.position);
+    const src=`<span class="source-badge ${k.source.toLowerCase().replace(/ /g,'-')}">${k.source}</span>`;
+    const u=k.url?k.url.replace('https://elevenloves.co.uk','').substring(0,35):'—';
+    return `<tr><td class="kw-name">${k.keyword}</td><td>${k.search_volume.toLocaleString()}</td><td class="pos-cell ${pc}">${k.position>100?'—':k.position}</td><td class="${cls}">${arr} ${Math.abs(k.pos_change)}</td><td>${src}</td><td class="url-cell" title="${k.url}">${u}</td></tr>`;
+  }).join('');
+}
+renderWL(D.winners,'wBody',true);
+renderWL(D.losers,'lBody',false);
+
+// --- Tabs ---
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// --- Landing Pages ---
+document.getElementById('pagesBody').innerHTML=D.top_pages.map(p=>{
+  const kws=p.top_kws.map(k=>`<span style="color:rgba(255,255,255,0.6)">${k.kw}</span> <span class="pos-cell ${getPosClass(k.pos)}" style="font-size:10px">#${k.pos}</span> <span style="color:rgba(255,255,255,0.25);font-size:10px">(${k.vol})</span>`).join(', ');
+  return `<tr><td class="url-cell"><a href="https://elevenloves.co.uk${p.path}" target="_blank">${p.path}</a></td><td>${p.keywords}</td><td>${p.top10}</td><td>${p.etv.toLocaleString()}</td><td style="white-space:normal;max-width:500px;font-size:11px">${kws}</td></tr>`;
+}).join('');
+
+// --- Clusters ---
+document.getElementById('clustersBody').innerHTML=D.top_clusters.map(c=>{
+  const apc=getPosClass(c.avg_pos);
+  return `<tr><td class="kw-name">${c.name}</td><td>${c.count}</td><td>${c.volume.toLocaleString()}</td><td>${c.top3}</td><td>${c.top10}</td><td>${c.top20}</td><td class="pos-cell ${apc}">${c.avg_pos>100?'—':c.avg_pos}</td><td>${c.etv.toLocaleString()}</td></tr>`;
+}).join('');
+
+// --- Keyword Table ---
+function getPosClass(p){if(p<=3)return'p1-3';if(p<=10)return'p4-10';if(p<=20)return'p11-20';if(p<=50)return'p21-50';if(p<=100)return'p51-100';return'p100';}
+function getSerpClass(f){if(f.includes('people_also_ask'))return'people_also_ask';if(f.includes('video'))return'video';if(f.includes('images'))return'images';if(f.includes('ai_overview'))return'ai_overview';if(f.includes('featured_snippet'))return'featured_snippet';if(f.includes('popular_products'))return'popular_products';return'';}
+
+function applyFilters(){
+  const s=document.getElementById('fSearch').value.toLowerCase();
+  const p=document.getElementById('fPos').value;
+  const src=document.getElementById('fSource').value;
+  const intent=document.getElementById('fIntent').value;
+  const mv=document.getElementById('fMove').value;
+  const vol=parseInt(document.getElementById('fVol').value)||0;
+
+  filtered=D.keywords.filter(k=>{
+    if(s&&!k.keyword.toLowerCase().includes(s))return false;
+    if(p!=='all'){if(p==='1-3'&&k.position>3)return false;if(p==='1-10'&&k.position>10)return false;if(p==='11-20'&&(k.position<11||k.position>20))return false;if(p==='21-50'&&(k.position<21||k.position>50))return false;if(p==='51-100'&&(k.position<51||k.position>100))return false;if(p==='101'&&k.position<=100)return false;}
+    if(src!=='all'&&k.source!==src)return false;
+    if(intent!=='all'&&k.intent!==intent)return false;
+    if(mv==='up'&&k.pos_change<=0)return false;if(mv==='down'&&k.pos_change>=0)return false;if(mv==='new'&&!k.is_new)return false;
+    if(k.search_volume<vol)return false;
+    return true;
+  });
+  filtered.sort((a,b)=>{let va=a[sortCol],vb=b[sortCol];if(typeof va==='string'){va=va.toLowerCase();vb=(vb||'').toLowerCase();}if(va<vb)return sortDir==='asc'?-1:1;if(va>vb)return sortDir==='asc'?1:-1;return 0;});
+  page=1;renderKwTable();
+}
+
+function renderKwTable(){
+  const start=(page-1)*PER_PAGE,pd=filtered.slice(start,start+PER_PAGE),tp=Math.ceil(filtered.length/PER_PAGE);
+  document.getElementById('kwBody').innerHTML=pd.map(k=>{
+    const pc=getPosClass(k.position),pt=k.position>100?'—':k.position;
+    let ch='<span style="color:rgba(255,255,255,0.15)">—</span>';
+    if(k.is_new&&k.position<=100)ch='<span class="pos-new">NEW</span>';
+    else if(k.pos_change>0)ch=`<span class="pos-up">&#9650; ${k.pos_change}</span>`;
+    else if(k.pos_change<0)ch=`<span class="pos-down">&#9660; ${Math.abs(k.pos_change)}</span>`;
+    const serp=(k.serp_features||[]).slice(0,4).map(f=>`<span class="serp-tag ${getSerpClass(f)}">${f.replace(/_/g,' ')}</span>`).join('');
+    const ib=k.intent?`<span class="badge ${k.intent.toLowerCase()}">${k.intent}</span>`:'<span class="badge unknown">—</span>';
+    const sb=`<span class="source-badge ${k.source.toLowerCase().replace(/ /g,'-')}">${k.source}</span>`;
+    const u=k.url?`<a href="${k.url}" target="_blank">${k.url.replace('https://elevenloves.co.uk','').substring(0,40)}</a>`:'—';
+    const d=k.difficulty;const dc=d>=70?'#f87171':d>=40?'#fbbf24':d>=20?'#60a5fa':'#34d399';
+    return `<tr><td class="kw-name">${k.keyword}</td><td>${k.search_volume.toLocaleString()}</td><td class="pos-cell ${pc}">${pt}</td><td>${ch}</td><td>${k.etv>0?k.etv.toLocaleString():'—'}</td><td><span style="color:${dc};font-weight:600">${d||'—'}</span></td><td>${sb}</td><td>${ib}</td><td>${serp}</td><td class="url-cell">${u}</td></tr>`;
+  }).join('');
+
+  // Pagination
+  const pg=document.getElementById('kwPag');
+  if(tp<=1){pg.innerHTML='';return;}
+  let h=`<button ${page===1?'disabled':''} onclick="goPage(${page-1})">&#9664; Prev</button>`;
+  let s=Math.max(1,page-3),e=Math.min(tp,s+6);if(e-s<6)s=Math.max(1,e-6);
+  for(let i=s;i<=e;i++)h+=`<button class="${i===page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  h+=`<span class="page-info">${filtered.length.toLocaleString()} keywords</span>`;
+  h+=`<button ${page===tp?'disabled':''} onclick="goPage(${page+1})">Next &#9654;</button>`;
+  pg.innerHTML=h;
+}
+
+function goPage(p){page=p;renderKwTable();document.querySelector('#tab-keywords').scrollIntoView({behavior:'smooth',block:'start'});}
+
+// Sort headers
+document.querySelectorAll('#kwTable th[data-sort]').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const col=th.dataset.sort;
+    if(sortCol===col)sortDir=sortDir==='asc'?'desc':'asc';
+    else{sortCol=col;sortDir=th.dataset.type==='num'?'desc':'asc';}
+    document.querySelectorAll('#kwTable th').forEach(t=>t.classList.remove('sorted-asc','sorted-desc'));
+    th.classList.add(sortDir==='asc'?'sorted-asc':'sorted-desc');
+    applyFilters();
+  });
+});
+
+// Filter events
+['fSearch','fPos','fSource','fIntent','fMove','fVol'].forEach(id=>{
+  document.getElementById(id).addEventListener(id==='fSearch'||id==='fVol'?'input':'change',applyFilters);
+});
+
+// CSV export
+function exportCSV(){
+  const h=['Keyword','Search Volume','Position','Change','Est Traffic','Difficulty','Source','Intent','URL','SERP Features','Tracked'];
+  const rows=filtered.map(k=>[`"${k.keyword.replace(/"/g,'""')}"`,k.search_volume,k.position>100?'':k.position,k.pos_change,k.etv,k.difficulty,k.source,k.intent,`"${k.url||''}"`,`"${(k.serp_features||[]).join(', ')}"`,k.is_tracked?'Yes':'No'].join(','));
+  const csv=h.join(',')+'\n'+rows.join('\n');
+  const b=new Blob([csv],{type:'text/csv'});const u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download='eleven_loves_ranks_'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(u);
+}
+
+applyFilters();
+</script>
+</body>
+</html>
