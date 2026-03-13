@@ -109,6 +109,9 @@
         .content-item.blog{border-color:var(--b);background:#f8fbfe}.content-item.youtube{border-color:#c62828;background:#fef8f8}.content-item.collection{border-color:var(--g);background:#f5faf5}
         .content-item.approved{background:#e8f5e9!important;border-left-color:#2e7d32!important}
         .content-item.rejected{background:#fce4ec!important;border-left-color:#c62828!important;opacity:.65}
+        .role-badge{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-right:4px}
+        .role-hub{background:var(--brand-brown);color:var(--brand-pearl)}.role-spoke{background:var(--brand-beige);color:var(--brand-brown);border:1px solid var(--brand-taupe)}
+        .hub-tag{font-size:10px;color:var(--brand-warm);margin-left:6px}
         .feedback-btns{display:flex;gap:6px;flex-shrink:0}
         .fb-btn{padding:5px 14px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s;letter-spacing:.02em}
         .fb-btn:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.1)}
@@ -417,7 +420,7 @@ const hubSpoke=[
 {title:"Can You Wear a Tulle Skirt Over 50?",type:"blog",status:"broken",url:"/blogs/news/can-you-wear-a-tulle-skirt-over-50 [404]",kw:"tulle skirt over 50 (30)"},
 ]},
 {hub:"Capsule Wardrobe",url:"/collections/capsule-wardrobe-2026",related:["/collections/the-icons","/collections/the-perfects","/collections/officewear"],totalVol:9900,currentTraffic:200,spokes:[
-{title:"How to Find Your Style & Add Personality to a Capsule Wardrobe",type:"blog",status:"upcoming",url:"/blogs/news/how-to-find-your-style-add-personality-to-a-capsule-wardrobe",kw:"capsule wardrobe (9,900), how to find your style (1,600)"},
+{title:"How to Find Your Style & Add Personality to a Capsule Wardrobe",type:"blog",status:"live",url:"/blogs/news/how-to-find-your-style-add-personality-to-a-capsule-wardrobe",kw:"capsule wardrobe (9,900), how to find your style (1,600)"},
 {title:"Capsule Wardrobe 2025 Guide",type:"blog",status:"live",url:"/blogs/news/capsule-wardrobe-2025",kw:"capsule wardrobe 2025"},
 {title:"How to Find Your Style: Step by Step",type:"blog",status:"live",url:"/blogs/news/how-to-find-your-style-a-step-by-step-guide",kw:"how to find your style (1,600)"},
 {title:"Summer Capsule Wardrobe Essentials",type:"blog",status:"new",url:"",kw:"summer capsule wardrobe (480)"},
@@ -438,12 +441,12 @@ const hubSpoke=[
 {title:"Styling Cargo Trousers | Lookbook",type:"video",status:"new",url:"",kw:"cargo trousers outfit ideas"},
 ]},
 {hub:"T-Shirts & Tops",url:"/collections/t-shirts-vests-1",related:["/collections/tops","/collections/boyfriend-t-shirts","/collections/skylar-shoulder-pad-t-shirts","/collections/neat-fit-t-shirts","/collections/slogan-tops","/collections/black-t-shirts","/collections/white-t-shirts","/collections/womens-roll-sleeve-t-shirts","/collections/t-shirts-with-sparkle","/collections/vests","/collections/rib-jersey-vests"],totalVol:18100,currentTraffic:429,spokes:[
-{title:"The Search for the Best White T-Shirt for Women",type:"blog",status:"upcoming",url:"/blogs/news/the-search-for-the-best-white-t-shirt-for-women-ends-here",kw:"best white t shirt for women (480)"},
+{title:"The Search for the Best White T-Shirt for Women",type:"blog",status:"live",url:"/blogs/news/the-search-for-the-best-white-t-shirt-for-women-ends-here",kw:"best white t shirt for women (480)"},
 {title:"How to Style a Shoulder Pad T-Shirt",type:"blog",status:"new",url:"",kw:"shoulder pad t shirt styling"},
 {title:"Why a Boyfriend T-Shirt is a Wardrobe Essential",type:"blog",status:"new",url:"",kw:"boyfriend t shirt (590)"},
 ]},
 {hub:"Denim & Jeans",url:"/collections/womens-jeans",related:["/collections/denim","/collections/shorts","/collections/billie-barrel-legs"],totalVol:2900,currentTraffic:15,spokes:[
-{title:"How to Find the Best Jeans for Women",type:"blog",status:"upcoming",url:"/blogs/news/how-to-find-the-best-jeans-for-women-without-the-stress",kw:"best jeans for women (2,900)"},
+{title:"How to Find the Best Jeans for Women",type:"blog",status:"live",url:"/blogs/news/how-to-find-the-best-jeans-for-women-without-the-stress",kw:"best jeans for women (2,900)"},
 {title:"Barrel Leg vs Wide Leg: Which is Right for You?",type:"blog",status:"new",url:"",kw:"barrel leg jeans, wide leg jeans"},
 ]},
 {hub:"French Style",url:"/collections/womens-french-style",related:["/collections/style-personality-la-parisienne"],totalVol:1500,currentTraffic:352,spokes:[
@@ -452,7 +455,7 @@ const hubSpoke=[
 {title:"How to Achieve Effortless French Style",type:"video",status:"new",url:"",kw:"french style tips"},
 ]},
 {hub:"Knitwear & Layering",url:"/collections/womens-knitwear",related:["/collections/cashmere-blend-jumpers","/collections/alex-crewneck-jumpers","/collections/roll-neck-jumpers","/collections/balloon-sleeve-cardigans","/collections/iggy-sheer-rib-jumper","/collections/scarves"],totalVol:1500,currentTraffic:33,spokes:[
-{title:"The Art of Layering Clothes for Warmth & Style",type:"blog",status:"upcoming",url:"/blogs/news/the-art-of-layering-clothes-for-warmth-style",kw:"layering clothes (1,300)"},
+{title:"The Art of Layering Clothes for Warmth & Style",type:"blog",status:"live",url:"/blogs/news/the-art-of-layering-clothes-for-warmth-style",kw:"layering clothes (1,300)"},
 {title:"Luxury Cashmere Gift Guide",type:"blog",status:"new",url:"",kw:"luxury cashmere scarf (200), cashmere blend (100)"},
 ]},
 {hub:"Sweatshirts",url:"/collections/crewneck-sweatshirts",related:["/collections/regular-fit-sweatshirts","/collections/hoodies","/collections/womens-organic-cotton-slogan-sweatshirts","/collections/black-sweatshirts","/collections/vintage-white-sweatshirts","/collections/womens-red-sweatshirts","/collections/los-angeles-sweatshirts-t-shirts"],totalVol:3620,currentTraffic:586,spokes:[
@@ -519,76 +522,172 @@ const heatData=[
 const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const seasonActions=[
-{season:"Spring (Mar-Apr)",badge:"peak-spring",peak:"Wide Leg Trousers, Cargo Trousers, T-Shirts peak",actions:[
-{dot:"dot-publish",text:"Publish: Wide leg trouser styling guide (Feb)"},
-{dot:"dot-publish",text:"Publish: Best jeans for women blog goes live"},
-{dot:"dot-optimise",text:"Optimise: /collections/wide-leg-trousers + /collections/cargo-trousers"},
-{dot:"dot-publish",text:"Publish: Spring colour outfit guides"},
-{dot:"dot-video",text:"Film: Wide leg trouser lookbook video"},
+{season:"Spring (Mar-May)",badge:"peak-spring",peak:"Wide Leg Trousers, Cargo Trousers, T-Shirts peak",actions:[
+{dot:"dot-publish",text:"Publish: Wide leg trouser styling guide + cargo blog (Mar)"},
+{dot:"dot-optimise",text:"Optimise: /collections/wide-leg-trousers + /collections/cargo-trousers (Mar)"},
+{dot:"dot-video",text:"Film: Wide leg trouser lookbook + jeans fit guide (Apr)"},
+{dot:"dot-publish",text:"Publish: Summer capsule wardrobe + holiday capsule (Apr-May)"},
+{dot:"dot-publish",text:"Publish: Shoulder pad t-shirt styling guide (May)"},
 ]},
-{season:"Summer (May-Jul)",badge:"peak-summer",peak:"Linen trousers, holiday capsule, accessories peak",actions:[
-{dot:"dot-publish",text:"Publish: Summer capsule wardrobe blog (Apr)"},
-{dot:"dot-publish",text:"Publish: Holiday capsule wardrobe blog (Apr-May)"},
-{dot:"dot-publish",text:"Publish: Enamel bracelet styling guide (May)"},
-{dot:"dot-optimise",text:"Optimise: /collections/resortwear + /collections/loungewear"},
-{dot:"dot-video",text:"Film: Holiday capsule wardrobe video"},
+{season:"Summer (Jun-Jul)",badge:"peak-summer",peak:"Linen trousers, holiday capsule, accessories peak",actions:[
+{dot:"dot-publish",text:"Publish: Enamel jewellery + linen trousers styling (May-Jun)"},
+{dot:"dot-optimise",text:"Optimise: /collections/resortwear + /collections/loungewear (Apr-May)"},
+{dot:"dot-video",text:"Film: Holiday capsule wardrobe video (May)"},
+{dot:"dot-publish",text:"Publish: Autumn capsule wardrobe (Jul, ahead of Sep peak)"},
 ]},
 {season:"Autumn (Aug-Oct)",badge:"peak-autumn",peak:"Capsule wardrobe, workwear, knitwear, layering peak",actions:[
-{dot:"dot-publish",text:"Publish: Autumn capsule wardrobe blog (Jul)"},
-{dot:"dot-publish",text:"Publish: Workwear capsule wardrobe blog (Aug)"},
-{dot:"dot-publish",text:"Publish: Layering clothes blog goes live"},
+{dot:"dot-publish",text:"Publish: Workwear capsule wardrobe guide (Aug)"},
 {dot:"dot-optimise",text:"Optimise: /collections/capsule-wardrobe-2026 for Sep peak"},
 {dot:"dot-optimise",text:"Optimise: /collections/tulle for Nov peak (start Sep)"},
-{dot:"dot-video",text:"Film: Autumn capsule wardrobe + layering videos"},
+{dot:"dot-video",text:"Film: Autumn capsule + layering videos (Aug)"},
+{dot:"dot-publish",text:"Publish: Black tulle skirt styling guide (Sep)"},
 ]},
 {season:"Winter (Nov-Dec)",badge:"peak-winter",peak:"Tulle skirts, loungewear, knitwear, party season peak",actions:[
-{dot:"dot-publish",text:"Publish: Black tulle skirt styling guide (Sep)"},
-{dot:"dot-publish",text:"Publish: Party season outfit guide (Oct)"},
+{dot:"dot-publish",text:"Publish: Tulle skirt party + colour guides (Oct)"},
+{dot:"dot-publish",text:"Publish: Party season outfit guide (Oct-Nov)"},
 {dot:"dot-publish",text:"Publish: Cashmere gift guide (Nov)"},
-{dot:"dot-optimise",text:"Optimise: /collections/loungewear for Dec gifting"},
-{dot:"dot-optimise",text:"Optimise: /collections/christmas-gifts + /collections/party"},
-{dot:"dot-video",text:"Film: Tulle skirt styling + loungewear haul videos"},
+{dot:"dot-optimise",text:"Optimise: /collections/loungewear for Dec gifting (Oct-Nov)"},
+{dot:"dot-video",text:"Film: Tulle skirt styling + loungewear haul videos (Oct-Nov)"},
 ]},
 ];
 
 const roadmap=[
-{quarter:"Q1 2026 (Jan-Mar)",items:[
-{type:"blog",title:"How to Find Your Style & Add Personality to a Capsule Wardrobe",timing:"Goes live Jan",kw:"capsule wardrobe (9,900), how to find your style (1,600)",status:"upcoming"},
-{type:"blog",title:"The Search for the Best White T-Shirt for Women",timing:"Goes live Jan-Feb",kw:"best white t shirt for women (480)",status:"upcoming"},
-{type:"collection",title:"Optimise Wide Leg Trousers Collection",timing:"Optimise Jan-Feb (Mar peak)",kw:"womens wide leg trousers (18,100)",status:"new"},
-{type:"collection",title:"Optimise Cargo Trousers Collection",timing:"Optimise Jan-Feb (Mar peak)",kw:"cargo trousers womens (14,800)",status:"new"},
-{type:"blog",title:"How to Find the Best Jeans for Women",timing:"Goes live Feb",kw:"best jeans for women (2,900)",status:"upcoming"},
-{type:"blog",title:"How to Style Wide Leg Trousers",timing:"Publish Feb",kw:"wide leg trouser outfit ideas",status:"new"},
-{type:"youtube",title:"5 Wide Leg Trouser Outfits",timing:"Film & publish Feb",kw:"wide leg trouser outfit ideas",status:"new"},
-{type:"youtube",title:"Best Jeans for Women: Fit Guide",timing:"Film & publish Feb-Mar",kw:"best jeans for women (2,900)",status:"new"},
-{type:"blog",title:"Cargo Trousers: From Utility to Chic",timing:"Publish Mar",kw:"cargo trousers womens uk (1,600)",status:"new"},
+// ===== FEBRUARY (Launched) =====
+{quarter:"February 2026 (Launched)",items:[
+{type:"blog",title:"How to Find Your Style & Add Personality to a Capsule Wardrobe",timing:"Launched Feb",kw:"capsule wardrobe (9,900), how to find your style (1,600)",status:"live",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"The Search for the Best White T-Shirt for Women",timing:"Launched Feb",kw:"best white t shirt for women (480)",status:"live",role:"spoke",hub:"T-Shirts & Tops"},
+{type:"blog",title:"How to Find the Best Jeans for Women",timing:"Launched Feb",kw:"best jeans for women (2,900)",status:"live",role:"spoke",hub:"Denim & Jeans"},
+{type:"blog",title:"The Art of Layering Clothes for Warmth & Style",timing:"Launched Feb",kw:"layering clothes (1,300)",status:"live",role:"spoke",hub:"Knitwear & Layering"},
 ]},
-{quarter:"Q2 2026 (Apr-Jun)",items:[
-{type:"blog",title:"Summer Capsule Wardrobe Essentials",timing:"Publish Apr",kw:"summer capsule wardrobe (480)",status:"new"},
-{type:"blog",title:"Holiday Capsule Wardrobe: Pack Smart",timing:"Publish Apr-May",kw:"capsule wardrobe for holiday (720)",status:"new"},
-{type:"youtube",title:"Holiday Capsule: Pack Light, Look Chic",timing:"Film & publish May",kw:"capsule wardrobe for holiday (720)",status:"new"},
-{type:"blog",title:"Enamel Jewellery Trend: Styling Guide",timing:"Publish May",kw:"enamel bracelet (480)",status:"new"},
-{type:"collection",title:"Optimise Loungewear + Resortwear",timing:"Optimise Apr-May",kw:"loungewear sets, resortwear",status:"live"},
-{type:"blog",title:"Wide Leg Linen Trousers: Summer Styling",timing:"Publish May (Jul peak)",kw:"linen wide leg trousers womens (1,600)",status:"new"},
+// ===== MARCH =====
+{quarter:"March 2026",items:[
+{type:"blog",title:"How to Style Wide Leg Trousers: Complete Guide",timing:"Publish mid-Mar",kw:"how to style wide leg trousers, wide leg trouser outfit ideas",status:"new",role:"spoke",hub:"Wide Leg Trousers"},
+{type:"blog",title:"Cargo Trousers: From Utility to Chic",timing:"Publish mid-Mar",kw:"cargo trousers womens uk (1,600)",status:"new",role:"spoke",hub:"Cargo Trousers"},
+{type:"blog",title:"What Shoes to Wear with Wide Leg Trousers",timing:"Publish Mar",kw:"what shoes to wear with wide leg trousers (1,900)",status:"new",role:"spoke",hub:"Wide Leg Trousers"},
+{type:"blog",title:"How to Style Wide Leg Jeans",timing:"Publish Mar",kw:"how to style wide leg jeans (1,000)",status:"new",role:"spoke",hub:"Denim & Jeans"},
+{type:"blog",title:"Smart Casual Women: The Ultimate Dress Code Guide",timing:"Publish Mar",kw:"smart casual women (22,200)",status:"new",role:"hub",hub:"Smart Casual"},
+{type:"blog",title:"What to Wear to a Christening: Complete Guide",timing:"Publish Mar",kw:"what to wear to a christening (4,400)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Co Ord Sets: How to Style Matching Sets",timing:"Publish Mar",kw:"co ord sets women (12,100)",status:"new",role:"hub",hub:"Loungewear"},
+{type:"blog",title:"Wardrobe Staples Every Woman Needs",timing:"Publish Mar",kw:"wardrobe staples (480)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"Spring Outfit Ideas 2026",timing:"Publish Mar",kw:"spring outfit ideas (480)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"How to Dress for Your Body Shape",timing:"Publish Mar",kw:"how to dress for your body shape (880)",status:"new",role:"spoke",hub:"Style Personality"},
 ]},
-{quarter:"Q3 2026 (Jul-Sep)",items:[
-{type:"blog",title:"Autumn Capsule Wardrobe: What You Need",timing:"Publish Jul (Sep peak)",kw:"autumn capsule wardrobe (480)",status:"new"},
-{type:"blog",title:"The Art of Layering Clothes for Warmth & Style",timing:"Goes live Jul-Aug",kw:"layering clothes (1,300)",status:"upcoming"},
-{type:"collection",title:"Update Capsule Wardrobe 2026 Page",timing:"Optimise Jul-Aug (Sep peak)",kw:"capsule wardrobe 2026 (720)",status:"live"},
-{type:"blog",title:"Workwear Capsule Wardrobe Guide",timing:"Publish Aug",kw:"workwear capsule wardrobe (480)",status:"new"},
-{type:"youtube",title:"Autumn Capsule Wardrobe Essentials",timing:"Film & publish Aug",kw:"autumn capsule wardrobe (480)",status:"new"},
-{type:"youtube",title:"The Art of Layering | Video",timing:"Film & publish Aug-Sep",kw:"layering clothes (1,300)",status:"new"},
-{type:"collection",title:"Prepare Tulle Skirt Collection for Peak",timing:"Optimise Aug-Sep (Nov peak)",kw:"tulle skirt (6,600)",status:"live"},
-{type:"blog",title:"Black Tulle Skirt: Style Guide",timing:"Publish Sep (Nov peak)",kw:"black tulle skirt (1,300)",status:"new"},
+// ===== APRIL =====
+{quarter:"April 2026",items:[
+{type:"blog",title:"Wedding Guest Outfit: The Complete Guide",timing:"Publish Apr",kw:"wedding guest outfit (27,100)",status:"new",role:"hub",hub:"Occasion Guides"},
+{type:"blog",title:"Summer Capsule Wardrobe Essentials",timing:"Publish Apr",kw:"summer capsule wardrobe (480)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"Holiday Capsule Wardrobe: Pack Smart",timing:"Publish Apr",kw:"capsule wardrobe for holiday (720)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"Brunch Outfit Ideas: Effortlessly Chic",timing:"Publish Apr",kw:"brunch outfit (8,100)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"What to Wear with Black Jeans: Complete Guide",timing:"Publish Apr",kw:"what to wear with black jeans (590)",status:"new",role:"spoke",hub:"Denim & Jeans"},
+{type:"blog",title:"Blazer and Jeans: The Perfect Outfit Combo",timing:"Publish Apr",kw:"blazer and jeans outfit (880)",status:"new",role:"spoke",hub:"Blazers & Jackets"},
+{type:"blog",title:"What Colours Suit Me: Find Your Palette",timing:"Publish Apr",kw:"what colours suit me (2,400)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"blog",title:"Sustainable Fashion UK: Your Complete Guide",timing:"Publish Apr",kw:"sustainable fashion uk (170), ethical fashion brands uk (880)",status:"new",role:"hub",hub:"Sustainability"},
+{type:"youtube",title:"5 Wide Leg Trouser Outfits | Lookbook",timing:"Film & publish Apr",kw:"wide leg trouser outfit ideas",status:"new",role:"spoke",hub:"Wide Leg Trousers"},
+{type:"youtube",title:"Best Jeans for Women: Fit Guide",timing:"Film & publish Apr",kw:"best jeans for women (2,900)",status:"new",role:"spoke",hub:"Denim & Jeans"},
 ]},
-{quarter:"Q4 2026 (Oct-Dec)",items:[
-{type:"youtube",title:"How to Style a Tulle Skirt",timing:"Publish Sep-Oct (Nov peak)",kw:"how to style a tulle skirt (170)",status:"new"},
-{type:"blog",title:"Tulle Skirt Outfit Ideas for Party Season",timing:"Publish Oct",kw:"tulle skirt outfit ideas, party outfits",status:"new"},
-{type:"blog",title:"Party Season Outfit Guide",timing:"Publish Oct-Nov",kw:"party outfit ideas, statement skirt",status:"new"},
-{type:"collection",title:"Optimise Loungewear for Gifting",timing:"Optimise Oct-Nov (Dec peak)",kw:"womens loungewear sets (2,900)",status:"live"},
-{type:"youtube",title:"Loungewear Haul: Our Favourite Sets",timing:"Film & publish Nov",kw:"womens loungewear sets uk (2,400)",status:"new"},
-{type:"blog",title:"Luxury Cashmere Gift Guide",timing:"Publish Nov",kw:"luxury cashmere scarf (200)",status:"new"},
-{type:"blog",title:"Tulle Skirts by Colour: Find Your Match",timing:"Publish Oct",kw:"pink tulle skirt (590), white tulle skirt (590)",status:"new"},
+// ===== MAY =====
+{quarter:"May 2026",items:[
+{type:"blog",title:"Date Night Outfit Ideas for Every Occasion",timing:"Publish May",kw:"date night outfit (8,100)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Hen Do Outfits: What to Wear",timing:"Publish May",kw:"hen do outfits (8,100)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"How to Style a Shoulder Pad T-Shirt",timing:"Publish May",kw:"shoulder pad t shirt styling",status:"new",role:"spoke",hub:"T-Shirts & Tops"},
+{type:"blog",title:"Garden Party Outfit Ideas",timing:"Publish May",kw:"garden party outfit (720)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"What to Wear with White Jeans",timing:"Publish May",kw:"what to wear with white jeans (480)",status:"new",role:"spoke",hub:"Denim & Jeans"},
+{type:"blog",title:"Slow Fashion: Why Quality Beats Quantity",timing:"Publish May",kw:"slow fashion (720)",status:"new",role:"spoke",hub:"Sustainability"},
+{type:"blog",title:"Italian Style for Women: Get the Look",timing:"Publish May",kw:"italian style fashion women (390)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"blog",title:"How to Style a Scarf: The Complete Guide",timing:"Publish May",kw:"how to style a scarf (390)",status:"new",role:"spoke",hub:"Knitwear & Layering"},
+{type:"blog",title:"Enamel Jewellery: The New Trend to Know",timing:"Publish May",kw:"enamel bracelet (480)",status:"new",role:"spoke",hub:"Accessories"},
+{type:"youtube",title:"Holiday Capsule: Pack Light, Look Chic",timing:"Film & publish May",kw:"capsule wardrobe for holiday (720)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+]},
+// ===== JUNE =====
+{quarter:"June 2026",items:[
+{type:"blog",title:"Wide Leg Linen Trousers: Summer Styling Guide",timing:"Publish Jun",kw:"linen trousers outfit (590), linen wide leg trousers womens (1,600)",status:"new",role:"spoke",hub:"Wide Leg Trousers"},
+{type:"blog",title:"Summer Wedding Guest Outfit Guide",timing:"Publish Jun",kw:"summer wedding guest outfit (590)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Dopamine Dressing: Add Colour to Your Wardrobe",timing:"Publish Jun",kw:"dopamine dressing (1,900)",status:"new",role:"hub",hub:"Style Guides"},
+{type:"blog",title:"Engagement Party Outfit Ideas",timing:"Publish Jun",kw:"engagement party outfit (1,600)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Monochrome Outfit: The Complete Guide",timing:"Publish Jun",kw:"monochrome outfit (1,600)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"blog",title:"How to Style Joggers and Look Put Together",timing:"Publish Jun",kw:"how to style joggers (110)",status:"new",role:"spoke",hub:"Loungewear"},
+{type:"blog",title:"What to Wear in Italy: Travel Style Guide",timing:"Publish Jun",kw:"what to wear in italy (210)",status:"new",role:"spoke",hub:"French Style"},
+{type:"blog",title:"Eco Friendly Clothing: A Complete Guide",timing:"Publish Jun",kw:"eco friendly clothing (590)",status:"new",role:"spoke",hub:"Sustainability"},
+{type:"blog",title:"Holiday Outfit Ideas: What to Pack",timing:"Publish Jun",kw:"holiday outfit ideas (590)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"youtube",title:"Date Night Lookbook: 5 Outfit Ideas",timing:"Film & publish Jun",kw:"date night outfit (8,100)",status:"new",role:"spoke",hub:"Occasion Guides"},
+]},
+// ===== JULY =====
+{quarter:"July 2026",items:[
+{type:"blog",title:"Autumn Capsule Wardrobe: What You Need",timing:"Publish Jul (Sep peak)",kw:"autumn capsule wardrobe (480)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"Business Casual Women: The Complete Guide",timing:"Publish Jul",kw:"business casual women (3,600)",status:"new",role:"hub",hub:"Workwear"},
+{type:"blog",title:"What to Wear to an Interview: Women's Guide",timing:"Publish Jul",kw:"what to wear to an interview (3,600)",status:"new",role:"spoke",hub:"Workwear"},
+{type:"blog",title:"Scandinavian Style Fashion: Get the Look",timing:"Publish Jul",kw:"scandinavian style fashion (880)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"blog",title:"Oversized Blazer: How to Style It",timing:"Publish Jul",kw:"oversized blazer outfit (170)",status:"new",role:"spoke",hub:"Blazers & Jackets"},
+{type:"blog",title:"Minimalist Wardrobe: The Essential Guide",timing:"Publish Jul",kw:"minimalist wardrobe (480)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"How to Declutter Your Wardrobe",timing:"Publish Jul",kw:"how to declutter your wardrobe (170)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"Pleated Skirt Outfit Ideas for Every Season",timing:"Publish Jul",kw:"pleated skirt outfit (720)",status:"new",role:"spoke",hub:"Tulle Skirts"},
+{type:"blog",title:"Fashion Over 40: Style Tips That Work",timing:"Publish Jul",kw:"fashion over 40 (260)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"youtube",title:"Autumn Capsule Wardrobe Essentials",timing:"Film & publish Jul",kw:"autumn capsule wardrobe (480)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+]},
+// ===== AUGUST =====
+{quarter:"August 2026",items:[
+{type:"blog",title:"Workwear Capsule Wardrobe: The Guide",timing:"Publish Aug",kw:"workwear capsule wardrobe (480)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"Concert Outfit Ideas: What to Wear",timing:"Publish Aug",kw:"concert outfit ideas (2,400)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Graduation Outfit Ideas for Every Ceremony",timing:"Publish Aug",kw:"graduation outfit ideas (1,300)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"What to Wear to Afternoon Tea",timing:"Publish Aug",kw:"what to wear to afternoon tea (1,000)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Old Money Aesthetic: How to Get the Look",timing:"Publish Aug",kw:"old money aesthetic (1,600)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"blog",title:"Theatre Outfit: What to Wear",timing:"Publish Aug",kw:"theatre outfit (590)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"How to Look Put Together Every Day",timing:"Publish Aug",kw:"how to look put together (90)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"blog",title:"Wardrobe Essentials: The Only Pieces You Need",timing:"Publish Aug",kw:"wardrobe essentials women (320)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"youtube",title:"The Art of Layering | Video Guide",timing:"Film & publish Aug",kw:"layering clothes (1,300)",status:"new",role:"spoke",hub:"Knitwear & Layering"},
+{type:"youtube",title:"Smart Casual Lookbook: 7 Outfits",timing:"Film & publish Aug",kw:"smart casual women (22,200)",status:"new",role:"spoke",hub:"Smart Casual"},
+]},
+// ===== SEPTEMBER =====
+{quarter:"September 2026",items:[
+{type:"blog",title:"Black Tulle Skirt: Complete Style Guide",timing:"Publish Sep (Nov peak)",kw:"black tulle skirt (1,300)",status:"new",role:"spoke",hub:"Tulle Skirts"},
+{type:"blog",title:"Autumn Outfit Ideas 2026: What to Wear",timing:"Publish Sep",kw:"autumn outfit ideas (1,000)",status:"new",role:"hub",hub:"Seasonal Style"},
+{type:"blog",title:"Fashion Trends 2026: Your Complete Guide",timing:"Publish Sep",kw:"fashion trends 2026 (1,000)",status:"new",role:"spoke",hub:"Seasonal Style"},
+{type:"blog",title:"Smart Casual Dress Code: What It Really Means",timing:"Publish Sep",kw:"smart casual dress code women (1,900)",status:"new",role:"spoke",hub:"Smart Casual"},
+{type:"blog",title:"What to Wear to the Races: Complete Guide",timing:"Publish Sep",kw:"what to wear to races (1,300)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Ethical Fashion Brands UK: Our Top Picks",timing:"Publish Sep",kw:"ethical fashion brands uk (880)",status:"new",role:"spoke",hub:"Sustainability"},
+{type:"blog",title:"How to Style a Maxi Skirt",timing:"Publish Sep",kw:"how to style a maxi skirt (390)",status:"new",role:"spoke",hub:"Tulle Skirts"},
+{type:"blog",title:"Colour Blocking: How to Wear Bold Colours",timing:"Publish Sep",kw:"colour blocking outfits (210)",status:"new",role:"spoke",hub:"Style Guides"},
+{type:"blog",title:"How to Wear a Skirt in Winter",timing:"Publish Sep (ahead of winter)",kw:"how to wear a skirt in winter (110)",status:"new",role:"spoke",hub:"Tulle Skirts"},
+{type:"blog",title:"Winter Outfit Ideas: Stay Warm, Look Chic",timing:"Publish Sep (Nov peak)",kw:"winter outfit ideas (720)",status:"new",role:"spoke",hub:"Seasonal Style"},
+]},
+// ===== OCTOBER =====
+{quarter:"October 2026",items:[
+{type:"blog",title:"Christmas Party Outfit: The Complete Guide",timing:"Publish Oct (Dec peak)",kw:"christmas party outfit (22,200)",status:"new",role:"hub",hub:"Occasion Guides"},
+{type:"blog",title:"New Years Eve Outfit Ideas",timing:"Publish Oct (Dec peak)",kw:"new years eve outfit (5,400)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Black Tie Women: What to Wear",timing:"Publish Oct",kw:"black tie women (3,600)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Cocktail Dress Code: Your Complete Guide",timing:"Publish Oct",kw:"cocktail dress code (2,900)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Tulle Skirt Outfit Ideas for Party Season",timing:"Publish Oct",kw:"tulle skirt outfit ideas, party outfits",status:"new",role:"spoke",hub:"Tulle Skirts"},
+{type:"blog",title:"Tulle Skirts by Colour: Find Your Match",timing:"Publish Oct",kw:"pink tulle skirt (590), white tulle skirt (590)",status:"new",role:"spoke",hub:"Tulle Skirts"},
+{type:"blog",title:"Birthday Outfit Ideas: What to Wear",timing:"Publish Oct",kw:"birthday outfit ideas (390)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Recycled Fashion: Why It Matters",timing:"Publish Oct",kw:"recycled fashion (320)",status:"new",role:"spoke",hub:"Sustainability"},
+{type:"youtube",title:"How to Style a Tulle Skirt | 5 Outfits",timing:"Film & publish Oct",kw:"how to style a tulle skirt (170)",status:"new",role:"spoke",hub:"Tulle Skirts"},
+{type:"youtube",title:"Party Season Lookbook 2026",timing:"Film & publish Oct",kw:"christmas party outfit (22,200)",status:"new",role:"spoke",hub:"Occasion Guides"},
+]},
+// ===== NOVEMBER =====
+{quarter:"November 2026",items:[
+{type:"blog",title:"Winter Wedding Guest Outfit: Complete Guide",timing:"Publish Nov",kw:"winter wedding guest outfit (18,100)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Mother of the Bride: The Complete Outfit Guide",timing:"Publish Nov",kw:"mother of the bride outfit (27,100)",status:"new",role:"hub",hub:"Occasion Guides"},
+{type:"blog",title:"What to Wear to a Funeral: Women's Guide",timing:"Publish Nov",kw:"what to wear to a funeral woman (2,900)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"Luxury Cashmere Gift Guide",timing:"Publish Nov",kw:"luxury cashmere scarf (200)",status:"new",role:"spoke",hub:"Knitwear & Layering"},
+{type:"blog",title:"How to Style a Crewneck Sweatshirt",timing:"Publish Nov",kw:"crewneck sweatshirt outfit, sweatshirt outfits",status:"new",role:"spoke",hub:"Sweatshirts"},
+{type:"blog",title:"Slogan Sweatshirt: The New Wardrobe Essential",timing:"Publish Nov",kw:"slogan sweatshirt (390)",status:"new",role:"spoke",hub:"Sweatshirts"},
+{type:"blog",title:"Family Photo Outfit Ideas",timing:"Publish Nov",kw:"family photo outfit ideas (480)",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"How to Build a Wardrobe from Scratch",timing:"Publish Nov",kw:"how to build a wardrobe from scratch (90)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"youtube",title:"Loungewear Haul: Our Favourite Sets",timing:"Film & publish Nov",kw:"womens loungewear sets uk (2,400)",status:"new",role:"spoke",hub:"Loungewear"},
+{type:"youtube",title:"Winter Wedding Guest: 5 Outfit Ideas",timing:"Film & publish Nov",kw:"winter wedding guest outfit (18,100)",status:"new",role:"spoke",hub:"Occasion Guides"},
+]},
+// ===== DECEMBER =====
+{quarter:"December 2026",items:[
+{type:"blog",title:"Party Season Outfit Guide: What to Wear",timing:"Publish Dec",kw:"party outfit ideas, statement skirt",status:"new",role:"spoke",hub:"Occasion Guides"},
+{type:"blog",title:"How to Style a Jersey Dress Every Season",timing:"Publish Dec",kw:"how to style a jersey dress (20)",status:"new",role:"spoke",hub:"Dresses"},
+{type:"blog",title:"Maxi Dress Outfit Ideas",timing:"Publish Dec",kw:"maxi dress outfit ideas (30)",status:"new",role:"spoke",hub:"Dresses"},
+{type:"blog",title:"Capsule Wardrobe Over 50: Your Guide",timing:"Publish Dec",kw:"capsule wardrobe over 50 (50)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"blog",title:"Cardigan Outfit Ideas for Layering",timing:"Publish Dec",kw:"cardigan outfit ideas (50)",status:"new",role:"spoke",hub:"Knitwear & Layering"},
+{type:"blog",title:"Classic Style for Women: Timeless Pieces",timing:"Publish Dec",kw:"classic style women (170)",status:"new",role:"spoke",hub:"Style Personality"},
+{type:"blog",title:"Barrel Leg Jeans vs Wide Leg: Which Is for You?",timing:"Publish Dec",kw:"barrel leg jeans outfit (110)",status:"new",role:"spoke",hub:"Denim & Jeans"},
+{type:"blog",title:"New Year New Wardrobe: 2027 Style Preview",timing:"Publish Dec",kw:"fashion trends 2027, wardrobe refresh",status:"new",role:"hub",hub:"Capsule Wardrobe"},
+{type:"youtube",title:"How to Build a Capsule Wardrobe | Full Guide",timing:"Film & publish Dec",kw:"how to build a capsule wardrobe (720)",status:"new",role:"spoke",hub:"Capsule Wardrobe"},
+{type:"youtube",title:"Christmas Gift Guide: Style Edition",timing:"Film & publish Dec",kw:"luxury cashmere scarf, enamel bracelet",status:"new",role:"spoke",hub:"Accessories"},
 ]},
 ];
 
@@ -665,13 +764,13 @@ function renderSeason(){
 
 // Feedback state
 let feedbackData={};
-try{feedbackData=JSON.parse(localStorage.getItem('el_roadmap_feedback')||'{}');}catch(e){}
+try{feedbackData=JSON.parse(localStorage.getItem('el_roadmap_feedback_v2')||'{}');}catch(e){}
 let roadmapFilter='all';
 
 function getItemId(q,idx){return q.replace(/[^a-zA-Z0-9]/g,'')+'_'+idx}
 
 function saveFeedback(){
-    try{localStorage.setItem('el_roadmap_feedback',JSON.stringify(feedbackData));}catch(e){}
+    try{localStorage.setItem('el_roadmap_feedback_v2',JSON.stringify(feedbackData));}catch(e){}
 }
 
 function setFeedback(itemId,decision){
@@ -733,11 +832,13 @@ function renderRoadmap(){
             const stateClass=decision?' '+decision:'';
             const approveSelected=decision==='approved'?' selected':'';
             const rejectSelected=decision==='rejected'?' selected':'';
+            const roleBadge=item.role==='hub'?'<span class="role-badge role-hub">HUB</span>':'<span class="role-badge role-spoke">SPOKE</span>';
+            const hubTag=item.hub?`<span class="hub-tag">&rarr; ${item.hub}</span>`:'';
             return `<div class="content-item ${item.type}${stateClass}" id="item-${itemId}">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
                     <div style="flex:1;min-width:200px">
-                        <span class="spoke-type ${item.type}">${item.type.toUpperCase()}</span>
-                        <strong>${item.title}</strong> ${statusBadge(item.status||'new')}
+                        ${roleBadge}<span class="spoke-type ${item.type}">${item.type.toUpperCase()}</span>
+                        <strong>${item.title}</strong> ${statusBadge(item.status||'new')}${hubTag}
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
                         <div style="font-size:11px;color:#999">${item.timing}</div>
@@ -765,12 +866,12 @@ function exportTbl(id){const t=document.getElementById(id);const rows=[];t.query
 
 // Export feedback
 function exportFeedback(){
-    const rows=[['Quarter','Type','Title','Status','Keywords','Timing','Decision','Note']];
+    const rows=[['Month','Type','Role','Hub','Title','Status','Keywords','Timing','Decision','Note']];
     roadmap.forEach(q=>{
         q.items.forEach((item,idx)=>{
             const itemId=getItemId(q.quarter,idx);
             const fb=feedbackData[itemId]||{};
-            rows.push([q.quarter,item.type,item.title,item.status||'new',item.kw,item.timing,fb.decision||'pending',fb.note||'']);
+            rows.push([q.quarter,item.type,item.role||'spoke',item.hub||'',item.title,item.status||'new',item.kw,item.timing,fb.decision||'pending',fb.note||'']);
         });
     });
     const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
