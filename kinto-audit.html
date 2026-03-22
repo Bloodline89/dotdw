@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KINTO Europe &amp; UK — SEO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --kinto-dark: #333333;
+            --kinto-text: #555555;
+            --kinto-gray: #999999;
+            --kinto-light: #f5f5f3;
+            --kinto-border: #e5e5e3;
+            --kinto-white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Work Sans', -apple-system, sans-serif;
+            font-weight: 400;
+            color: var(--kinto-text);
+            background: var(--kinto-light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page {
+            max-width: 860px;
+            width: 100%;
+            padding: 3rem 2rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+        .header img {
+            height: 32px;
+            opacity: 0.6;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 300;
+            font-size: 2.2rem;
+            color: var(--kinto-dark);
+            letter-spacing: 0.03em;
+            margin-bottom: 0.5rem;
+        }
+        .header p {
+            color: var(--kinto-gray);
+            font-size: 0.88rem;
+            font-weight: 400;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--kinto-white);
+            border: 1px solid var(--kinto-border);
+            border-radius: 6px;
+            padding: 2.5rem 2rem 2rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            border-color: var(--kinto-dark);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+        .card-label {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--kinto-gray);
+            margin-bottom: 1rem;
+        }
+        .card h2 {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 400;
+            font-size: 1.6rem;
+            color: var(--kinto-dark);
+            line-height: 1.25;
+            margin-bottom: 1rem;
+        }
+        .card p {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--kinto-text);
+            flex-grow: 1;
+        }
+        .card-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--kinto-border);
+        }
+        .card-stat {
+            text-align: left;
+        }
+        .card-stat .val {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--kinto-dark);
+            line-height: 1;
+        }
+        .card-stat .lbl {
+            font-size: 0.62rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--kinto-gray);
+            margin-top: 0.25rem;
+        }
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1.5rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--kinto-dark);
+            letter-spacing: 0.03em;
+        }
+        .card-action span {
+            transition: transform 0.2s;
+        }
+        .card:hover .card-action span {
+            transform: translateX(3px);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--kinto-gray);
+            font-size: 0.75rem;
+        }
+        @media (max-width: 640px) {
+            .cards { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <div class="header">
+        <img src="data:image/webp;base64,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" alt="KINTO">
+        <h1>SEO Audit &amp; Keyword Research</h1>
+        <p>kinto-europe.com &nbsp;|&nbsp; kinto-europe.co.uk</p>
+    </div>
+
+    <div class="cards">
+
+        <a class="card" href="https://dotdwconsulting.com/kinto-combined-seo-audit.html">
+            <div class="card-label">Technical SEO Audit</div>
+            <h2>EU &amp; UK Platform Audit</h2>
+            <p>Comprehensive technical SEO audit covering both the EU (.com) and UK (.co.uk) stores. Crawling, hreflang, internal linking, on-page, schema, Core Web Vitals, blog performance, and striking distance analysis.</p>
+            <div class="card-stats">
+                <div class="card-stat">
+                    <div class="val">67</div>
+                    <div class="lbl">Actions</div>
+                </div>
+                <div class="card-stat">
+                    <div class="val">10</div>
+                    <div class="lbl">Sections</div>
+                </div>
+                <div class="card-stat">
+                    <div class="val">12 wk</div>
+                    <div class="lbl">Roadmap</div>
+                </div>
+                <div class="card-stat">
+                    <div class="val">45</div>
+                    <div class="lbl">Exports</div>
+                </div>
+            </div>
+            <div class="card-action">Open Audit <span>&rarr;</span></div>
+        </a>
+
+        <a class="card" href="https://dotdwconsulting.com/kinto-keyword-research.html">
+            <div class="card-label">Keyword Research</div>
+            <h2>Keyword Strategy Dashboard</h2>
+            <p>2,750 keywords across GB, DE, FR, and NL markets. Organised by product clusters and content pillars with hub-and-spoke content opportunities. Filterable by market, cluster, relevance, and ranking status.</p>
+            <div class="card-stats">
+                <div class="card-stat">
+                    <div class="val">2,750</div>
+                    <div class="lbl">Keywords</div>
+                </div>
+                <div class="card-stat">
+                    <div class="val">4</div>
+                    <div class="lbl">Markets</div>
+                </div>
+                <div class="card-stat">
+                    <div class="val">23</div>
+                    <div class="lbl">Clusters</div>
+                </div>
+                <div class="card-stat">
+                    <div class="val">5</div>
+                    <div class="lbl">Content Hubs</div>
+                </div>
+            </div>
+            <div class="card-action">Open Dashboard <span>&rarr;</span></div>
+        </a>
+
+    </div>
+
+    <div class="footer">
+        <p>KINTO Europe &amp; UK &mdash; March 2026</p>
+    </div>
+
+</div>
+</body>
+</html>
