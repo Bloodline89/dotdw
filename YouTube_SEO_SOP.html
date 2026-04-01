@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube SEO SOP | Eleven Loves</title>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --accent-light: #ff6b6b;
+            --success: #00d9a5;
+            --warning: #ffc107;
+            --danger: #e94560;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        header .date {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            display: inline-block;
+            position: relative;
+        }
+
+        nav {
+            background: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        section {
+            background: white;
+            margin: 30px 0;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 30px;
+        }
+
+        .section-header h2 {
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-content {
+            padding: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-critical { background: #ffe0e6; color: #c41e3a; }
+        .badge-high { background: #fff3cd; color: #856404; }
+        .badge-medium { background: #cce5ff; color: #004085; }
+        .badge-low { background: #d4edda; color: #155724; }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-new { background: #e8d5f5; color: #6f42c1; }
+
+        .callout {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .callout-info {
+            background: #cce5ff;
+            border-left: 4px solid #004085;
+        }
+
+        .callout-warning {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+        }
+
+        .callout-success {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+        }
+
+        .callout-new {
+            background: #f3e8ff;
+            border-left: 4px solid #6f42c1;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .summary-card .label {
+            color: var(--gray);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        footer p {
+            opacity: 0.8;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .section-content { padding: 20px; }
+            nav ul { justify-content: flex-start; overflow-x: auto; }
+        }
+
+        @media print {
+            nav { display: none; }
+            section { break-inside: avoid; }
+            .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>YouTube SEO Standard Operating Procedure</h1>
+    <p class="subtitle">Eleven Loves | Video Optimisation Playbook</p>
+    <p class="date">February 2026</p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#pre-production">I. Pre-Production</a></li>
+        <li><a href="#scripting">II. Scripting & Delivery</a></li>
+        <li><a href="#post-production">III. Post-Production & Upload</a></li>
+        <li><a href="#promotion">IV. First 48 Hours</a></li>
+        <li><a href="#ai-optimisation">V. AI & LLM Optimisation</a></li>
+        <li><a href="#measurement">VI. Measurement</a></li>
+        <li><a href="#tools">VII. Tools</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+
+    <!-- Key Metrics -->
+    <section>
+        <div class="section-header">
+            <h2>Key YouTube Ranking Factors (2026)</h2>
+        </div>
+        <div class="section-content">
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="value">Watch Time</div>
+                    <div class="label">#1 ranking signal &mdash; longer engaged viewing = higher rank</div>
+                </div>
+                <div class="summary-card">
+                    <div class="value">Retention</div>
+                    <div class="label">First 30 seconds is the critical window</div>
+                </div>
+                <div class="summary-card">
+                    <div class="value">CTR</div>
+                    <div class="label">Thumbnail + title &mdash; target 4-5%+</div>
+                </div>
+                <div class="summary-card">
+                    <div class="value">Engagement</div>
+                    <div class="label">Likes, comments, shares, subscribes</div>
+                </div>
+                <div class="summary-card">
+                    <div class="value">Session Time</div>
+                    <div class="label">Do viewers stay on YouTube after your video?</div>
+                </div>
+            </div>
+            <div class="callout callout-info">
+                <strong>70% of all watch time now comes from recommendations, not search.</strong> Your videos need to be optimised for both search discovery and recommendation performance.
+            </div>
+        </div>
+    </section>
+
+    <!-- I. Pre-Production -->
+    <section id="pre-production">
+        <div class="section-header">
+            <h2>I. Pre-Production & Planning</h2>
+        </div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Detail & Goal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Keyword Research</strong></td>
+                        <td>Complete keyword research, identifying the primary target keyword and 3-4 supporting keywords.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Video Length</strong></td>
+                        <td>Aim for 8-9 minutes (target 536 seconds) for optimal performance. Videos 8-12 minutes tend to rank best when retention stays high.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Script Generation</strong></td>
+                        <td>Use a clear, detailed prompt with ChatGPT to generate the script.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Script Prompt Format</strong></td>
+                        <td>Request the script in a table format with columns for: <strong>Timestamp, Voiceover</strong> (exact script), <strong>Visual Scene</strong> (what camera shows), <strong>Keywords to Speak</strong>, and <strong>Pattern Break Type</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Script Must Include</strong></td>
+                        <td>The Hook, a CTA, a Session Extension, and be informed by 2026 YouTube SEO best practices.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. Plan Chapters</strong></td>
+                        <td>While scripting, define 4-6 chapter timestamps (e.g., 0:00 Intro, 1:30 First Trend). These will be added to the description after upload.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7. Plan Shorts</strong></td>
+                        <td>Identify 2-3 moments in the script that work as standalone YouTube Shorts (under 60 seconds). Plan these during scripting, not as an afterthought.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- II. Scripting & Delivery -->
+    <section id="scripting">
+        <div class="section-header">
+            <h2>II. Scripting & On-Camera Delivery</h2>
+        </div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Detail & Goal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Hook (0-10s)</strong></td>
+                        <td>The hook must be delivered in the first 0-10 seconds and state a specific outcome for the viewer.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Primary Keyword (first 10s)</strong></td>
+                        <td>Say the primary keyword and any secondary high-priority keywords (e.g., "wearable trends," "2026 fashion") within the first 10 seconds so YouTube understands the topic.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Second Hook (20-30s)</strong></td>
+                        <td>Add a "second hook" or open loop at the 20-30 second mark. This is the critical retention gate &mdash; if viewers get past 30 seconds, they're likely to stay. Example: <em>"But first, there's one trend that completely surprised me..."</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Natural Conversation</strong></td>
+                        <td>After the hook, Hayley should talk naturally about the topic. The algorithm rewards natural, engaging content that keeps viewers watching, not forced keyword repetition.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Pattern Breaks</strong></td>
+                        <td>Include pattern breaks every 20-30 seconds throughout the video to maintain viewer attention.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. Clear Statements for AI</strong></td>
+                        <td>When covering key points, frame them as clear statements or Q&A: <em>"The biggest trend for 2026 is..."</em> or <em>"The best way to style a tulle skirt is..."</em>. AI tools parse transcripts and cite clear, quotable language.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7. CTA (60-70% mark)</strong></td>
+                        <td>Include a specific, question-based CTA at the 60-70% mark of the video. Ask viewers to comment with their answer.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8. Session Extension</strong></td>
+                        <td>Include a prompt at the close of the video to link to the next video in the series.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-warning">
+                <strong>The 30-Second Rule:</strong> YouTube data shows the first 30 seconds determines whether most viewers stay or leave. Your SOP already nails the 0-10s hook &mdash; the second hook at 20-30s locks them in.
+            </div>
+        </div>
+    </section>
+
+    <!-- III. Post-Production & Upload -->
+    <section id="post-production">
+        <div class="section-header">
+            <h2>III. Post-Production & Upload</h2>
+        </div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Detail & Goal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Rename Video File</strong></td>
+                        <td>Rename the final video file with the primary keyword before uploading (e.g., <code>wearable-fashion-trends-2026.mp4</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Title</strong></td>
+                        <td>Include the primary keyword in the first 60 characters. Avoid clickbait. Front-load the keyword as early as possible in the title.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Custom Thumbnail</strong></td>
+                        <td>Design a custom thumbnail: high-contrast, one focal point, readable text. If CTR is below 4-5% after 48 hours, swap the thumbnail immediately.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Description (200-300 words)</strong></td>
+                        <td>Write a 200-300 word description with keywords naturally distributed. Include:
+                            <ul style="margin: 10px 0 0 20px;">
+                                <li>Primary keyword in the first 1-2 sentences</li>
+                                <li>2-3 target keywords + 3-5 related keywords throughout</li>
+                                <li>Relevant external links</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Chapters / Timestamps</strong></td>
+                        <td>Add manual chapter timestamps in the description (planned during pre-production). Must start with <code>0:00</code>. Chapters appear in Google search results and improve CTR.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. Hashtags</strong></td>
+                        <td>Add 3-5 hashtags in the description (e.g., #FashionTrends2026 #TulleSkirt #SustainableFashion). These create clickable topic links and aid discovery.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7. Tags</strong></td>
+                        <td>Add 5-8 tags: primary keyword, 2-3 keyword variations, 1-2 broad category tags. Tags are a minor but confirmed ranking signal.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8. Transcript & Captions</strong></td>
+                        <td>Upload a full transcript and captions. 94% of top-ranking videos have both. Transcripts are now parsed by AI tools (ChatGPT, Gemini, Perplexity) for citation.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9. Cards & End Screens</strong></td>
+                        <td>Add 1-2 cards linking to related videos at key moments mid-video. Add an end screen linking to the next video in the series (reinforces session extension).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10. Playlist / Series</strong></td>
+                        <td>Add the video to the relevant series or playlist for session extension.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11. Pinned Comment</strong></td>
+                        <td>Immediately after upload, pin a comment with a question or CTA to seed engagement and boost the comment signal. Example: <em>"Which trend are you most excited to try? Let me know below!"</em></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- IV. First 48 Hours -->
+    <section id="promotion">
+        <div class="section-header">
+            <h2>IV. First 48-Hour Promotion Window</h2>
+        </div>
+        <div class="section-content">
+            <div class="callout callout-new">
+                <strong>NEW SECTION:</strong> YouTube's algorithm weighs early performance heavily. The first 48 hours after upload are critical for signalling to the algorithm that the video deserves wider distribution.
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Detail & Goal</th>
+                        <th>Timing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Social Share</strong></td>
+                        <td>Share across all social channels (Instagram Stories, TikTok, Facebook) with a direct link to the video.</td>
+                        <td>Within 1 hour of upload</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Email List</strong></td>
+                        <td>Send to email subscribers via Klaviyo. Even a small segment drives early views and watch time.</td>
+                        <td>Within 2 hours of upload</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Embed on Site</strong></td>
+                        <td>Embed the video on a relevant blog post or collection page on elevenloves.co.uk. This also passes SEO value to both the page and the video.</td>
+                        <td>Within 24 hours</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Community Post</strong></td>
+                        <td>Create a YouTube Community post linking to the new video to notify subscribers who may have missed it.</td>
+                        <td>24 hours after upload</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Reply to Comments</strong></td>
+                        <td>Reply to every comment in the first 48 hours. This drives additional engagement signals and encourages more comments.</td>
+                        <td>Ongoing for 48 hours</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. Publish Shorts</strong></td>
+                        <td>Publish the 2-3 planned Shorts clips with links back to the full video in the description.</td>
+                        <td>24-48 hours after upload</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- V. AI & LLM Optimisation -->
+    <section id="ai-optimisation">
+        <div class="section-header">
+            <h2>V. AI & LLM Optimisation (2026)</h2>
+        </div>
+        <div class="section-content">
+            <div class="callout callout-new">
+                <strong>NEW SECTION:</strong> AI tools like Google's Gemini, ChatGPT, and Perplexity now parse video transcripts and captions to understand content. They don't just read titles and tags anymore &mdash; they listen to what's actually said. This is a new optimisation layer for 2026.
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Detail & Goal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Transcript Clarity</strong></td>
+                        <td>Ensure spoken content clearly states topics and directly answers questions. AI tools extract and cite clear, specific language from transcripts.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Structured Spoken Content</strong></td>
+                        <td>Frame key points as clear statements: <em>"The biggest wearable trend for 2026 is..."</em> or <em>"The best way to style a tulle skirt for a wedding is..."</em>. This makes the video citable by AI search engines.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Answer Common Questions</strong></td>
+                        <td>Incorporate natural answers to "People Also Ask" questions related to your topic. AI tools surface videos that directly answer user queries.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Clean Captions</strong></td>
+                        <td>Review auto-generated captions for accuracy. AI tools rely on caption text &mdash; errors mean your content may be misunderstood or ignored.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-success">
+                <strong>Already Working:</strong> Eleven Loves' "How to Style a Tulle Skirt" guide is already the #1 AI-cited page on the site (20 ChatGPT pageviews). Applying these principles to video will compound this advantage.
+            </div>
+        </div>
+    </section>
+
+    <!-- VI. Measurement -->
+    <section id="measurement">
+        <div class="section-header">
+            <h2>VI. Measurement & Iteration</h2>
+        </div>
+        <div class="section-content">
+            <div class="callout callout-new">
+                <strong>NEW SECTION:</strong> Every video should be reviewed against these metrics at set intervals. Use the diagnosis framework below to identify what to fix.
+            </div>
+
+            <h3>Performance Review Schedule</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Target</th>
+                        <th>When to Check</th>
+                        <th>If Below Target</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Click-Through Rate (CTR)</strong></td>
+                        <td>4-5%+</td>
+                        <td>48 hours post-upload</td>
+                        <td>Swap thumbnail immediately. Revise title if needed.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Audience Retention (30s)</strong></td>
+                        <td>70%+ still watching at 30s</td>
+                        <td>1 week</td>
+                        <td>Hook or second hook needs reworking. Review first 30 seconds.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Average View Duration</strong></td>
+                        <td>50%+ of video length</td>
+                        <td>1 week</td>
+                        <td>Content pacing issue. Add more pattern breaks, tighten script.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Impressions</strong></td>
+                        <td>Trending upward</td>
+                        <td>2 weeks</td>
+                        <td>SEO/keyword problem. Check title, description, tags alignment with search demand.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Session Starts</strong></td>
+                        <td>Viewers watching more videos after yours</td>
+                        <td>Monthly</td>
+                        <td>Improve end screen, session extension CTA, and playlist strategy.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Comments</strong></td>
+                        <td>Growing per video</td>
+                        <td>1 week</td>
+                        <td>Strengthen CTA question. Ensure pinned comment is engaging.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Quick Diagnosis Framework</h3>
+            <div class="summary-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                <div class="summary-card" style="border-left: 4px solid var(--danger);">
+                    <div class="value" style="font-size: 1.2em;">Low Impressions?</div>
+                    <div class="label" style="margin-top: 10px;">It's an <strong>SEO problem</strong>. Keywords, title, description, or tags aren't matching search demand.</div>
+                </div>
+                <div class="summary-card" style="border-left: 4px solid var(--warning);">
+                    <div class="value" style="font-size: 1.2em;">Low CTR?</div>
+                    <div class="label" style="margin-top: 10px;">It's a <strong>thumbnail/title problem</strong>. Change the thumbnail first &mdash; this alone can lift CTR 2-5% within 48 hours.</div>
+                </div>
+                <div class="summary-card" style="border-left: 4px solid var(--accent);">
+                    <div class="value" style="font-size: 1.2em;">Low Retention?</div>
+                    <div class="label" style="margin-top: 10px;">It's a <strong>content/pacing problem</strong>. Review the retention graph for drop-off points and add pattern breaks.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VII. Tools -->
+    <section id="tools">
+        <div class="section-header">
+            <h2>VII. Recommended Tools</h2>
+        </div>
+        <div class="section-content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tool Type</th>
+                        <th>Recommended Tool</th>
+                        <th>Detail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Script Generation</strong></td>
+                        <td>ChatGPT</td>
+                        <td>Use a detailed prompt to generate the script outline and content.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transcript & Captions</strong></td>
+                        <td>Descript</td>
+                        <td>Recommended for generating the full transcript and adding captions. Review for accuracy before publishing.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Custom Thumbnails</strong></td>
+                        <td>Canva</td>
+                        <td>10,000+ YouTube templates for design.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI Thumbnail Tool</strong></td>
+                        <td>Midjourney or Gemini (Nano Banana Pro)</td>
+                        <td>Optional AI alternatives for thumbnail concepts.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>YouTube Keyword Research & Tags</strong></td>
+                        <td>TubeBuddy or vidIQ</td>
+                        <td>YouTube-specific keyword research, tag suggestions, competitor analysis, and CTR/retention benchmarking. <span class="badge badge-new">NEW</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <p><strong>Eleven Loves YouTube SEO SOP</strong></p>
+    <p>Version 2.0 | February 2026</p>
+</footer>
+
+</body>
+</html>

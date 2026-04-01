@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Internal Linking Strategy - Eleven Loves</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --gray: #7f8c8d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f6fa;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header .subtitle { opacity: 0.9; font-size: 1.2em; }
+        .header .date { opacity: 0.7; margin-top: 10px; }
+
+        nav {
+            background: var(--primary);
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9em;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover { opacity: 1; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+        section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .section-header h2 { font-size: 1.5em; }
+
+        .section-content { padding: 30px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        tr:hover { background: #f8f9fa; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge-critical { background: #e74c3c; color: white; }
+        .badge-high { background: #f39c12; color: white; }
+        .badge-medium { background: #3498db; color: white; }
+        .badge-info { background: #e8f4fd; color: #0c5460; }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .summary-card .label {
+            color: var(--gray);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .summary-card.warning { border-left: 4px solid var(--warning); }
+        .summary-card.success { border-left: 4px solid var(--success); }
+        .summary-card.danger { border-left: 4px solid var(--danger); }
+
+        .cluster-diagram {
+            background: #1a1a2e;
+            color: #eee;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.8;
+        }
+
+        .cluster-diagram .hub { color: #27ae60; font-weight: bold; }
+        .cluster-diagram .strong { color: #3498db; }
+        .cluster-diagram .warning { color: #f39c12; }
+        .cluster-diagram .critical { color: #e74c3c; }
+
+        .code-block {
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .code-block .comment { color: #636e72; }
+        .code-block .tag { color: #e17055; }
+        .code-block .attr { color: #74b9ff; }
+        .code-block .string { color: #a29bfe; }
+
+        h3 {
+            color: var(--primary);
+            margin: 25px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        h4 {
+            color: var(--primary);
+            margin: 20px 0 10px 0;
+        }
+
+        .anchor-examples {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .anchor-box {
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .anchor-box.bad {
+            background: #ffeaea;
+            border: 1px solid #f8d7da;
+        }
+
+        .anchor-box.good {
+            background: #e8f8f0;
+            border: 1px solid #c3e6cb;
+        }
+
+        .anchor-box h5 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .anchor-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .anchor-box li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .checklist h4 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .checklist ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: var(--gray);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--light);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -30px;
+            width: 24px;
+            height: 24px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .timeline-content h4 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .kpi-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .kpi-card .metric { font-size: 0.8em; color: var(--gray); margin-bottom: 5px; }
+        .kpi-card .current { font-size: 1.5em; font-weight: bold; color: var(--danger); }
+        .kpi-card .target { font-size: 1em; color: var(--success); margin-top: 5px; }
+        .kpi-card .arrow { color: var(--success); }
+
+        .link-table code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            nav ul { gap: 15px; }
+            .anchor-examples { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Semantic Internal Linking Strategy</h1>
+        <div class="subtitle">Collection URLs - elevenloves.co.uk</div>
+        <div class="date">28 January 2026</div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#hierarchy">Hierarchy</a></li>
+            <li><a href="#clusters">Clusters</a></li>
+            <li><a href="#implementation">Implementation</a></li>
+            <li><a href="#anchor-text">Anchor Text</a></li>
+            <li><a href="#action-plan">Action Plan</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Executive Summary -->
+        <section id="summary">
+            <div class="section-header">
+                <h2>Executive Summary</h2>
+            </div>
+            <div class="section-content">
+                <p style="font-size: 1.1em; margin-bottom: 20px;">
+                    This document provides a comprehensive semantic internal linking strategy for Eleven Loves' collection URLs.
+                    The analysis of <strong>448 URLs</strong> reveals significant opportunities to improve internal linking architecture
+                    through topically relevant connections.
+                </p>
+
+                <div class="summary-grid">
+                    <div class="summary-card danger">
+                        <div class="value">78</div>
+                        <div class="label">Collections with only 2-3 inlinks</div>
+                    </div>
+                    <div class="summary-card success">
+                        <div class="value">12</div>
+                        <div class="label">High-authority hub collections</div>
+                    </div>
+                    <div class="summary-card warning">
+                        <div class="value">~65%</div>
+                        <div class="label">Orphaned edit/occasion pages</div>
+                    </div>
+                    <div class="summary-card success">
+                        <div class="value">2.1</div>
+                        <div class="label">Average crawl depth</div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Current State</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Collections with only 2-3 unique inlinks</td>
+                            <td><span class="badge badge-danger">78 collections</span></td>
+                            <td><span class="badge badge-success">&lt;10</span></td>
+                        </tr>
+                        <tr>
+                            <td>High-authority hub collections</td>
+                            <td><span class="badge badge-success">12 identified</span></td>
+                            <td>Leverage for link equity</td>
+                        </tr>
+                        <tr>
+                            <td>Orphaned or weakly-linked collections</td>
+                            <td><span class="badge badge-warning">~65% of edits/occasion pages</span></td>
+                            <td><span class="badge badge-success">&lt;10%</span></td>
+                        </tr>
+                        <tr>
+                            <td>Average collection crawl depth</td>
+                            <td><span class="badge badge-success">2.1</span></td>
+                            <td>Maintain at 1-2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- How Semantic Internal Linking Works -->
+        <section id="how-it-works">
+            <div class="section-header">
+                <h2>How Semantic Internal Linking Works for SEO</h2>
+            </div>
+            <div class="section-content">
+                <p style="font-size: 1.1em; margin-bottom: 25px;">
+                    Semantic internal linking connects pages based on their topical relationships, helping search engines understand your site's content structure and distributing ranking authority throughout your pages.
+                </p>
+
+                <h3>Link Equity Distribution</h3>
+                <p>When one page links to another, it passes a portion of its "link equity" (also called PageRank or link juice) to the target page. Pages with more inbound links from authoritative pages accumulate more equity, signalling to Google that they're important.</p>
+                <div class="checklist">
+                    <ul>
+                        <li><strong>Hub pages</strong> (e.g., /collections/dresses) with many inlinks become authority sources</li>
+                        <li><strong>Spoke pages</strong> (e.g., /collections/maxi-dresses) receive equity when linked from hubs</li>
+                        <li><strong>Orphan pages</strong> with few or no internal links struggle to rank regardless of content quality</li>
+                    </ul>
+                </div>
+
+                <h3>Topical Relevance Signals</h3>
+                <p>Google uses internal links to understand how pages relate to each other topically. When you link related pages together with descriptive anchor text, you create topical clusters that signal expertise in a subject area.</p>
+                <div class="anchor-examples">
+                    <div class="anchor-box good">
+                        <h5>Strong Topical Signal</h5>
+                        <ul>
+                            <li>/collections/dresses → /collections/maxi-dresses<br><small>Parent links to child variant - clear hierarchy</small></li>
+                            <li>/collections/tops → /collections/blouses<br><small>Category links to subcategory - topic reinforcement</small></li>
+                            <li>/collections/workwear → /collections/womens-blazers<br><small>Context links to product type - user intent match</small></li>
+                        </ul>
+                    </div>
+                    <div class="anchor-box bad">
+                        <h5>Weak/No Topical Signal</h5>
+                        <ul>
+                            <li>Homepage → /collections/barrel-leg-trousers<br><small>Direct link from homepage skips hierarchy</small></li>
+                            <li>/collections/party → /collections/loungewear<br><small>No semantic relationship between contexts</small></li>
+                            <li>Footer links to all collections<br><small>Site-wide links dilute relevance signals</small></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Parent-Child Relationships</h3>
+                <p>The most powerful semantic links establish clear parent-child relationships between categories and subcategories. This creates a logical hierarchy that both users and search engines can follow.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Relationship Type</th>
+                            <th>Example</th>
+                            <th>SEO Benefit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-success">Parent → Child</span></td>
+                            <td>/collections/dresses → /collections/maxi-dresses</td>
+                            <td>Passes authority down, establishes hierarchy</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-info">Child → Parent</span></td>
+                            <td>/collections/maxi-dresses → /collections/dresses</td>
+                            <td>Breadcrumb path, confirms hierarchy to crawlers</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-medium">Sibling ↔ Sibling</span></td>
+                            <td>/collections/maxi-dresses ↔ /collections/midi-dresses</td>
+                            <td>Creates topical cluster, cross-pollination of rankings</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-warning">Complementary</span></td>
+                            <td>/collections/dresses → /collections/heels</td>
+                            <td>Style context, captures "complete outfit" intent</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Crawl Depth & Discovery</h3>
+                <p>Search engines discover pages by following links. Pages buried many clicks from the homepage may not be crawled frequently or may be perceived as less important. Effective internal linking keeps important pages within 1-3 clicks of the homepage.</p>
+                <div class="summary-grid">
+                    <div class="summary-card success">
+                        <div class="value">1-2</div>
+                        <div class="label">Ideal click depth for key collections</div>
+                    </div>
+                    <div class="summary-card warning">
+                        <div class="value">3-4</div>
+                        <div class="label">Acceptable for niche subcategories</div>
+                    </div>
+                    <div class="summary-card danger">
+                        <div class="value">5+</div>
+                        <div class="label">Likely to be undervalued or not indexed</div>
+                    </div>
+                </div>
+
+                <h3>Anchor Text Relevance</h3>
+                <p>The clickable text in a link (anchor text) tells search engines what the target page is about. Using descriptive, keyword-relevant anchor text is a direct ranking signal for the linked page.</p>
+                <div class="checklist">
+                    <ul>
+                        <li><strong>"Shop wide leg trousers"</strong> tells Google the target is about wide leg trousers</li>
+                        <li><strong>"Click here"</strong> or <strong>"View more"</strong> provides no topical signal</li>
+                        <li><strong>Varied anchor text</strong> across multiple links is more natural than identical anchors</li>
+                        <li><strong>Over-optimised anchors</strong> (e.g., always "cheap dresses UK") can appear manipulative</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collection Hierarchy -->
+        <section id="hierarchy">
+            <div class="section-header">
+                <h2>Collection Hierarchy Analysis</h2>
+            </div>
+            <div class="section-content">
+                <h3>Tier 1: Primary Hub Collections (High Authority)</h3>
+                <p>These collections have the strongest internal link profiles and should serve as <strong>link equity sources</strong> for lower-tier pages.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Collection URL</th>
+                            <th>Unique Inlinks</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/collections/womens-jeans</code></td>
+                            <td><span class="badge badge-success">795</span></td>
+                            <td>Primary Category Hub</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/tulle</code></td>
+                            <td><span class="badge badge-success">660</span></td>
+                            <td>Signature Product Hub</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/womens-knitwear</code></td>
+                            <td><span class="badge badge-success">639</span></td>
+                            <td>Primary Category Hub</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/blazers-and-jackets</code></td>
+                            <td><span class="badge badge-success">622</span></td>
+                            <td>Primary Category Hub</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/skirts</code></td>
+                            <td><span class="badge badge-success">611</span></td>
+                            <td>Primary Category Hub</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/t-shirts-vests-1</code></td>
+                            <td><span class="badge badge-success">610</span></td>
+                            <td>Primary Category Hub</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/trousers</code></td>
+                            <td><span class="badge badge-success">586</span></td>
+                            <td>Primary Category Hub</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/dresses-jumpsuits</code></td>
+                            <td><span class="badge badge-success">582</span></td>
+                            <td>Primary Category Hub</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Tier 2: Secondary Collections (Medium Authority)</h3>
+                <p>These collections need <strong>incoming links from Tier 1</strong> and should link to Tier 3.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Collection URL</th>
+                            <th>Unique Inlinks</th>
+                            <th>Category Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/collections/womens-cotton-shirts</code></td>
+                            <td><span class="badge badge-medium">20</span></td>
+                            <td>Material Subcategory</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/womens-blazers</code></td>
+                            <td><span class="badge badge-medium">14</span></td>
+                            <td>Product Subcategory</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/boyfriend-t-shirts</code></td>
+                            <td><span class="badge badge-medium">11</span></td>
+                            <td>Style Subcategory</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/black-t-shirts</code></td>
+                            <td><span class="badge badge-medium">11</span></td>
+                            <td>Colour Subcategory</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/tops</code></td>
+                            <td><span class="badge badge-medium">10</span></td>
+                            <td>Product Subcategory</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Tier 3: Tertiary Collections (Low Authority - Need Links)</h3>
+                <p>These <strong>78+ collections</strong> have only 2-3 unique inlinks and require immediate attention.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Collection URL</th>
+                            <th>Unique Inlinks</th>
+                            <th>Issue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #fff5f5;">
+                            <td><code>/collections/vests</code></td>
+                            <td><span class="badge badge-critical">2</span></td>
+                            <td>Subcategory - needs parent</td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td><code>/collections/joggers</code></td>
+                            <td><span class="badge badge-critical">2</span></td>
+                            <td>Product type - isolated</td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td><code>/collections/maxi-dresses</code></td>
+                            <td><span class="badge badge-critical">2</span></td>
+                            <td>Style - needs parent link</td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td><code>/collections/petite-skirts</code></td>
+                            <td><span class="badge badge-critical">2</span></td>
+                            <td>Size category - isolated</td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td><code>/collections/travel-outfits</code></td>
+                            <td><span class="badge badge-critical">2</span></td>
+                            <td>Occasion - isolated</td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td><code>/collections/party</code></td>
+                            <td><span class="badge badge-critical">2</span></td>
+                            <td>Needs links from hub</td>
+                        </tr>
+                        <tr style="background: #fff5f5;">
+                            <td><code>/collections/sale-dresses</code></td>
+                            <td><span class="badge badge-critical">2</span></td>
+                            <td>Sale subcategory - isolated</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Semantic Clusters -->
+        <section id="clusters">
+            <div class="section-header">
+                <h2>Semantic Cluster Mapping</h2>
+            </div>
+            <div class="section-content">
+                <h3>Semantic Relationship Types</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Relationship</th>
+                            <th>Example</th>
+                            <th>Link Direction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Parent → Child</strong></td>
+                            <td>Skirts → Maxi Skirts</td>
+                            <td>Downward</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Child → Parent</strong></td>
+                            <td>Maxi Skirts → Skirts</td>
+                            <td>Upward</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sibling</strong></td>
+                            <td>Maxi Skirts ↔ Mini Skirts</td>
+                            <td>Bidirectional</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Complementary</strong></td>
+                            <td>Tulle Skirts → Tops</td>
+                            <td>Cross-category</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Occasion Match</strong></td>
+                            <td>Party → Sequin Outfits</td>
+                            <td>Thematic</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Cluster 1: Skirts & Tulle (Signature Category)</h3>
+                <div class="cluster-diagram">
+<span class="hub">HUB: /collections/skirts (611 inlinks)</span>
+│
+├── <span class="strong">/collections/tulle (660 inlinks)</span> ←→ CROSS-LINK
+│   ├── <span class="warning">/collections/maxi-skirts (4 inlinks) ⚠️ NEEDS LINKS</span>
+│   ├── <span class="warning">/collections/black-skirts (4 inlinks) ⚠️ NEEDS LINKS</span>
+│   └── /collections/what-to-wear-with-a-tulle-skirt (7 inlinks)
+│
+├── <span class="critical">/collections/petite-skirts (2 inlinks) ⚠️ CRITICAL</span>
+│
+└── Related Outfit Collections:
+    ├── <span class="critical">/collections/outfits-with-the-delphine-skirt (2 inlinks) ⚠️</span>
+    ├── <span class="critical">/collections/styling-the-trophy-skirt (2 inlinks) ⚠️</span>
+    └── <span class="critical">/collections/styling-the-delphine-faux-leather-skirt (2 inlinks) ⚠️</span>
+                </div>
+
+                <h4>Recommended Semantic Links for Skirts Cluster</h4>
+                <table class="link-table">
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Anchor Text</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/collections/skirts</code></td>
+                            <td><code>/collections/tulle</code></td>
+                            <td>"Shop our signature tulle skirts"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/skirts</code></td>
+                            <td><code>/collections/maxi-skirts</code></td>
+                            <td>"Explore maxi skirt styles"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/skirts</code></td>
+                            <td><code>/collections/black-skirts</code></td>
+                            <td>"Classic black skirts"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/tulle</code></td>
+                            <td><code>/collections/what-to-wear-with-a-tulle-skirt</code></td>
+                            <td>"Style inspiration for tulle"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/petite-skirts</code></td>
+                            <td><code>/collections/skirts</code></td>
+                            <td>"Back to all skirts"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Cluster 2: Tops & T-Shirts</h3>
+                <div class="cluster-diagram">
+<span class="hub">HUB: /collections/t-shirts-vests-1 (610 inlinks)</span>
+│
+├── /collections/tops (10 inlinks)
+│   ├── <span class="strong">/collections/slogan-tops (571 inlinks) ✓ STRONG</span>
+│   ├── /collections/white-t-shirts (10 inlinks)
+│   ├── /collections/black-t-shirts (11 inlinks)
+│   └── /collections/plain-t-shirts (9 inlinks)
+│
+├── Style Subcategories:
+│   ├── /collections/boyfriend-t-shirts (11 inlinks)
+│   ├── /collections/neat-fit-t-shirts (10 inlinks)
+│   └── /collections/womens-roll-sleeve-t-shirts (10 inlinks)
+│
+├── <span class="critical">/collections/vests (2 inlinks) ⚠️ CRITICAL</span>
+│   └── /collections/rib-jersey-vests (6 inlinks)
+│
+└── Special Collections:
+    └── <span class="warning">/collections/t-shirts-with-sparkle (3 inlinks) ⚠️</span>
+                </div>
+
+                <h3>Cluster 3: Trousers & Bottoms</h3>
+                <div class="cluster-diagram">
+<span class="hub">HUB: /collections/trousers (586 inlinks)</span>
+│
+├── /collections/bottoms (8 inlinks)
+│   ├── <span class="strong">/collections/womens-jeans (795 inlinks) ✓ STRONG</span>
+│   ├── /collections/shorts (5 inlinks)
+│   └── <span class="critical">/collections/joggers (2 inlinks) ⚠️ CRITICAL</span>
+│
+├── Style Subcategories:
+│   ├── /collections/cargo-trousers (7 inlinks)
+│   ├── /collections/wide-leg-trousers (4 inlinks)
+│   ├── /collections/barrel-leg-trousers (4 inlinks)
+│   └── <span class="critical">/collections/petite-wide-leg-trousers (2 inlinks) ⚠️</span>
+│
+└── Product-Specific Outfits:
+    ├── <span class="critical">/collections/outfits-with-the-billie-barrel-leg-trousers (2 inlinks) ⚠️</span>
+    └── <span class="critical">/collections/outfits-with-the-billie-faux-leather-trousers (2 inlinks) ⚠️</span>
+                </div>
+
+                <h3>Cluster 4: Occasion & Lifestyle Collections</h3>
+                <div class="cluster-diagram">
+<span class="hub">THEME HUBS:</span>
+│
+├── PARTY & EVENTS
+│   ├── <span class="strong">/collections/your-kind-of-party (571 inlinks) ✓ HUB</span>
+│   ├── <span class="critical">/collections/party (2 inlinks) ⚠️ NEEDS LINKS FROM HUB</span>
+│   ├── /collections/party-outfits (5 inlinks)
+│   └── /collections/sequin-outfits (4 inlinks)
+│
+├── WORK & OFFICE
+│   ├── <span class="strong">/collections/officewear (571 inlinks) ✓ HUB</span>
+│   └── /collections/womens-work-blouses (8 inlinks)
+│
+├── TRAVEL & WEEKEND
+│   ├── <span class="strong">/collections/resortwear (571 inlinks) ✓ HUB</span>
+│   ├── <span class="critical">/collections/travel-outfits (2 inlinks) ⚠️ CRITICAL</span>
+│   └── <span class="critical">/collections/weekend-style-favourites (2 inlinks) ⚠️</span>
+│
+└── SEASONAL
+    ├── /collections/autumn-outfits (3 inlinks)
+    └── <span class="critical">/collections/summer-occasion-dressing (2 inlinks) ⚠️</span>
+                </div>
+
+                <h3>Cluster 5: Influencer Edit Collections</h3>
+                <p>These collections have <strong>critically low inlinks</strong> (2 each) and represent a significant linking opportunity.</p>
+
+                <div class="cluster-diagram">
+<span class="critical">EDIT COLLECTIONS (All need links):</span>
+│
+├── /collections/the-claire-lopez-edit (2 inlinks) ⚠️
+├── /collections/the-kat-farmer-edit (2 inlinks) ⚠️
+├── /collections/the-hayley-karseras-edit (2 inlinks) ⚠️
+├── /collections/the-claire-hall-edit (2 inlinks) ⚠️
+├── /collections/the-shelley-jackson-edit (2 inlinks) ⚠️
+├── /collections/the-grace-surguy-edit (2 inlinks) ⚠️
+├── /collections/the-caroline-cook-edit (2 inlinks) ⚠️
+├── /collections/the-gayle-rinkoff-edit (2 inlinks) ⚠️
+├── /collections/the-abi-norman-edit (2 inlinks) ⚠️
+└── /collections/the-christina-miller-edit (2 inlinks) ⚠️
+                </div>
+
+                <div style="background: #e8f4fd; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <strong>Strategy for Edit Collections:</strong>
+                    <ol style="margin: 10px 0 0 20px;">
+                        <li>Create a master "Shop By Influencer" collection page</li>
+                        <li>Link from homepage or main navigation</li>
+                        <li>Cross-link between related edits</li>
+                        <li>Add links from blog posts featuring each influencer</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation Guide -->
+        <section id="implementation">
+            <div class="section-header">
+                <h2>Implementation Guide</h2>
+            </div>
+            <div class="section-content">
+                <h3>Step 1: Add Parent-Child Navigation</h3>
+                <p>Add breadcrumb-style navigation to collection pages:</p>
+
+                <div class="code-block">
+<span class="comment">&lt;!-- snippets/collection-parent-links.liquid --&gt;</span>
+<span class="tag">{% case</span> collection.handle <span class="tag">%}</span>
+  <span class="tag">{% when</span> <span class="string">'maxi-skirts'</span> or <span class="string">'black-skirts'</span> or <span class="string">'petite-skirts'</span> <span class="tag">%}</span>
+    <span class="tag">&lt;nav</span> <span class="attr">class</span>=<span class="string">"collection-breadcrumb"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/skirts"</span><span class="tag">&gt;</span>All Skirts<span class="tag">&lt;/a&gt;</span> /
+      <span class="tag">&lt;span&gt;</span>{{ collection.title }}<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">{% when</span> <span class="string">'cargo-trousers'</span> or <span class="string">'wide-leg-trousers'</span> or <span class="string">'joggers'</span> <span class="tag">%}</span>
+    <span class="tag">&lt;nav</span> <span class="attr">class</span>=<span class="string">"collection-breadcrumb"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/trousers"</span><span class="tag">&gt;</span>All Trousers<span class="tag">&lt;/a&gt;</span> /
+      <span class="tag">&lt;span&gt;</span>{{ collection.title }}<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+<span class="tag">{% endcase %}</span>
+                </div>
+
+                <h3>Step 2: Add Related Collections Section</h3>
+                <div class="code-block">
+<span class="comment">&lt;!-- snippets/related-collections.liquid --&gt;</span>
+<span class="tag">{% if</span> collection.handle == <span class="string">'tulle'</span> <span class="tag">%}</span>
+  <span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="string">"related-collections"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h3&gt;</span>Complete Your Look<span class="tag">&lt;/h3&gt;</span>
+    <span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/tops"</span><span class="tag">&gt;</span>Pair with our tops<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/blazers-and-jackets"</span><span class="tag">&gt;</span>Add a blazer or jacket<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/what-to-wear-with-a-tulle-skirt"</span><span class="tag">&gt;</span>Styling inspiration<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/section&gt;</span>
+<span class="tag">{% endif %}</span>
+                </div>
+
+                <h3>Step 3: Add "Shop By" Navigation Blocks</h3>
+                <div class="code-block">
+<span class="comment">&lt;!-- sections/collection-navigation.liquid --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"collection-nav-grid"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"nav-block"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h4&gt;</span>Shop By Category<span class="tag">&lt;/h4&gt;</span>
+    <span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/dresses-jumpsuits"</span><span class="tag">&gt;</span>Dresses & Jumpsuits<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/skirts"</span><span class="tag">&gt;</span>Skirts<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/trousers"</span><span class="tag">&gt;</span>Trousers<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/t-shirts-vests-1"</span><span class="tag">&gt;</span>T-Shirts & Vests<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="string">"nav-block"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h4&gt;</span>Shop By Occasion<span class="tag">&lt;/h4&gt;</span>
+    <span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/officewear"</span><span class="tag">&gt;</span>Office<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/your-kind-of-party"</span><span class="tag">&gt;</span>Party<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;&lt;a</span> <span class="attr">href</span>=<span class="string">"/collections/resortwear"</span><span class="tag">&gt;</span>Resort & Holiday<span class="tag">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Anchor Text Guidelines -->
+        <section id="anchor-text">
+            <div class="section-header">
+                <h2>Anchor Text Guidelines</h2>
+            </div>
+            <div class="section-content">
+                <h3>Semantic Anchor Text Best Practices</h3>
+
+                <div class="anchor-examples">
+                    <div class="anchor-box bad">
+                        <h5>❌ Avoid</h5>
+                        <ul>
+                            <li>"Click here"</li>
+                            <li>"View more"</li>
+                            <li>"See all"</li>
+                            <li>"Shop now"</li>
+                            <li>"Collection"</li>
+                        </ul>
+                    </div>
+                    <div class="anchor-box good">
+                        <h5>✅ Use Instead</h5>
+                        <ul>
+                            <li>"Shop tulle skirts"</li>
+                            <li>"Explore our cargo trouser styles"</li>
+                            <li>"Browse the complete knitwear collection"</li>
+                            <li>"Find your perfect party dress"</li>
+                            <li>"Recycled tulle maxi skirts"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Keyword-Optimised Anchor Text Examples</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Target Collection</th>
+                            <th>Recommended Anchor Text</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/collections/tulle</code></td>
+                            <td>"signature recycled tulle collection"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/maxi-skirts</code></td>
+                            <td>"elegant maxi skirt styles"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/cargo-trousers</code></td>
+                            <td>"utility cargo trousers"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/party-outfits</code></td>
+                            <td>"party-ready outfit ideas"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/petite-skirts</code></td>
+                            <td>"skirts for petite frames"</td>
+                        </tr>
+                        <tr>
+                            <td><code>/collections/capsule-wardrobe-2025</code></td>
+                            <td>"build your 2025 capsule wardrobe"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Action Plan -->
+        <section id="action-plan">
+            <div class="section-header">
+                <h2>Priority Action Plan</h2>
+            </div>
+            <div class="section-content">
+                <h3>Priority Actions Summary</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Action</th>
+                            <th>Collections Affected</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-critical">1</span></td>
+                            <td>Add parent links to subcategory collections</td>
+                            <td>~30</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-high">2</span></td>
+                            <td>Add links from hub pages to isolated occasion collections</td>
+                            <td>~15</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-high">3</span></td>
+                            <td>Create "Shop By Influencer" hub page</td>
+                            <td>~12 edit collections</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-medium">4</span></td>
+                            <td>Link sale subcategories from sale hub</td>
+                            <td>~10</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-medium">5</span></td>
+                            <td>Add cross-links between sibling collections</td>
+                            <td>~20</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <footer style="background: var(--primary); color: white; padding: 30px; text-align: center; margin-top: 40px;">
+        <p>Strategy Document Prepared: 28 January 2026</p>
+        <p style="opacity: 0.7; margin-top: 10px;">Based on internal linking audit of 448 URLs</p>
+    </footer>
+</body>
+</html>
