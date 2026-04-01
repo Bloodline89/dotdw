@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eleven Loves — SEO Hub</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f1117;
+  color: #e2e8f0;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1a1d29 0%, #2d1f3d 50%, #1a2940 100%);
+  padding: 48px 32px 40px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.header-logo {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #a78bfa;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.header h1 span { color: #a78bfa; }
+.header-sub {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #94a3b8;
+}
+
+/* Grid */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Card */
+.card {
+  background: #1e2030;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+}
+.card:hover {
+  border-color: rgba(167,139,250,0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+/* Card accent colors */
+.card.purple::before { background: linear-gradient(90deg, #a78bfa, #7c3aed); }
+.card.blue::before { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+.card.green::before { background: linear-gradient(90deg, #34d399, #10b981); }
+.card.amber::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.card.rose::before { background: linear-gradient(90deg, #fb7185, #e11d48); }
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+.card.purple .card-icon { background: rgba(167,139,250,0.12); color: #a78bfa; }
+.card.blue .card-icon { background: rgba(96,165,250,0.12); color: #60a5fa; }
+.card.green .card-icon { background: rgba(52,211,153,0.12); color: #34d399; }
+.card.amber .card-icon { background: rgba(251,191,36,0.12); color: #fbbf24; }
+.card.rose .card-icon { background: rgba(251,113,133,0.12); color: #fb7185; }
+
+.card h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.card p {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.6;
+  flex: 1;
+}
+.card-tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+.card.purple .card-tag { background: rgba(167,139,250,0.12); color: #a78bfa; }
+.card.blue .card-tag { background: rgba(96,165,250,0.12); color: #60a5fa; }
+.card.green .card-tag { background: rgba(52,211,153,0.12); color: #34d399; }
+.card.amber .card-tag { background: rgba(251,191,36,0.12); color: #fbbf24; }
+.card.rose .card-tag { background: rgba(251,113,133,0.12); color: #fb7185; }
+
+.card-arrow {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  font-size: 18px;
+  color: rgba(255,255,255,0.15);
+  transition: all 0.25s;
+}
+.card:hover .card-arrow {
+  color: #a78bfa;
+  transform: translateX(4px);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 24px;
+  color: #475569;
+  font-size: 12px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+@media (max-width: 768px) {
+  .header { padding: 32px 20px; }
+  .header h1 { font-size: 24px; }
+  .container { padding: 24px 16px; }
+  .cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Eleven Loves</div>
+  <h1>SEO <span>Insights Hub</span></h1>
+  <div class="header-sub">elevenloves.co.uk</div>
+</div>
+
+<div class="container">
+  <div class="cards">
+
+    <a href="https://dotdwconsulting.com/Eleven_Loves_Rank_Tracker.html" class="card purple">
+      <div class="card-icon">&#9650;</div>
+      <h2>SEO Performance Dashboard</h2>
+      <p>Rankings, GSC clicks &amp; impressions, GA4 organic sessions, revenue, transactions. YTD vs YoY with brand/non-brand split, page performance, blog analysis and keyword tracking.</p>
+      <span class="card-tag">Dashboard</span>
+      <span class="card-arrow">&#8594;</span>
+    </a>
+
+    <a href="https://dotdwconsulting.com/Eleven_Loves_Keyword_Dashboard.html" class="card blue">
+      <div class="card-icon">&#9733;</div>
+      <h2>Keyword Dashboard</h2>
+      <p>Keyword research, search volumes, difficulty scores, and opportunity analysis for target keywords across all product categories.</p>
+      <span class="card-tag">Keywords</span>
+      <span class="card-arrow">&#8594;</span>
+    </a>
+
+    <a href="https://dotdwconsulting.com/Eleven_Loves_SEO_Audit.html" class="card green">
+      <div class="card-icon">&#9881;</div>
+      <h2>SEO Audit</h2>
+      <p>Technical SEO audit covering site health, crawlability, indexation, Core Web Vitals, on-page optimisation, and prioritised recommendations.</p>
+      <span class="card-tag">Audit</span>
+      <span class="card-arrow">&#8594;</span>
+    </a>
+
+    <a href="https://dotdwconsulting.com/Eleven_Loves_Semantic_Linking_Strategy.html" class="card amber">
+      <div class="card-icon">&#9741;</div>
+      <h2>Semantic Linking Strategy</h2>
+      <p>Internal linking architecture, topic clusters, and semantic relationships between collections, products and blog content.</p>
+      <span class="card-tag">Strategy</span>
+      <span class="card-arrow">&#8594;</span>
+    </a>
+
+    <a href="https://dotdwconsulting.com/YouTube_SEO_SOP.html" class="card rose">
+      <div class="card-icon">&#9654;</div>
+      <h2>YouTube SEO SOP</h2>
+      <p>Standard operating procedures for YouTube video optimisation including titles, descriptions, tags, thumbnails, and publishing workflow.</p>
+      <span class="card-tag">SOP</span>
+      <span class="card-arrow">&#8594;</span>
+    </a>
+
+  </div>
+</div>
+
+<div class="footer">
+  Eleven Loves SEO Hub &mdash; dotdw consulting
+</div>
+
+</body>
+</html>
