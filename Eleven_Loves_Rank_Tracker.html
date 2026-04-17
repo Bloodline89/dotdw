@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eleven Loves — SEO Performance Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f1117;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 24px;
+}
+a { color: #a78bfa; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1900px; margin: 0 auto; }
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+.header h1 span { color: #a78bfa; }
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: #94a3b8;
+}
+.header-meta strong { color: #cbd5e1; }
+
+/* KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: #1e2030;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.kpi-deltas { display: flex; gap: 8px; flex-wrap: wrap; }
+.delta {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  gap: 3px;
+}
+.delta.up { background: rgba(52,211,153,0.15); color: #34d399; }
+.delta.down { background: rgba(248,113,113,0.15); color: #f87171; }
+.delta.neutral { background: rgba(148,163,184,0.15); color: #94a3b8; }
+.delta-label { font-size: 10px; color: #94a3b8; margin-left: 2px; }
+
+/* Charts */
+.charts-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.charts-row.two { grid-template-columns: 1fr 1fr; }
+.charts-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.chart-panel {
+  background: #1e2030;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 20px;
+}
+.chart-panel h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.chart-wrap { position: relative; width: 100%; }
+.chart-wrap.doughnut { max-width: 280px; margin: 0 auto; }
+
+/* Section headers */
+.section {
+  margin-bottom: 32px;
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.section-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+.section-header h2 span { color: #a78bfa; }
+
+/* Tables */
+.table-wrap {
+  background: #1e2030;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+thead th {
+  background: #161827;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  padding: 12px 14px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+thead th:hover { color: #a78bfa; }
+thead th .sort-icon { margin-left: 4px; opacity: 0.4; }
+thead th.sorted .sort-icon { opacity: 1; color: #a78bfa; }
+tbody td {
+  padding: 10px 14px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  white-space: nowrap;
+}
+tbody tr:hover { background: rgba(167,139,250,0.04); }
+.url-cell {
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pos-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+.pos-1-3 { background: rgba(52,211,153,0.15); color: #34d399; }
+.pos-4-10 { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.pos-11-20 { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.pos-21-50 { background: rgba(251,146,60,0.15); color: #fb923c; }
+.pos-51-100 { background: rgba(248,113,113,0.15); color: #f87171; }
+
+.change-positive { color: #34d399; }
+.change-negative { color: #f87171; }
+
+/* Blog KPI row */
+.blog-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.blog-kpi {
+  background: #161827;
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.blog-kpi .bk-label { font-size: 11px; text-transform: uppercase; color: #94a3b8; margin-bottom: 4px; }
+.blog-kpi .bk-value { font-size: 20px; font-weight: 700; color: #fff; }
+
+/* Winners / Losers side by side */
+.wl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: 0; margin-bottom: 0; }
+.tab-btn {
+  padding: 10px 24px;
+  background: #161827;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-bottom: none;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.15s;
+}
+.tab-btn:hover { color: #e2e8f0; }
+.tab-btn.active {
+  background: #1e2030;
+  color: #a78bfa;
+  border-color: rgba(167,139,250,0.3);
+}
+.tab-content {
+  display: none;
+  background: #1e2030;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0 12px 12px 12px;
+  padding: 20px;
+}
+.tab-content.active { display: block; }
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filters input, .filters select {
+  background: #161827;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+}
+.filters input:focus, .filters select:focus { border-color: #a78bfa; }
+.filters input::placeholder { color: #64748b; }
+.btn {
+  background: #a78bfa;
+  color: #0f1117;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { background: #8b5cf6; }
+.btn-secondary {
+  background: rgba(255,255,255,0.06);
+  color: #e2e8f0;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.pagination button {
+  background: #161827;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.pagination button:hover { background: rgba(167,139,250,0.15); }
+.pagination button.active { background: #a78bfa; color: #0f1117; font-weight: 600; }
+.pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
+.pagination .page-info { color: #94a3b8; font-size: 13px; }
+
+/* Table max-height with scroll */
+.table-scroll {
+  max-height: 600px;
+  overflow-y: auto;
+}
+.table-scroll::-webkit-scrollbar { width: 6px; }
+.table-scroll::-webkit-scrollbar-track { background: #1e2030; }
+.table-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .charts-row.two, .charts-row.three { grid-template-columns: 1fr; }
+  .wl-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+}
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  .header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .header-meta { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>Eleven Loves — <span>SEO Performance Dashboard</span></h1>
+      <div style="color:#94a3b8; font-size:13px; margin-top:4px;">Domain: elevenloves.co.uk</div>
+    </div>
+    <div class="header-meta">
+      <div>YTD: <strong>1 Jan &ndash; 17 Apr 2026</strong> vs <strong>1 Jan &ndash; 17 Apr 2025</strong></div>
+      <div style="margin-top:2px;">Rankings: <strong>17 Apr 2026</strong> vs <strong>Previous Check</strong></div>
+      <div id="lastUpdated" style="margin-top:2px;"></div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <!-- Executive Summary Insight -->
+  <div class="section" style="margin-bottom:24px;">
+    <div class="section-header"><h2>Executive <span>Summary</span></h2></div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>GA4 Organic Search &mdash; YTD 1 Jan &ndash; 17 Apr 2026 vs 1 Jan &ndash; 17 Apr 2025</strong><br>Between 1 Jan &ndash; 17 Apr 2026, GA4 recorded <strong style="color:#fff">46,928</strong> organic sessions (<span style="color:#34d399">+38.4%</span> vs same period 2025: <strong style="color:#fff">33,898</strong>). Organic revenue totalled <strong style="color:#fff">£244,990</strong> (<span style="color:#34d399">+44.7%</span> vs same period 2025: <strong style="color:#fff">£169,290</strong>). Transactions: <strong style="color:#fff">1,749</strong> (<span style="color:#34d399">+27.5%</span> vs same period 2025: <strong style="color:#fff">1,372</strong>). YTD conversion rate: <strong style="color:#fff">3.73%</strong> (2025: <strong style="color:#fff">4.05%</strong>). YTD average order value: <strong style="color:#fff">£140</strong> (2025: <strong style="color:#fff">£123</strong>).</p><p style='margin-top:14px'><strong style='color:#a78bfa;font-size:14px;'>Google Search Console &mdash; YTD 1 Jan &ndash; 17 Apr 2026 vs 1 Jan &ndash; 17 Apr 2025</strong><br>Between 1 Jan &ndash; 17 Apr 2026, GSC recorded <strong style="color:#fff">31,810</strong> clicks (<span style="color:#34d399">+45.1%</span> vs same period 2025: <strong style="color:#fff">21,918</strong>) from <strong style="color:#fff">690,452</strong> impressions (<span style="color:#f87171">-40.3%</span> vs same period 2025: <strong style="color:#fff">1,155,951</strong>). Average CTR: <strong style="color:#fff">4.61%</strong> (2025: <strong style="color:#fff">1.90%</strong>, change: <span style="color:#34d399">+2.71pp</span>).</p><p style='margin-top:14px'><strong style='color:#a78bfa;font-size:14px;'>April 1&ndash;17, 2026 Period Snapshot (17 days)</strong><br>GA4: <strong style="color:#fff">7,373</strong> sessions (<span style="color:#f87171">-53.4%</span> vs Mar*, <span style="color:#f87171">-3.1%</span> vs Apr 1&ndash;17 2025), <strong style="color:#fff">£44,810</strong> revenue (<span style="color:#f87171">-46.7%</span> vs Mar*, <span style="color:#f87171">-1.7%</span> vs Apr 1&ndash;17 2025), <strong style="color:#fff">273</strong> transactions. Conversion rate: <strong style="color:#fff">3.70%</strong>. AOV: <strong style="color:#fff">£164</strong>. GSC: <strong style="color:#fff">4,542</strong> clicks (<span style="color:#f87171">-59.0%</span> vs Mar*), <strong style="color:#fff">95,993</strong> impressions (<span style="color:#f87171">-52.9%</span> vs Mar*).<br><span style='color:#fbbf24;font-size:12px;font-style:italic;'>* April 1&ndash;17 is a partial month (17 days). Direct MoM comparisons against March (31 days) should be interpreted with caution.</span></p><p style='margin-top:14px'><strong style='color:#a78bfa;font-size:14px;'>Keyword Rankings &mdash; 17 Apr 2026 Snapshot</strong><br>The site ranks for <strong style="color:#fff">2,182</strong> tracked keywords in Google UK. Positions 1&ndash;3: <strong style="color:#fff">243</strong> | Page 1 (1&ndash;10): <strong style="color:#fff">580</strong> | Page 2 (11&ndash;20): <strong style="color:#fff">368</strong> | Positions 21&ndash;50: <strong style="color:#fff">553</strong> | Positions 51&ndash;100: <strong style="color:#fff">681</strong>. Estimated monthly traffic value: <strong style="color:#fff">£36,248</strong>.</p><p style='margin-top:14px'><strong style='color:#a78bfa;font-size:14px;'>Schema &amp; On-Page Changes in this Period</strong><br>Collection FAQs were added from 1 March 2026 (batch 1), with further batches on 2 Apr and 3 Apr. Product FAQs were added on 1 April 2026, and Review Schema was added on 7 April 2026. The April reporting window (1&ndash;17 Apr) therefore includes Product FAQ and Review Schema changes that are now live and may begin to influence click-through rates and SERP presentation. Collection FAQs have been live since 1 March &mdash; any impact should be visible in the March and early April data.</p></div>
+  </div>
+
+  <!-- Schema & On-Page Changes -->
+  <div class="section" style="margin-bottom:24px;">
+    <div class="section-header"><h2>Schema &amp; On-Page <span>Changes</span></h2></div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><strong style="color:#a78bfa;font-size:14px;">Implementation Timeline</strong><div style="margin-top:12px;padding-left:16px;border-left:2px solid #a78bfa;"><div style="margin-bottom:10px;"><span style="color:#fbbf24;font-weight:600;">1 Mar 2026</span> &mdash; Collection FAQs added (batch 1)</div><div style="margin-bottom:10px;"><span style="color:#fbbf24;font-weight:600;">1 Apr 2026</span> &mdash; Product FAQs added</div><div style="margin-bottom:10px;"><span style="color:#fbbf24;font-weight:600;">2 Apr 2026</span> &mdash; Collection FAQs added (batch 2)</div><div style="margin-bottom:10px;"><span style="color:#fbbf24;font-weight:600;">3 Apr 2026</span> &mdash; Collection FAQs added (batch 3)</div><div style="margin-bottom:0;"><span style="color:#fbbf24;font-weight:600;">7 Apr 2026</span> &mdash; Review Schema added</div></div><p style="margin-top:14px;color:#94a3b8;font-size:12px;font-style:italic;">Collection FAQs have been live since 1 March. Product FAQs and Review Schema were added within the April reporting window (1&ndash;17 Apr). Monitor CTR and rich result appearance over the coming weeks to assess impact.</p></div>
+  </div>
+
+  <!-- Brand vs Non-Brand -->
+  <div class="section" style="margin-bottom:24px;">
+    <div class="section-header"><h2>Brand vs Non-Brand <span>GSC Clicks</span></h2></div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>Brand vs Non-Brand &mdash; GSC YTD 1 Jan &ndash; 17 Apr 2026 vs 1 Jan &ndash; 17 Apr 2025</strong><br>Brand keywords account for <strong style="color:#fff">90.5%</strong> of total YTD clicks. Non-brand keywords represent the remaining <strong style="color:#fff">9.5%</strong>.</p><p style='margin-top:10px'><strong>Brand:</strong> <strong style="color:#fff">28,773</strong> clicks (<span style="color:#34d399">+49.3%</span> vs 2025: <strong style="color:#fff">19,276</strong>), <strong style="color:#fff">52,174</strong> impressions, <strong style="color:#fff">55.15%</strong> CTR.<br><strong>Non-brand:</strong> <strong style="color:#fff">3,037</strong> clicks (<span style="color:#34d399">+15.0%</span> vs 2025: <strong style="color:#fff">2,642</strong>), <strong style="color:#fff">638,278</strong> impressions (<span style="color:#f87171">-43.0%</span> vs 2025: <strong style="color:#fff">1,118,853</strong>), <strong style="color:#fff">0.48%</strong> CTR (2025: <strong style="color:#fff">0.24%</strong>).</p><p style='margin-top:10px'><strong>April 1&ndash;17, 2026 vs March 2026:</strong> Brand clicks <strong style="color:#fff">4,075</strong> (<span style="color:#f87171">-59.7%</span> vs Mar*). Non-brand clicks <strong style="color:#fff">467</strong> (<span style="color:#f87171">-52.3%</span> vs Mar*).<br><span style='color:#fbbf24;font-size:12px;font-style:italic;'>* Partial month (17 days vs 31 days).</span></p></div>
+    <div class="charts-row two" style="margin-top:16px;">
+      <div class="chart-panel">
+        <h3>YTD Clicks — Brand vs Non-Brand (1 Jan &ndash; 17 Apr 2026 vs 2025)</h3>
+        <div class="chart-wrap"><canvas id="chartBrandClicks"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <h3>Monthly Clicks — Brand vs Non-Brand</h3>
+        <div class="chart-wrap"><canvas id="chartBrandMonthly"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row 1: 2 charts -->
+  <div class="charts-row two">
+    <div class="chart-panel">
+      <h3>GA4 Organic Sessions &amp; Revenue — Jan&ndash;Apr 2026 vs 2025</h3>
+      <div class="chart-wrap"><canvas id="chartOrganic"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <h3>GSC Clicks &amp; Impressions — Jan&ndash;Apr 2026 vs 2025</h3>
+      <div class="chart-wrap"><canvas id="chartGSC"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Charts Row 2: 3 charts -->
+  <div class="charts-row three">
+    <div class="chart-panel">
+      <h3>Ranking Distribution</h3>
+      <div class="chart-wrap doughnut"><canvas id="chartRanking"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <h3>Transactions &amp; Revenue — Jan&ndash;Apr 2026 vs 2025</h3>
+      <div class="chart-wrap"><canvas id="chartTransRev"></canvas></div>
+    </div>
+    <div class="chart-panel">
+      <h3>Top 10 Non-Brand Keywords by Clicks (Apr 1&ndash;17, 2026)</h3>
+      <div class="chart-wrap"><canvas id="chartTopKw"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Top Performing Pages YTD -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Top Performing Pages <span>YTD 1 Jan &ndash; 17 Apr 2026 vs 2025</span></h2>
+    </div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>Top Pages by GSC Clicks &mdash; 1 Jan &ndash; 17 Apr 2026</strong><br>The table below shows the top 20 landing pages ranked by total Google Search Console clicks for the year to date (1 Jan &ndash; 17 Apr 2026), with GA4 organic session, transaction and revenue data merged where available.</p><p style='margin-top:10px'>&bull; <strong style="color:#fff">/ (homepage)</strong>: <strong style="color:#fff">24,247</strong> clicks, 91,523 impressions, avg position <strong style="color:#fff">5.8</strong>, 1,073 transactions, £148,691 revenue<br>&bull; <strong style="color:#fff">/collections/shop-all</strong>: <strong style="color:#fff">2,355</strong> clicks, 50,677 impressions, avg position <strong style="color:#fff">3.1</strong>, 64 transactions, £7,396 revenue<br>&bull; <strong style="color:#fff">/pages/delivery-and-returns-for-uk-orders</strong>: <strong style="color:#fff">1,459</strong> clicks, 4,244 impressions, avg position <strong style="color:#fff">7.7</strong>, 11 transactions, £1,036 revenue</p><p style='margin-top:10px'>Of the top 20 pages: <strong style="color:#fff">12</strong> are collection pages, <strong style="color:#fff">5</strong> are blog posts.</p></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="topPagesTable">
+          <thead>
+            <tr>
+              <th>Page URL</th>
+              <th>GSC Clicks (YTD)</th>
+              <th>YTD 2025</th>
+              <th>YoY Change</th>
+              <th>Impressions</th>
+              <th>Avg Pos</th>
+              <th>GA4 Sessions</th>
+              <th>Transactions</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Underperforming Pages YTD -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Underperforming Pages <span>YTD 1 Jan &ndash; 17 Apr 2026 vs 2025</span></h2>
+      <span style="color:#94a3b8;font-size:12px;">High impressions with below-average CTR or declining position</span>
+    </div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>Underperforming Pages &mdash; 1 Jan &ndash; 17 Apr 2026</strong><br>These pages received significant search impressions YTD but have a CTR below the site average (<strong style="color:#fff">8.34%</strong>), or have seen their average position decline compared to March 2026. Pages with a high CTR relative to their position are excluded.</p><p style='margin-top:10px'>&bull; <strong style="color:#fff">/collections/skirts</strong>: <strong style="color:#fff">51,496</strong> impressions, <strong style="color:#fff">436</strong> clicks, <strong style="color:#fff">0.85%</strong> CTR, avg position <strong style="color:#fff">10.1</strong><br>&bull; <strong style="color:#fff">/collections/shop-all</strong>: <strong style="color:#fff">50,677</strong> impressions, <strong style="color:#fff">2,355</strong> clicks, <strong style="color:#fff">4.65%</strong> CTR, avg position <strong style="color:#fff">3.1</strong><br>&bull; <strong style="color:#fff">/collections/t-shirts-vests-1</strong>: <strong style="color:#fff">46,269</strong> impressions, <strong style="color:#fff">255</strong> clicks, <strong style="color:#fff">0.55%</strong> CTR, avg position <strong style="color:#fff">8.5</strong></p><p style='margin-top:10px'>These <strong style="color:#fff">20</strong> pages collectively received <strong style="color:#fff">593,395</strong> impressions YTD. Reviewing title tags, meta descriptions and on-page content for these URLs could increase click-through from existing search visibility.</p></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="underPagesTable">
+          <thead>
+            <tr>
+              <th>Page URL</th>
+              <th>GSC Clicks (YTD)</th>
+              <th>YTD 2025</th>
+              <th>YoY Change</th>
+              <th>Impressions</th>
+              <th>CTR</th>
+              <th>Avg Pos</th>
+              <th>GA4 Sessions</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog Performance -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Blog Performance <span>/blogs/news/</span></h2>
+    </div>
+    <div class="blog-kpis" id="blogKpis"></div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>Blog Performance &mdash; April 1&ndash;17, 2026 (/blogs/news/)</strong><br>In April 1&ndash;17, 2026, blog pages (URLs under /blogs/news/) received <strong style="color:#fff">257</strong> GSC clicks (<span style="color:#f87171">-62.8%</span> vs Mar 2026*: <strong style="color:#fff">690</strong>) and <strong style="color:#fff">25,817</strong> impressions. GA4 recorded <strong style="color:#fff">188</strong> organic sessions from blog content. No transactions were directly attributed to blog landing pages in GA4 this month.</p><p style='margin-top:10px'>Blog pages account for <strong style="color:#fff">5.7%</strong> of total organic clicks. <strong style="color:#fff">29</strong> individual blog posts received at least one organic click in April 1&ndash;17, 2026.</p><p style='margin-top:10px'>Top 3 blog posts by clicks:<br>&bull; <strong style="color:#fff">The Ultimate Guide To Tulle Skirts How To Wear Them At Any Age And For Any Occasion</strong>: <strong style="color:#fff">66</strong> clicks, 5,501 impressions, avg position <strong style="color:#fff">4.7</strong><br>&bull; <strong style="color:#fff">How To Wear Tulle To A Wedding A Guest S Guide To Stylish Outfits</strong>: <strong style="color:#fff">33</strong> clicks, 1,755 impressions, avg position <strong style="color:#fff">4.8</strong><br>&bull; <strong style="color:#fff">How To Style A Tulle Skirt A Complete Guide</strong>: <strong style="color:#fff">31</strong> clicks, 2,437 impressions, avg position <strong style="color:#fff">8.1</strong></p></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="blogTable">
+          <thead>
+            <tr>
+              <th>Blog URL</th>
+              <th>GSC Clicks</th>
+              <th>Impressions</th>
+              <th>Avg Position</th>
+              <th>GA4 Sessions</th>
+              <th>Transactions</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Blog Posts -->
+  <div class="section">
+    <div class="section-header">
+      <h2>New Blog Posts <span>Early Performance</span></h2>
+      <span style="color:#94a3b8;font-size:12px;">Recently published &mdash; April 1&ndash;17, 2026 data</span>
+    </div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>New Blog Posts &mdash; Early Performance (April 1&ndash;17, 2026)</strong><br><strong style="color:#fff">6</strong> new blog posts were published recently. In April 1&ndash;17, 2026, they collectively received <strong style="color:#fff">219</strong> GSC impressions, <strong style="color:#fff">3</strong> clicks, and <strong style="color:#fff">7</strong> GA4 sessions. These are early-stage metrics &mdash; the posts are still building search visibility.</p><p style='margin-top:10px'>&bull; <strong style="color:#fff">Styling Tips To Elevate Your Everyday Wardrobe</strong>: 107 impressions, 3 clicks, 6 sessions. <span style="color:#34d399">Avg position 4.4 &mdash; strong early ranking.</span> Top queries: "elevate your everyday style" (pos 3.8, 4 impr), "elevate your style" (pos 1.0, 4 impr), "elevate your wardrobe" (pos 2.3, 3 impr).<br>&bull; <strong style="color:#fff">How To Find The Best Jeans For Women Without The Stress</strong>: 37 impressions, 0 clicks, 0 sessions. <span style="color:#60a5fa">Avg position 8.2 &mdash; page 1 visibility.</span> Top queries: "what women’s jeans are ideal for everyday comfort?" (pos 6.6, 5 impr), "are there reliable women’s jeans for year-round wear?" (pos 9.0, 1 impr), "how do i choose popular women’s jeans for versatile styling?" (pos 4.0, 1 impr).<br>&bull; <strong style="color:#fff">5 Go To Outfit Formulas For Effortless Style</strong>: 34 impressions, 0 clicks, 1 sessions. <span style="color:#fbbf24">Avg position 11.1 &mdash; not yet on page 1.</span> Top queries: "effortless elegance outfit formulas effortless style" (pos 20.3, 13 impr).<br>&bull; <strong style="color:#fff">How To Find Your Style Add Personality To A Capsule Wardrobe</strong>: 29 impressions, 0 clicks, 0 sessions. <span style="color:#60a5fa">Avg position 5.2 &mdash; page 1 visibility.</span> Top queries: "beauty pie blog "your capsules wardrobe"" (pos 11.0, 1 impr).<br>&bull; <strong style="color:#fff">The Art Of Layering Clothes For Warmth Style</strong>: 9 impressions, 0 clicks, 0 sessions. <span style="color:#34d399">Avg position 1.9 &mdash; strong early ranking.</span> Top queries: "how to layer clothes without looking bulky" (pos 1.0, 2 impr), "how to layer without looking bulky" (pos 1.0, 1 impr), "how to style long layered hair" (pos 5.0, 1 impr).<br>&bull; <strong style="color:#fff">How To Find The Best White T Shirt For Women</strong>: 3 impressions, 0 clicks, 0 sessions. <span style="color:#60a5fa">Avg position 8.3 &mdash; page 1 visibility.</span></p></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="newBlogTable">
+          <thead>
+            <tr>
+              <th>Blog Post</th>
+              <th>GSC Impressions</th>
+              <th>GSC Clicks</th>
+              <th>CTR</th>
+              <th>Avg Position</th>
+              <th>GA4 Sessions</th>
+              <th>Top Search Query</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Performance -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Product Page Performance <span>(PDPs)</span></h2>
+      <span style="color:#94a3b8;font-size:12px;">URLs under /products/</span>
+    </div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>Product Page Performance (PDPs) &mdash; /products/</strong><br>YTD (1 Jan &ndash; 17 Apr 2026): <strong style="color:#fff">1,673</strong> GSC clicks (<span style="color:#f87171">-44.2%</span> vs same period 2025: <strong style="color:#fff">2,996</strong>) from <strong style="color:#fff">231,066</strong> impressions (<span style="color:#f87171">-69.5%</span> vs same period 2025: <strong style="color:#fff">758,109</strong>). April 1&ndash;17, 2026: <strong style="color:#fff">266</strong> clicks (<span style="color:#f87171">-46.0%</span> vs Mar*), <strong style="color:#fff">27,711</strong> impressions.</p><p style='margin-top:10px'>GA4 recorded <strong style="color:#fff">1,219</strong> organic sessions to product pages in April 1&ndash;17, 2026, generating <strong style="color:#fff">39</strong> transactions and <strong style="color:#fff">£7,389</strong> revenue. <strong style="color:#fff">511</strong> individual product pages received at least one organic click.</p><p style='margin-top:10px'>Top products by clicks (April 1&ndash;17, 2026):<br>&bull; <strong style="color:#fff">Billie Barrel Leg Jeans Mid Wash</strong>: <strong style="color:#fff">20</strong> clicks, 429 impressions, avg position <strong style="color:#fff">8.3</strong><br>&bull; <strong style="color:#fff">Perfect Side Stripe Joggers Black</strong>: <strong style="color:#fff">15</strong> clicks, 1,956 impressions, avg position <strong style="color:#fff">11.1</strong><br>&bull; <strong style="color:#fff">Tina Shacket Khaki 1</strong>: <strong style="color:#fff">10</strong> clicks, 362 impressions, avg position <strong style="color:#fff">6.7</strong></p><p style='margin-top:10px'><span style='color:#fbbf24;font-style:italic;'>Note: Product FAQ schema was added on 1 April 2026 and Review Schema on 7 April 2026. Both changes are now live within this reporting window. Early signals of impact may be visible in this data.</span></p></div>
+    <div class="blog-kpis" id="productKpis"></div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="productTable">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>GSC Clicks (Apr 1-17)</th>
+              <th>Impressions</th>
+              <th>Avg Position</th>
+              <th>GA4 Sessions</th>
+              <th>Transactions</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Winners & Losers -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Keyword <span>Winners &amp; Losers</span></h2>
+      <span style="color:#94a3b8;font-size:12px;">April 1&ndash;17 vs March 2026 (partial month)</span>
+    </div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>Keyword Winners &amp; Losers &mdash; April 1&ndash;17, 2026 vs March 2026 (GSC Clicks)</strong><br>Comparison of GSC click volumes per keyword between April 1&ndash;17, 2026 and March 2026 (1 Mar &ndash; 31 Mar). Only keywords appearing in both periods are compared. Note: April is a partial month (17 days) so absolute click volumes are not directly comparable to March (31 days).</p><p style='margin-top:10px'>Top 5 winners by click increase:<br>&bull; <strong style="color:#fff">elevenloves uk</strong>: <span style="color:#34d399">+13</span> clicks (22 &rarr; 35)<br>&bull; <strong style="color:#fff">french fashion</strong>: <span style="color:#34d399">+6</span> clicks (1 &rarr; 7) (position: 16.6 &rarr; 5.1)<br>&bull; <strong style="color:#fff">french style clothing uk</strong>: <span style="color:#34d399">+5</span> clicks (3 &rarr; 8) (position: 1.2 &rarr; 1.3)<br>&bull; <strong style="color:#fff">eleven loves ai</strong>: <span style="color:#34d399">+5</span> clicks (1 &rarr; 6) (position: 4.0 &rarr; 3.8)<br>&bull; <strong style="color:#fff">eleven loves barrel jeans</strong>: <span style="color:#34d399">+5</span> clicks (1 &rarr; 6)<br>Combined click gain from top 5: <strong style="color:#fff">+34</strong>.</p><p style='margin-top:10px'>Top 5 losers by click decline:<br>&bull; <strong style="color:#fff">eleven loves</strong>: <span style="color:#f87171">-3,684</span> clicks (6,313 &rarr; 2,629) (position: 1.2 &rarr; 1.2)<br>&bull; <strong style="color:#fff">elevenloves</strong>: <span style="color:#f87171">-753</span> clicks (1,076 &rarr; 323) (position: 1.2 &rarr; 1.1)<br>&bull; <strong style="color:#fff">eleven loves clothing</strong>: <span style="color:#f87171">-461</span> clicks (608 &rarr; 147) (position: 1.0 &rarr; 1.4)<br>&bull; <strong style="color:#fff">eleven loves uk</strong>: <span style="color:#f87171">-219</span> clicks (433 &rarr; 214) (position: 1.0 &rarr; 1.9)<br>&bull; <strong style="color:#fff">eleven loves returns</strong>: <span style="color:#f87171">-109</span> clicks (257 &rarr; 148) (position: 1.4 &rarr; 3.7)</p></div>
+    <div class="wl-grid">
+      <div>
+        <h3 style="color:#34d399;margin-bottom:12px;font-size:15px;">Winners (Biggest Click Gains)</h3>
+        <div class="table-wrap"><div class="table-scroll">
+          <table id="winnersTable">
+            <thead><tr>
+              <th>Keyword</th>
+              <th>Cur. Clicks</th>
+              <th>Prev. Clicks</th>
+              <th>Change</th>
+              <th>Cur. Pos</th>
+              <th>Prev. Pos</th>
+              <th>Pos Change</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div></div>
+      </div>
+      <div>
+        <h3 style="color:#f87171;margin-bottom:12px;font-size:15px;">Losers (Biggest Click Declines)</h3>
+        <div class="table-wrap"><div class="table-scroll">
+          <table id="losersTable">
+            <thead><tr>
+              <th>Keyword</th>
+              <th>Cur. Clicks</th>
+              <th>Prev. Clicks</th>
+              <th>Change</th>
+              <th>Cur. Pos</th>
+              <th>Prev. Pos</th>
+              <th>Pos Change</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Keywords (tabbed) -->
+  <div class="section">
+    <div class="section-header">
+      <h2>All <span>Keywords &amp; Pages</span></h2>
+    </div>
+    <div style="background:#1a1d29;border-left:3px solid #a78bfa;padding:20px;border-radius:12px;margin-bottom:24px;color:#cbd5e1;font-size:14px;line-height:1.7;"><p><strong style='color:#a78bfa;font-size:14px;'>Keyword Ranking Overview &mdash; Google UK (17 Apr 2026)</strong><br>The site is tracked for <strong style="color:#fff">2,182</strong> keywords in Google UK. <strong style="color:#fff">580</strong> (<strong style="color:#fff">26.6%</strong>) rank on page 1 (positions 1&ndash;10), of which <strong style="color:#fff">243</strong> (<strong style="color:#fff">11.1%</strong>) are in positions 1&ndash;3. Since the previous check: <strong style="color:#fff">181</strong> keywords entered the top 30, <strong style="color:#fff">241</strong> dropped out (net: <strong style="color:#fff">-60</strong>). <strong style="color:#fff">84</strong> keywords trigger an AI Overview.<br><span style='color:#94a3b8;font-size:12px;font-style:italic;'>Note: Some positions may reflect AI Overview (AIO) citations rather than traditional organic rankings. AIO results are dynamic and can change between crawls.</span></p><p style='margin-top:10px'>Position distribution: Positions 1&ndash;3: <strong style="color:#fff">243</strong> | Positions 4&ndash;10: <strong style="color:#fff">337</strong> | Positions 11&ndash;20: <strong style="color:#fff">368</strong> | Positions 21&ndash;50: <strong style="color:#fff">553</strong> | Positions 51&ndash;100: <strong style="color:#fff">681</strong></p><p style='margin-top:10px'>Highest search volume keywords ranking on page 1:<br>&bull; <strong style="color:#fff">vest</strong>: search volume <strong style="color:#fff">22,200</strong>, position <strong style="color:#fff">1</strong><br>&bull; <strong style="color:#fff">women's t shirt</strong>: search volume <strong style="color:#fff">18,100</strong>, position <strong style="color:#fff">0</strong><br>&bull; <strong style="color:#fff">black tea shirts</strong>: search volume <strong style="color:#fff">12,100</strong>, position <strong style="color:#fff">10</strong><br>&bull; <strong style="color:#fff">bubble skirt</strong>: search volume <strong style="color:#fff">8,100</strong>, position <strong style="color:#fff">0</strong><br>&bull; <strong style="color:#fff">wear to work</strong>: search volume <strong style="color:#fff">8,100</strong>, position <strong style="color:#fff">7</strong></p></div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('tabKeywords', this)">All Keywords</button>
+      <button class="tab-btn" onclick="switchTab('tabPages', this)">Top Landing Pages</button>
+    </div>
+
+    <!-- Tab 1: All Keywords -->
+    <div class="tab-content active" id="tabKeywords">
+      <div class="filters">
+        <input type="text" id="kwSearch" placeholder="Search keywords..." oninput="filterKeywords()">
+        <select id="kwPosFilter" onchange="filterKeywords()">
+          <option value="">All Positions</option>
+          <option value="1-3">Top 3</option>
+          <option value="4-10">4-10</option>
+          <option value="11-20">11-20</option>
+          <option value="21-50">21-50</option>
+          <option value="51-100">51-100</option>
+        </select>
+        <input type="number" id="kwVolMin" placeholder="Min Volume" oninput="filterKeywords()" style="width:110px;">
+        <button class="btn btn-secondary" onclick="exportCSV()">Export CSV</button>
+        <span id="kwCount" style="color:#94a3b8;font-size:12px;margin-left:auto;"></span>
+      </div>
+      <div class="table-wrap">
+        <table id="kwTable">
+          <thead><tr>
+            <th data-col="keyword" onclick="sortKwTable('keyword')">Keyword <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th data-col="search_volume" onclick="sortKwTable('search_volume')">Volume <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th data-col="position" onclick="sortKwTable('position')">Position <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th>Pos Change</th>
+            <th data-col="has_aio" onclick="sortKwTable('has_aio')">AIO <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th data-col="gsc_clicks" onclick="sortKwTable('gsc_clicks')">GSC Clicks <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th data-col="gsc_impressions" onclick="sortKwTable('gsc_impressions')">GSC Impr. <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th data-col="gsc_ctr" onclick="sortKwTable('gsc_ctr')">GSC CTR <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th data-col="etv" onclick="sortKwTable('etv')">ETV <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th data-col="difficulty" onclick="sortKwTable('difficulty')">Difficulty <span class="sort-icon">&#9650;&#9660;</span></th>
+            <th>SERP Features</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="kwPagination"></div>
+    </div>
+
+    <!-- Tab 2: Top Landing Pages -->
+    <div class="tab-content" id="tabPages">
+      <div class="table-wrap">
+        <div class="table-scroll" style="max-height:700px;">
+          <table id="lpTable">
+            <thead><tr>
+              <th onclick="sortLpTable('url')">URL <span class="sort-icon">&#9650;&#9660;</span></th>
+              <th onclick="sortLpTable('gsc_clicks')">GSC Clicks <span class="sort-icon">&#9650;&#9660;</span></th>
+              <th onclick="sortLpTable('gsc_impressions')">Impressions <span class="sort-icon">&#9650;&#9660;</span></th>
+              <th onclick="sortLpTable('gsc_ctr')">CTR <span class="sort-icon">&#9650;&#9660;</span></th>
+              <th onclick="sortLpTable('gsc_position')">Avg Position <span class="sort-icon">&#9650;&#9660;</span></th>
+              <th onclick="sortLpTable('ga4_sessions')">Sessions <span class="sort-icon">&#9650;&#9660;</span></th>
+              <th onclick="sortLpTable('ga4_transactions')">Transactions <span class="sort-icon">&#9650;&#9660;</span></th>
+              <th onclick="sortLpTable('ga4_revenue')">Revenue <span class="sort-icon">&#9650;&#9660;</span></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="loadingOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0f1117;display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="text-align:center;color:#a78bfa;">
+    <div style="font-size:20px;font-weight:600;margin-bottom:8px;">Loading report data&hellip;</div>
+    <div style="font-size:13px;color:#64748b;">Fetching from server</div>
+  </div>
+</div>
+<script>
+(async function() {
+// ═══════════════════════════════════════════════════════════
+// DATA (fetched from external JSON)
+// ═══════════════════════════════════════════════════════════
+let D;
+try {
+  const resp = await fetch('https://dotdwconsulting.com/report_data.json');
+  if (!resp.ok) throw new Error('Failed to load: ' + resp.status);
+  D = await resp.json();
+} catch (err) {
+  document.getElementById('loadingOverlay').innerHTML = '<div style="text-align:center;color:#f87171;"><div style="font-size:20px;font-weight:600;">Failed to load report data</div><div style="font-size:13px;color:#94a3b8;margin-top:8px;">' + err.message + '</div></div>';
+  return;
+}
+document.getElementById('loadingOverlay').style.display = 'none';
+
+// ═══════════════════════════════════════════════════════════
+// FORMATTERS
+// ═══════════════════════════════════════════════════════════
+const fmtNum = (n) => new Intl.NumberFormat('en-GB').format(Math.round(n || 0));
+const fmtCur = (n) => new Intl.NumberFormat('en-GB', { style:'currency', currency:'GBP', minimumFractionDigits:0, maximumFractionDigits:0 }).format(n || 0);
+const fmtCurFull = (n) => new Intl.NumberFormat('en-GB', { style:'currency', currency:'GBP', minimumFractionDigits:2, maximumFractionDigits:2 }).format(n || 0);
+const fmtPct = (n) => (n || 0).toFixed(1) + '%';
+const fmtDec = (n, d=1) => (n || 0).toFixed(d);
+
+function shortUrl(url) {
+  try {
+    const u = new URL(url);
+    return u.pathname === '/' ? '/' : u.pathname;
+  } catch {
+    return url || '';
+  }
+}
+
+function posClass(p) {
+  if (p <= 3) return 'pos-1-3';
+  if (p <= 10) return 'pos-4-10';
+  if (p <= 20) return 'pos-11-20';
+  if (p <= 50) return 'pos-21-50';
+  return 'pos-51-100';
+}
+
+function deltaHtml(value, label, isPercent=true, invert=false) {
+  let cls = 'neutral';
+  let arrow = '';
+  if (value > 0.05) { cls = invert ? 'down' : 'up'; arrow = '&#9650; '; }
+  else if (value < -0.05) { cls = invert ? 'up' : 'down'; arrow = '&#9660; '; }
+  const display = isPercent ? (value > 0 ? '+' : '') + value.toFixed(1) + '%' : (value > 0 ? '+' : '') + value.toFixed(2) + 'pp';
+  return `<span class="delta ${cls}">${arrow}${display}<span class="delta-label">${label}</span></span>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// HEADER
+// ═══════════════════════════════════════════════════════════
+document.getElementById('lastUpdated').textContent = 'Last updated: ' + D.generated;
+
+// ═══════════════════════════════════════════════════════════
+// KPI CARDS
+// ═══════════════════════════════════════════════════════════
+const kpis = D.kpis;
+const kpiDefs = [
+  { label: 'Organic Sessions (YTD)', value: fmtNum(kpis.ytd_sessions), prev: 'YTD 2025: ' + fmtNum(kpis.ytd_sessions_prev), deltas: [deltaHtml(kpis.ytd_sessions_yoy, 'YoY')] },
+  { label: 'Organic Revenue (YTD)', value: fmtCur(kpis.ytd_revenue), prev: 'YTD 2025: ' + fmtCur(kpis.ytd_revenue_prev), deltas: [deltaHtml(kpis.ytd_revenue_yoy, 'YoY')] },
+  { label: 'Organic Transactions (YTD)', value: fmtNum(kpis.ytd_transactions), prev: 'YTD 2025: ' + fmtNum(kpis.ytd_transactions_prev), deltas: [deltaHtml(kpis.ytd_transactions_yoy, 'YoY')] },
+  { label: 'GSC Clicks (YTD)', value: fmtNum(kpis.gsc_ytd_clicks), prev: 'YTD 2025: ' + fmtNum(kpis.gsc_ytd_clicks_prev), deltas: [deltaHtml(kpis.gsc_clicks_yoy, 'YoY')] },
+  { label: 'GSC Impressions (YTD)', value: fmtNum(kpis.gsc_ytd_impressions), prev: 'YTD 2025: ' + fmtNum(kpis.gsc_ytd_impressions_prev), deltas: [deltaHtml(kpis.gsc_impressions_yoy, 'YoY')] },
+  { label: 'Avg CTR (YTD)', value: fmtPct(kpis.gsc_ytd_ctr), prev: 'YTD 2025: ' + fmtPct(kpis.gsc_ytd_ctr_prev), deltas: [deltaHtml(kpis.gsc_ctr_yoy_delta, 'YoY', false)] },
+  { label: 'Ranked Keywords', value: fmtNum(kpis.ranked_keywords), prev: 'Current snapshot', deltas: [] },
+  { label: 'Est. Traffic Value', value: fmtCur(kpis.total_etv), prev: 'Monthly estimate', deltas: [] },
+];
+const kpiGrid = document.getElementById('kpiGrid');
+kpiDefs.forEach(k => {
+  kpiGrid.innerHTML += `
+    <div class="kpi-card">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <div style="font-size:11px;color:#64748b;margin-bottom:6px;">${k.prev}</div>
+      <div class="kpi-deltas">${k.deltas.join('')}</div>
+    </div>`;
+});
+
+// ═══════════════════════════════════════════════════════════
+// CHART COLORS
+// ═══════════════════════════════════════════════════════════
+const chartColors = {
+  purple: '#a78bfa',
+  green: '#34d399',
+  blue: '#60a5fa',
+  amber: '#fbbf24',
+  orange: '#fb923c',
+  red: '#f87171',
+  pink: '#f472b6',
+};
+
+// ═══════════════════════════════════════════════════════════
+// BRAND vs NON-BRAND CHARTS
+// ═══════════════════════════════════════════════════════════
+const bnb = D.brand_nonbrand;
+
+// Chart: YTD comparison bar chart
+new Chart(document.getElementById('chartBrandClicks'), {
+  type: 'bar',
+  data: {
+    labels: ['Brand', 'Non-Brand'],
+    datasets: [
+      {
+        label: 'Q1 2026',
+        data: [bnb.ytd_2026.brand.clicks, bnb.ytd_2026.non_brand.clicks],
+        backgroundColor: ['rgba(167,139,250,0.8)', 'rgba(96,165,250,0.8)'],
+        borderColor: [chartColors.purple, chartColors.blue],
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.5,
+        categoryPercentage: 0.7,
+      },
+      {
+        label: 'Q1 2025',
+        data: [bnb.ytd_2025.brand.clicks, bnb.ytd_2025.non_brand.clicks],
+        backgroundColor: ['rgba(167,139,250,0.25)', 'rgba(96,165,250,0.25)'],
+        borderColor: ['rgba(167,139,250,0.5)', 'rgba(96,165,250,0.5)'],
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.5,
+        categoryPercentage: 0.7,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#94a3b8' } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtNum(ctx.raw) + ' clicks' } }
+    },
+    scales: {
+      x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Clicks', color: '#94a3b8' } },
+    }
+  }
+});
+
+// Chart: Monthly brand vs non-brand (Apr 1-17 vs Mar)
+new Chart(document.getElementById('chartBrandMonthly'), {
+  type: 'bar',
+  data: {
+    labels: ['March 2026', 'April 1-17*'],
+    datasets: [
+      {
+        label: 'Brand',
+        data: [bnb.march_2026.brand.clicks, bnb.april_1_17_2026.brand.clicks],
+        backgroundColor: 'rgba(167,139,250,0.8)',
+        borderColor: chartColors.purple,
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+      {
+        label: 'Non-Brand',
+        data: [bnb.march_2026.non_brand.clicks, bnb.april_1_17_2026.non_brand.clicks],
+        backgroundColor: 'rgba(96,165,250,0.8)',
+        borderColor: chartColors.blue,
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#94a3b8' } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtNum(ctx.raw) + ' clicks' } }
+    },
+    scales: {
+      x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Clicks', color: '#94a3b8' } },
+    }
+  }
+});
+
+new Chart(document.getElementById('chartOrganic'), {
+  type: 'bar',
+  data: {
+    labels: D.ga4_chart.labels,
+    datasets: [
+      {
+        label: 'Sessions 2026',
+        data: D.ga4_chart.sessions_2026,
+        backgroundColor: 'rgba(167,139,250,0.8)',
+        borderColor: chartColors.purple,
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.4,
+        categoryPercentage: 0.8,
+      },
+      {
+        label: 'Sessions 2025',
+        data: D.ga4_chart.sessions_2025,
+        backgroundColor: 'rgba(167,139,250,0.25)',
+        borderColor: 'rgba(167,139,250,0.5)',
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.4,
+        categoryPercentage: 0.8,
+      },
+      {
+        label: 'Revenue 2026',
+        data: D.ga4_chart.revenue_2026,
+        type: 'line',
+        borderColor: chartColors.green,
+        backgroundColor: 'transparent',
+        tension: 0.3,
+        yAxisID: 'y1',
+        pointRadius: 6,
+        pointBackgroundColor: chartColors.green,
+        borderWidth: 2,
+      },
+      {
+        label: 'Revenue 2025',
+        data: D.ga4_chart.revenue_2025,
+        type: 'line',
+        borderColor: 'rgba(52,211,153,0.4)',
+        backgroundColor: 'transparent',
+        borderDash: [5, 5],
+        tension: 0.3,
+        yAxisID: 'y1',
+        pointRadius: 6,
+        pointBackgroundColor: 'rgba(52,211,153,0.4)',
+        borderWidth: 2,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: '#94a3b8' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.dataset.label.includes('Revenue')) return ctx.dataset.label + ': ' + fmtCur(ctx.raw);
+            return ctx.dataset.label + ': ' + fmtNum(ctx.raw);
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { position: 'left', ticks: { color: '#a78bfa' }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Sessions', color: '#a78bfa' } },
+      y1: { position: 'right', ticks: { color: '#34d399', callback: v => '\u00A3' + (v/1000).toFixed(0) + 'k' }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Revenue', color: '#34d399' } },
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// CHART 2: GSC Monthly Clicks & Impressions
+// ═══════════════════════════════════════════════════════════
+new Chart(document.getElementById('chartGSC'), {
+  type: 'bar',
+  data: {
+    labels: D.gsc_chart.labels,
+    datasets: [
+      {
+        label: 'Clicks 2026',
+        data: D.gsc_chart.clicks_2026,
+        backgroundColor: 'rgba(96,165,250,0.8)',
+        borderColor: chartColors.blue,
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.4,
+        categoryPercentage: 0.8,
+      },
+      {
+        label: 'Clicks 2025',
+        data: D.gsc_chart.clicks_2025,
+        backgroundColor: 'rgba(96,165,250,0.25)',
+        borderColor: 'rgba(96,165,250,0.5)',
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.4,
+        categoryPercentage: 0.8,
+      },
+      {
+        label: 'Impressions 2026',
+        data: D.gsc_chart.impressions_2026,
+        type: 'line',
+        borderColor: chartColors.amber,
+        backgroundColor: 'transparent',
+        tension: 0.3,
+        yAxisID: 'y1',
+        pointRadius: 6,
+        pointBackgroundColor: chartColors.amber,
+        borderWidth: 2,
+      },
+      {
+        label: 'Impressions 2025',
+        data: D.gsc_chart.impressions_2025,
+        type: 'line',
+        borderColor: 'rgba(251,191,36,0.4)',
+        backgroundColor: 'transparent',
+        borderDash: [5, 5],
+        tension: 0.3,
+        yAxisID: 'y1',
+        pointRadius: 6,
+        pointBackgroundColor: 'rgba(251,191,36,0.4)',
+        borderWidth: 2,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: '#94a3b8' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.dataset.label + ': ' + fmtNum(ctx.raw);
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { position: 'left', ticks: { color: '#60a5fa' }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Clicks', color: '#60a5fa' } },
+      y1: { position: 'right', ticks: { color: '#fbbf24' }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Impressions', color: '#fbbf24' } },
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// CHART 3: Ranking Distribution (Doughnut)
+// ═══════════════════════════════════════════════════════════
+const bucketData = D.position_buckets;
+new Chart(document.getElementById('chartRanking'), {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(bucketData),
+    datasets: [{
+      data: Object.values(bucketData),
+      backgroundColor: [chartColors.green, chartColors.blue, chartColors.amber, chartColors.orange, chartColors.red],
+      borderColor: '#1e2030',
+      borderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 12 } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.label + ': ' + ctx.raw + ' keywords'; }
+        }
+      }
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// CHART 4: Monthly Transactions & Revenue (bar + line combo)
+// ═══════════════════════════════════════════════════════════
+new Chart(document.getElementById('chartTransRev'), {
+  type: 'bar',
+  data: {
+    labels: D.ga4_chart.labels,
+    datasets: [
+      {
+        label: 'Transactions 2026',
+        data: D.ga4_chart.transactions_2026,
+        backgroundColor: 'rgba(167,139,250,0.8)',
+        borderColor: chartColors.purple,
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.4,
+        categoryPercentage: 0.8,
+        yAxisID: 'y',
+        order: 2,
+      },
+      {
+        label: 'Transactions 2025',
+        data: D.ga4_chart.transactions_2025,
+        backgroundColor: 'rgba(167,139,250,0.25)',
+        borderColor: 'rgba(167,139,250,0.5)',
+        borderWidth: 1,
+        borderRadius: 4,
+        barPercentage: 0.4,
+        categoryPercentage: 0.8,
+        yAxisID: 'y',
+        order: 2,
+      },
+      {
+        label: 'Revenue 2026',
+        data: D.ga4_chart.revenue_2026,
+        type: 'line',
+        borderColor: chartColors.green,
+        backgroundColor: 'transparent',
+        tension: 0.3,
+        yAxisID: 'y1',
+        pointRadius: 6,
+        pointBackgroundColor: chartColors.green,
+        borderWidth: 2,
+        order: 1,
+      },
+      {
+        label: 'Revenue 2025',
+        data: D.ga4_chart.revenue_2025,
+        type: 'line',
+        borderColor: 'rgba(52,211,153,0.4)',
+        backgroundColor: 'transparent',
+        borderDash: [5, 5],
+        tension: 0.3,
+        yAxisID: 'y1',
+        pointRadius: 6,
+        pointBackgroundColor: 'rgba(52,211,153,0.4)',
+        borderWidth: 2,
+        order: 1,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: '#94a3b8' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            if (ctx.dataset.label.includes('Revenue')) return ctx.dataset.label + ': ' + fmtCur(ctx.raw);
+            return ctx.dataset.label + ': ' + fmtNum(ctx.raw);
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { position: 'left', ticks: { color: '#a78bfa' }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Transactions', color: '#a78bfa' } },
+      y1: { position: 'right', ticks: { color: '#34d399', callback: v => '\u00A3' + (v/1000).toFixed(0) + 'k' }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Revenue', color: '#34d399' } },
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// CHART 5: Top 10 Keywords by Clicks (horizontal bar)
+// ═══════════════════════════════════════════════════════════
+const top10 = D.top10_kw_clicks;
+new Chart(document.getElementById('chartTopKw'), {
+  type: 'bar',
+  data: {
+    labels: top10.map(k => k.keyword),
+    datasets: [{
+      label: 'Clicks',
+      data: top10.map(k => k.clicks),
+      backgroundColor: 'rgba(167,139,250,0.6)',
+      borderColor: chartColors.purple,
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+    },
+    scales: {
+      x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+      y: { ticks: { color: '#e2e8f0', font: { size: 11 } }, grid: { display: false } },
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// TOP PERFORMING PAGES TABLE
+// ═══════════════════════════════════════════════════════════
+function changeHtml(val, isPct) {
+  if (val === 0 || val === undefined) return '<span style="color:#64748b">&mdash;</span>';
+  const cls = val > 0 ? 'change-positive' : 'change-negative';
+  const arrow = val > 0 ? '&#9650;' : '&#9660;';
+  if (isPct) return `<span class="${cls}">${arrow} ${val > 0 ? '+' : ''}${val.toFixed(1)}%</span>`;
+  return `<span class="${cls}">${arrow} ${val > 0 ? '+' : ''}${fmtNum(val)}</span>`;
+}
+
+function renderPageTable(tableId, data, showCtr) {
+  const tbody = document.querySelector('#' + tableId + ' tbody');
+  tbody.innerHTML = '';
+  data.forEach(p => {
+    const path = shortUrl(p.url);
+    const prevClicks = p.gsc_clicks_prev || 0;
+    const clickChange = p.gsc_clicks_change || 0;
+    const clickChangePct = p.gsc_clicks_change_pct || 0;
+    let row = `<tr>
+      <td class="url-cell"><a href="${p.url}" target="_blank" title="${p.url}">${path}</a></td>
+      <td>${fmtNum(p.gsc_clicks)}</td>
+      <td style="color:#64748b">${fmtNum(prevClicks)}</td>
+      <td>${changeHtml(clickChangePct, true)}</td>
+      <td>${fmtNum(p.gsc_impressions)}</td>`;
+    if (showCtr) row += `<td>${fmtPct((p.gsc_ctr || 0) * 100)}</td>`;
+    row += `<td><span class="pos-badge ${posClass(p.gsc_position)}">${fmtDec(p.gsc_position)}</span></td>
+      <td>${fmtNum(p.ga4_sessions)}</td>`;
+    if (!showCtr) row += `<td>${fmtNum(p.ga4_transactions)}</td>`;
+    row += `<td>${fmtCur(p.ga4_revenue)}</td>
+    </tr>`;
+    tbody.innerHTML += row;
+  });
+}
+
+renderPageTable('topPagesTable', D.top_pages_ytd, false);
+renderPageTable('underPagesTable', D.underperformers, true);
+
+// ═══════════════════════════════════════════════════════════
+// BLOG PERFORMANCE
+// ═══════════════════════════════════════════════════════════
+const bs = D.blog_summary;
+const blogKpisEl = document.getElementById('blogKpis');
+[
+  ['Blog Clicks', fmtNum(bs.clicks)],
+  ['Blog Impressions', fmtNum(bs.impressions)],
+  ['Blog Sessions', fmtNum(bs.sessions)],
+  ['Blog Transactions', fmtNum(bs.transactions)],
+  ['Blog Revenue', fmtCur(bs.revenue)],
+].forEach(([label, value]) => {
+  blogKpisEl.innerHTML += `<div class="blog-kpi"><div class="bk-label">${label}</div><div class="bk-value">${value}</div></div>`;
+});
+
+renderPageTable('blogTable', D.blog_pages, false);
+
+// ═══════════════════════════════════════════════════════════
+// NEW BLOG POSTS
+// ═══════════════════════════════════════════════════════════
+(function() {
+  const tbody = document.querySelector('#newBlogTable tbody');
+  D.new_blog_posts.forEach(nb => {
+    const title = nb.path.replace('/blogs/news/', '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const ctr = nb.gsc_ctr ? (nb.gsc_ctr * 100).toFixed(2) + '%' : '0%';
+    const topKw = nb.top_keywords && nb.top_keywords.length > 0
+      ? nb.top_keywords[0].keyword + ' (pos ' + nb.top_keywords[0].position + ')'
+      : '—';
+    const posHtml = nb.gsc_position > 0
+      ? `<span class="pos-badge ${posClass(nb.gsc_position)}">${nb.gsc_position.toFixed(1)}</span>`
+      : '<span style="color:#64748b">—</span>';
+    tbody.innerHTML += `<tr>
+      <td class="url-cell"><a href="${nb.url}" target="_blank" title="${nb.url}">${title}</a></td>
+      <td>${fmtNum(nb.gsc_impressions)}</td>
+      <td>${fmtNum(nb.gsc_clicks)}</td>
+      <td>${ctr}</td>
+      <td>${posHtml}</td>
+      <td>${fmtNum(nb.ga4_sessions)}</td>
+      <td style="font-size:12px;color:#94a3b8">${topKw}</td>
+    </tr>`;
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════
+// PRODUCT PERFORMANCE
+// ═══════════════════════════════════════════════════════════
+const ps = D.product_summary;
+const productKpisEl = document.getElementById('productKpis');
+[
+  ['Product Clicks (Apr 1-17)', fmtNum(ps.clicks)],
+  ['Product Impressions (Apr 1-17)', fmtNum(ps.impressions)],
+  ['GA4 Sessions (Apr 1-17)', fmtNum(ps.sessions)],
+  ['Transactions (Apr 1-17)', fmtNum(ps.transactions)],
+  ['Revenue (Apr 1-17)', fmtCur(ps.revenue)],
+  ['Active Products', ps.count],
+].forEach(([label, val]) => {
+  productKpisEl.innerHTML += `<div class="blog-kpi"><div class="bk-label">${label}</div><div class="bk-value">${val}</div></div>`;
+});
+
+// Product table
+(function() {
+  const tbody = document.querySelector('#productTable tbody');
+  D.product_pages.forEach(p => {
+    const name = shortUrl(p.url);
+    tbody.innerHTML += `<tr>
+      <td class="url-cell"><a href="${p.url}" target="_blank" title="${p.url}">${name}</a></td>
+      <td>${fmtNum(p.gsc_clicks)}</td>
+      <td>${fmtNum(p.gsc_impressions)}</td>
+      <td><span class="pos-badge ${posClass(p.gsc_position)}">${fmtDec(p.gsc_position)}</span></td>
+      <td>${fmtNum(p.ga4_sessions)}</td>
+      <td>${fmtNum(p.ga4_transactions)}</td>
+      <td>${fmtCur(p.ga4_revenue)}</td>
+    </tr>`;
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════
+// WINNERS & LOSERS
+// ═══════════════════════════════════════════════════════════
+function renderWLTable(tableId, data) {
+  const tbody = document.querySelector('#' + tableId + ' tbody');
+  tbody.innerHTML = '';
+  data.forEach(k => {
+    const clickCls = k.click_change > 0 ? 'change-positive' : k.click_change < 0 ? 'change-negative' : '';
+    const posCls = k.position_change > 0 ? 'change-positive' : k.position_change < 0 ? 'change-negative' : '';
+    tbody.innerHTML += `<tr>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${k.keyword}</td>
+      <td>${fmtNum(k.current_clicks)}</td>
+      <td>${fmtNum(k.previous_clicks)}</td>
+      <td class="${clickCls}" style="font-weight:600;">${k.click_change > 0 ? '+' : ''}${k.click_change}</td>
+      <td><span class="pos-badge ${posClass(k.current_position)}">${k.current_position}</span></td>
+      <td>${k.previous_position}</td>
+      <td class="${posCls}" style="font-weight:600;">${k.position_change > 0 ? '+' : ''}${k.position_change}</td>
+    </tr>`;
+  });
+}
+
+renderWLTable('winnersTable', D.winners);
+renderWLTable('losersTable', D.losers);
+
+// ═══════════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════════
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════
+// ALL KEYWORDS TABLE (paginated, filterable, sortable)
+// ═══════════════════════════════════════════════════════════
+let kwData = [...D.all_keywords];
+let kwFiltered = [...kwData];
+let kwSortCol = 'position';
+let kwSortAsc = true;
+let kwPage = 1;
+const KW_PER_PAGE = 100;
+
+function filterKeywords() {
+  const search = document.getElementById('kwSearch').value.toLowerCase().trim();
+  const posFilter = document.getElementById('kwPosFilter').value;
+  const volMin = parseFloat(document.getElementById('kwVolMin').value) || 0;
+
+  kwFiltered = kwData.filter(k => {
+    if (search && !k.keyword.toLowerCase().includes(search)) return false;
+    if (volMin && k.search_volume < volMin) return false;
+    if (posFilter) {
+      const [lo, hi] = posFilter.split('-').map(Number);
+      if (k.position < lo || k.position > hi) return false;
+    }
+    return true;
+  });
+
+  kwPage = 1;
+  sortAndRenderKw();
+}
+
+function sortKwTable(col) {
+  if (kwSortCol === col) kwSortAsc = !kwSortAsc;
+  else { kwSortCol = col; kwSortAsc = col === 'keyword'; }
+  // Update header styles
+  document.querySelectorAll('#kwTable thead th').forEach(th => th.classList.remove('sorted'));
+  const th = document.querySelector('#kwTable thead th[data-col="' + col + '"]');
+  if (th) th.classList.add('sorted');
+  sortAndRenderKw();
+}
+
+function sortAndRenderKw() {
+  kwFiltered.sort((a, b) => {
+    let va = a[kwSortCol], vb = b[kwSortCol];
+    // Push 0/null positions to the bottom when sorting by position
+    if (kwSortCol === 'position') {
+      if ((va === 0 || va == null) && (vb !== 0 && vb != null)) return 1;
+      if ((vb === 0 || vb == null) && (va !== 0 && va != null)) return -1;
+      if ((va === 0 || va == null) && (vb === 0 || vb == null)) return 0;
+    }
+    if (typeof va === 'string') { va = va.toLowerCase(); vb = (vb||'').toLowerCase(); }
+    if (va < vb) return kwSortAsc ? -1 : 1;
+    if (va > vb) return kwSortAsc ? 1 : -1;
+    return 0;
+  });
+  renderKwPage();
+}
+
+function renderKwPage() {
+  const total = kwFiltered.length;
+  const totalPages = Math.max(1, Math.ceil(total / KW_PER_PAGE));
+  if (kwPage > totalPages) kwPage = totalPages;
+  const start = (kwPage - 1) * KW_PER_PAGE;
+  const slice = kwFiltered.slice(start, start + KW_PER_PAGE);
+
+  document.getElementById('kwCount').textContent = fmtNum(total) + ' keywords';
+
+  const tbody = document.querySelector('#kwTable tbody');
+  tbody.innerHTML = '';
+  slice.forEach(k => {
+    const posDisplay = k.position > 0
+      ? `<span class="pos-badge ${posClass(k.position)}">${k.position}</span>`
+      : '<span style="color:#64748b">No rank</span>';
+    // Position difference display: handle strings like "Entered", "Dropped", "+3", "-2", "0", "0 (+1)"
+    let posDiffDisplay = '';
+    const pd = String(k.position_difference || '').trim();
+    if (pd.toLowerCase() === 'entered') {
+      posDiffDisplay = '<span style="color:#34d399;font-weight:600;font-size:11px;">Entered</span>';
+    } else if (pd.toLowerCase() === 'dropped') {
+      posDiffDisplay = '<span style="color:#f87171;font-weight:600;font-size:11px;">Dropped</span>';
+    } else if (pd === '' || pd === '0') {
+      posDiffDisplay = '<span style="color:#64748b;">&mdash;</span>';
+    } else {
+      // Could be "+3", "-2", "0 (+1)" etc
+      const isPositive = pd.startsWith('+') || (pd.includes('(+'));
+      const isNegative = pd.startsWith('-') || (pd.includes('(-'));
+      const cls = isPositive ? 'change-positive' : isNegative ? 'change-negative' : '';
+      posDiffDisplay = `<span class="${cls}" style="font-weight:600;font-size:12px;">${pd}</span>`;
+    }
+    const aioBadge = k.has_aio
+      ? `<span style="font-size:10px;background:rgba(251,191,36,0.15);color:#fbbf24;padding:2px 6px;border-radius:4px;font-weight:600;">AIO${k.aio_label ? ' (' + k.aio_label + ')' : ''}</span>`
+      : '';
+    tbody.innerHTML += `<tr>
+      <td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;">${k.keyword}</td>
+      <td>${fmtNum(k.search_volume)}</td>
+      <td>${posDisplay}</td>
+      <td>${posDiffDisplay}</td>
+      <td>${aioBadge}</td>
+      <td>${fmtNum(k.gsc_clicks)}</td>
+      <td>${fmtNum(k.gsc_impressions)}</td>
+      <td>${k.gsc_ctr}%</td>
+      <td>${fmtCurFull(k.etv)}</td>
+      <td>${k.difficulty}</td>
+      <td style="font-size:11px;color:#94a3b8;">${k.serp_features}</td>
+    </tr>`;
+  });
+
+  // Pagination
+  const pagDiv = document.getElementById('kwPagination');
+  pagDiv.innerHTML = '';
+  pagDiv.innerHTML += `<button ${kwPage<=1?'disabled':''} onclick="kwPage=1;renderKwPage();">&#171;</button>`;
+  pagDiv.innerHTML += `<button ${kwPage<=1?'disabled':''} onclick="kwPage--;renderKwPage();">&#8249;</button>`;
+  pagDiv.innerHTML += `<span class="page-info">Page ${kwPage} of ${totalPages}</span>`;
+  pagDiv.innerHTML += `<button ${kwPage>=totalPages?'disabled':''} onclick="kwPage++;renderKwPage();">&#8250;</button>`;
+  pagDiv.innerHTML += `<button ${kwPage>=totalPages?'disabled':''} onclick="kwPage=${totalPages};renderKwPage();">&#187;</button>`;
+}
+
+// Initial render
+sortAndRenderKw();
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT CSV
+// ═══════════════════════════════════════════════════════════
+function exportCSV() {
+  const headers = ['Keyword','Search Volume','Position','Pos Change','Has AIO','GSC Clicks','GSC Impressions','GSC CTR %','ETV','Difficulty','SERP Features'];
+  let csv = headers.join(',') + '\n';
+  kwFiltered.forEach(k => {
+    csv += [
+      '"' + k.keyword.replace(/"/g,'""') + '"',
+      k.search_volume, k.position,
+      '"' + (k.position_difference || '') + '"',
+      k.has_aio ? 'Yes' : 'No',
+      k.gsc_clicks, k.gsc_impressions,
+      k.gsc_ctr, k.etv, k.difficulty,
+      '"' + k.serp_features + '"'
+    ].join(',') + '\n';
+  });
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'eleven_loves_keywords.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════════════════════════
+// LANDING PAGES TABLE (sortable)
+// ═══════════════════════════════════════════════════════════
+let lpData = [...D.landing_pages];
+let lpSortCol = 'gsc_clicks';
+let lpSortAsc = false;
+
+function sortLpTable(col) {
+  if (lpSortCol === col) lpSortAsc = !lpSortAsc;
+  else { lpSortCol = col; lpSortAsc = col === 'url'; }
+  renderLpTable();
+}
+
+function renderLpTable() {
+  lpData.sort((a, b) => {
+    let va = a[lpSortCol], vb = b[lpSortCol];
+    if (typeof va === 'string') { va = va.toLowerCase(); vb = (vb||'').toLowerCase(); }
+    if (va < vb) return lpSortAsc ? -1 : 1;
+    if (va > vb) return lpSortAsc ? 1 : -1;
+    return 0;
+  });
+
+  const tbody = document.querySelector('#lpTable tbody');
+  tbody.innerHTML = '';
+  lpData.forEach(p => {
+    const path = shortUrl(p.url);
+    tbody.innerHTML += `<tr>
+      <td class="url-cell"><a href="${p.url}" target="_blank" title="${p.url}">${path}</a></td>
+      <td>${fmtNum(p.gsc_clicks)}</td>
+      <td>${fmtNum(p.gsc_impressions)}</td>
+      <td>${fmtPct(p.gsc_ctr)}</td>
+      <td><span class="pos-badge ${posClass(p.gsc_position)}">${fmtDec(p.gsc_position)}</span></td>
+      <td>${fmtNum(p.ga4_sessions)}</td>
+      <td>${fmtNum(p.ga4_transactions)}</td>
+      <td>${fmtCur(p.ga4_revenue)}</td>
+    </tr>`;
+  });
+}
+
+renderLpTable();
+})();
+</script>
+</body>
+</html>
