@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bluebella — SEO & International Search Packages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,200;6..72,300;6..72,400;6..72,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#000000;
+    --white:#FFFFFF;
+    --ink:#0a0a0a;
+    --muted:#00000080;        /* Bluebella secondary text = 50% black */
+    --faint:#0000000d;         /* hairline fills */
+    --line:#00000018;          /* hairlines */
+    --line-strong:#00000033;
+    --illus:#E11530;          /* illustrative / example data flag (real data stays black) */
+    --max:1280px;
+    --serif:'Newsreader', Georgia, 'Times New Roman', serif;
+    --sans:'Jost', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.65;
+    color:var(--ink);
+    background:var(--white);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 40px}
+
+  /* ---------- Type ---------- */
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:300;letter-spacing:-0.01em;color:var(--black);line-height:1.1}
+  h1{font-size:clamp(38px,5vw,62px)}
+  h2{font-size:clamp(28px,3.4vw,40px)}
+  .eyebrow{
+    font-family:var(--sans);font-weight:500;font-size:12px;
+    text-transform:uppercase;letter-spacing:0.28em;color:var(--muted);
+  }
+  .lede{font-size:18px;color:var(--muted);max-width:760px;line-height:1.6;font-weight:300}
+
+  /* ---------- Header ---------- */
+  header.top{border-bottom:1px solid var(--line)}
+  header.top .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:26px;padding-bottom:26px}
+  .logo{font-family:var(--serif);font-weight:300;font-size:26px;letter-spacing:0.02em}
+  .prepared{font-size:12px;text-transform:uppercase;letter-spacing:0.2em;color:var(--muted)}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:84px 0 30px 0}
+  .hero h1{margin-bottom:24px}
+  .hero h1 em{font-style:italic}
+  .hero .lede{margin-bottom:34px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:40px;border-top:1px solid var(--line);padding-top:26px;margin-top:8px}
+  .meta-row .item .k{font-size:11px;text-transform:uppercase;letter-spacing:0.22em;color:var(--muted);margin-bottom:4px}
+  .meta-row .item .v{font-family:var(--serif);font-size:20px;font-weight:300}
+
+  /* ---------- Pricing grid ---------- */
+  .pricing{padding:60px 0 40px 0}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+  .card{
+    display:flex;flex-direction:column;
+    background:var(--white);
+    border:1px solid var(--line-strong);
+    padding:40px 34px;
+    position:relative;
+  }
+  .card.flagship{
+    background:var(--black);
+    color:var(--white);
+    border-color:var(--black);
+  }
+  .card.flagship h3,.card.flagship .price,.card.flagship .price .cur{color:var(--white)}
+  .card .badge{
+    position:absolute;top:0;right:0;
+    background:var(--black);color:var(--white);
+    font-family:var(--sans);font-size:10px;font-weight:500;
+    text-transform:uppercase;letter-spacing:0.2em;
+    padding:8px 16px;
+  }
+  .card.flagship .badge{background:var(--white);color:var(--black)}
+  .card .pkg-num{font-size:11px;text-transform:uppercase;letter-spacing:0.24em;color:var(--muted);margin-bottom:14px}
+  .card.flagship .pkg-num{color:#ffffff99}
+  .card h3{font-size:27px;margin-bottom:6px}
+  .card .tagline{font-size:14px;color:var(--muted);min-height:42px;line-height:1.5;margin-bottom:20px}
+  .card.flagship .tagline{color:#ffffffb3}
+  .price{font-family:var(--serif);font-weight:300;font-size:52px;line-height:1;color:var(--black);letter-spacing:-0.02em}
+  .price .cur{font-size:30px;vertical-align:top;position:relative;top:6px}
+  .price small{font-family:var(--sans);display:block;font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0.04em;margin-top:8px}
+  .card.flagship .price small{color:#ffffffb3}
+
+  .divider{height:1px;background:var(--line);margin:26px 0 22px 0}
+  .card.flagship .divider{background:#ffffff2e}
+
+  .incl{font-size:11px;text-transform:uppercase;letter-spacing:0.2em;color:var(--muted);margin-bottom:16px}
+  .card.flagship .incl{color:#ffffff99}
+
+  ul.feat{list-style:none;flex:1}
+  ul.feat li{
+    position:relative;padding-left:26px;margin-bottom:13px;
+    font-size:14.5px;line-height:1.5;color:var(--ink);
+  }
+  .card.flagship ul.feat li{color:#ffffffe6}
+  ul.feat li::before{
+    content:"";position:absolute;left:0;top:7px;
+    width:9px;height:9px;border:1px solid var(--black);border-radius:50%;
+  }
+  ul.feat li.tick::before{
+    border:none;width:14px;height:9px;border-radius:0;top:6px;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'><path fill='none' stroke='black' stroke-width='2' d='M1 6 L6 11 L15 1'/></svg>") no-repeat center/contain;
+  }
+  .card.flagship ul.feat li.tick::before{
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'><path fill='none' stroke='white' stroke-width='2' d='M1 6 L6 11 L15 1'/></svg>") no-repeat center/contain;
+  }
+  ul.feat li b{font-weight:600}
+  ul.feat li.head{
+    padding-left:0;margin-top:8px;margin-bottom:10px;
+    font-size:11px;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted);font-weight:500;
+  }
+  ul.feat li.head::before{display:none}
+  .card.flagship ul.feat li.head{color:#ffffff99}
+
+  /* AI visibility block */
+  .ai-block{
+    border:1px solid #ffffff33;
+    padding:18px 18px 14px;
+    margin:6px 0 16px;
+  }
+  .ai-block .ai-title{
+    font-family:var(--sans);font-size:12px;font-weight:600;text-transform:uppercase;
+    letter-spacing:0.14em;color:var(--white);margin-bottom:12px;display:flex;align-items:center;gap:8px;
+  }
+  .ai-platforms{display:flex;flex-wrap:wrap;gap:8px}
+  .ai-platforms span{
+    font-size:12px;color:#fff;border:1px solid #ffffff40;
+    padding:5px 11px;letter-spacing:0.02em;
+  }
+
+  .cta{
+    display:block;text-align:center;margin-top:28px;
+    background:var(--black);color:var(--white);
+    font-family:var(--sans);font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:0.16em;
+    padding:15px;text-decoration:none;border:1px solid var(--black);
+    transition:opacity .2s;
+  }
+  .cta:hover{opacity:0.78}
+  .card.flagship .cta{background:var(--white);color:var(--black);border-color:var(--white)}
+
+  /* ---------- Comparison matrix ---------- */
+  .compare{padding:30px 0 70px 0}
+  .compare h2{margin-bottom:8px}
+  .compare .lede{margin-bottom:34px}
+  .matrix{width:100%;border-collapse:collapse;font-size:14.5px}
+  .matrix th,.matrix td{text-align:left;padding:16px 18px;border-bottom:1px solid var(--line);vertical-align:top}
+  .matrix thead th{
+    font-family:var(--sans);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.16em;
+    color:var(--muted);border-bottom:1px solid var(--line-strong);
+  }
+  .matrix thead th .pname{display:block;font-family:var(--serif);font-size:19px;font-weight:300;color:var(--black);text-transform:none;letter-spacing:0;margin-bottom:2px}
+  .matrix thead th .pprice{display:block;font-size:12px;color:var(--ink);letter-spacing:0.04em}
+  .matrix td:first-child,.matrix th:first-child{width:34%;color:var(--ink)}
+  .matrix td.c{text-align:center;width:22%}
+  .matrix td.c .dot{display:inline-block;width:8px;height:8px;border-radius:50%;border:1px solid var(--line-strong)}
+  .matrix td.c .yes{font-family:var(--serif);font-size:18px;color:var(--black)}
+  .matrix td.c .val{font-size:14px}
+  .matrix tbody tr:hover{background:var(--faint)}
+  .matrix .grouprow td{
+    background:var(--black);color:var(--white);
+    font-size:11px;text-transform:uppercase;letter-spacing:0.18em;font-weight:500;
+    padding:11px 18px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:40px 0 60px}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-end}
+  footer .note{font-size:13px;color:var(--muted);max-width:620px;line-height:1.6}
+  footer .sign .logo{font-size:22px}
+  footer .sign p{font-size:13px;color:var(--muted)}
+  footer .sign a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+
+  /* ---------- Report / live data ---------- */
+  .report{padding:30px 0 80px}
+  .report h2{margin-bottom:10px}
+  .report .lede{margin-bottom:40px}
+  .report .sublabel{font-size:11px;text-transform:uppercase;letter-spacing:0.2em;color:var(--muted);margin:0 0 16px}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-strong);border:1px solid var(--line-strong);margin-bottom:24px}
+  .stat{background:var(--white);padding:30px 26px}
+  .stat.invert{background:var(--black)}
+  .stat .snum{font-family:var(--serif);font-weight:300;font-size:46px;line-height:1;letter-spacing:-0.02em;color:var(--black)}
+  .stat.invert .snum{color:var(--white)}
+  .stat .snum .unit{font-family:var(--sans);font-size:16px;font-weight:400;color:var(--muted);letter-spacing:0}
+  .stat .slabel{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.4}
+  .stat.invert .slabel{color:#ffffffb3}
+
+  .report-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+  .panel{border:1px solid var(--line-strong);padding:30px 28px}
+  .panel.full{margin-bottom:24px}
+  .panel-h{font-family:var(--serif);font-weight:300;font-size:21px;color:var(--black);margin-bottom:22px;letter-spacing:-0.01em}
+  .panel-note{font-size:13px;color:var(--muted);line-height:1.55;margin-top:18px}
+
+  /* horizontal bars */
+  .bar-row{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .bar-row .bl{font-size:13px;width:130px;flex:none;color:var(--ink)}
+  .bar-row .track{flex:1;height:22px;background:var(--faint);position:relative}
+  .bar-row .fill{height:100%;background:var(--black)}
+  .bar-row .fill.light{background:var(--line-strong)}
+  .bar-row .bv{font-size:13px;font-weight:500;width:104px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
+
+  /* distribution segmented bar */
+  .dist{display:flex;height:46px;width:100%;border:1px solid var(--line-strong)}
+  .dist .seg{display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;border-right:1px solid #ffffff55;overflow:hidden;white-space:nowrap}
+  .dist .seg:last-child{border-right:none}
+  .dist-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px}
+  .dist-legend .li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+  .dist-legend .sw{width:11px;height:11px;flex:none}
+  .dist-legend .li b{color:var(--ink);font-weight:600}
+
+  /* data tables */
+  .dtable{width:100%;border-collapse:collapse;font-size:14px}
+  .dtable th{text-align:left;font-family:var(--sans);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);padding:0 14px 12px;border-bottom:1px solid var(--line-strong)}
+  .dtable th.r,.dtable td.r{text-align:right;font-variant-numeric:tabular-nums}
+  .dtable td{padding:14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .dtable tbody tr:last-child td{border-bottom:none}
+  .dtable tbody tr:hover{background:var(--faint)}
+  .dtable .kw{font-weight:500;color:var(--black)}
+  .pos{display:inline-block;min-width:30px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600;border:1px solid var(--line-strong);padding:3px 0;font-size:13px}
+  .pos.win{background:var(--black);color:#fff;border-color:var(--black)}
+  .delta{font-size:13px;font-weight:600;color:var(--illus)}
+  .delta.up{color:var(--illus)}
+  .delta.up::before{content:"▲ ";font-size:9px;vertical-align:1px}
+  .tag-op{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);border:1px solid var(--line-strong);padding:3px 9px;white-space:nowrap}
+
+  /* AI panel */
+  .panel.ai{background:var(--black);border-color:var(--black)}
+  .panel.ai .panel-h{color:#fff}
+  .ai-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#ffffff26;border:1px solid #ffffff26}
+  .ai-cell{background:var(--black);padding:22px 16px;text-align:center}
+  .ai-cell .plat{font-size:12px;color:#ffffffb3;margin-bottom:14px;min-height:30px;display:flex;align-items:center;justify-content:center;letter-spacing:0.02em}
+  .ai-cell .pct{font-family:var(--serif);font-weight:300;font-size:34px;color:#fff;line-height:1}
+  .ai-cell .ring{margin:0 auto 0;height:4px;background:#ffffff26;margin-top:14px}
+  .ai-cell .ring i{display:block;height:100%;background:#fff}
+  .ai-foot{font-size:12px;color:#ffffff80;margin-top:18px}
+
+  /* ---------- Share of Voice dashboard (example) ---------- */
+  .sov{border:1px solid var(--line-strong);background:#fff;margin-bottom:24px}
+  .sov-head{background:#000;color:#fff;padding:20px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .sov-head .t{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .sov-head .t h3{font-family:var(--serif);font-weight:300;font-size:25px;color:#fff;margin:0;letter-spacing:-0.01em}
+  .sov-head .t .sub{font-size:13px;color:#ffffffb3}
+  .sov-head .r{display:flex;align-items:center;gap:12px}
+  .sov-pill{border:1px solid var(--illus);border-radius:999px;padding:5px 14px;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--illus);font-weight:600;white-space:nowrap}
+  .sov-month{border:1px solid #ffffff4d;border-radius:999px;padding:6px 15px;font-size:12px;color:#fff;letter-spacing:0.04em;white-space:nowrap}
+  .sov-logo{font-family:var(--serif);font-weight:300;font-size:19px;color:#fff;letter-spacing:0.02em}
+  .sov-body{padding:24px 26px}
+  .sov-lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.2em;color:var(--muted);display:flex;align-items:center;gap:14px;margin-bottom:18px}
+  .sov-lbl::after{content:"";flex:1;height:1px;background:var(--line)}
+  .sov-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:18px}
+  .sov-card{background:var(--faint);padding:20px 20px}
+  .sov-card+.sov-card{margin-top:18px}
+  .sov-card h4{font-size:14px;font-weight:600;color:var(--black);margin-bottom:18px;font-family:var(--sans)}
+  .sov-card h4.cap{font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);font-weight:500;margin-bottom:14px}
+
+  .sov-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .sov-bar-row .nm{width:128px;flex:none;text-align:right;font-size:13px;color:var(--ink)}
+  .sov-bar-row.focus .nm{font-weight:700;color:#000}
+  .sov-bar-row .bar{flex:1}
+  .sov-bar-row .bar i{display:block;height:18px;background:#cfcfcf}
+  .sov-bar-row.focus .bar i{background:#000}
+  .sov-bar-row .vv{width:46px;flex:none;font-size:12px;color:var(--illus);font-variant-numeric:tabular-nums}
+  .sov-bar-row.focus .vv{color:var(--illus);font-weight:700}
+
+  .sov-split{display:flex;height:26px;border:1px solid var(--line-strong);margin-bottom:12px}
+  .sov-split .a{background:#000}
+  .sov-split .b{background:#cfcfcf}
+  .sov-split-legend{display:flex;gap:18px;font-size:12px;color:var(--illus)}
+  .sov-split-legend .li{display:flex;align-items:center;gap:7px}
+  .sov-split-legend .sw{width:10px;height:10px;flex:none}
+
+  .sov-fam{list-style:none;margin:0;padding:0}
+  .sov-fam li{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .sov-fam li:last-child{border-bottom:none}
+  .sov-fam li .rank{color:var(--muted);width:18px;flex:none;font-variant-numeric:tabular-nums}
+  .sov-fam li .fnm{flex:1;padding-left:6px;color:var(--ink)}
+  .sov-fam li .fct{font-weight:600;font-variant-numeric:tabular-nums;color:var(--illus)}
+
+  .sov-sent{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+  .sov-sent .big{font-family:var(--serif);font-weight:300;font-size:42px;line-height:1;color:var(--illus)}
+  .sov-sent .chip{font-size:12px;border:1px solid var(--illus);padding:4px 10px;color:var(--illus)}
+  .sov-sent-note{font-size:12px;color:var(--muted);line-height:1.5}
+
+  .sov-callouts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .sov-callout{border-left:3px solid #000;background:var(--faint);padding:13px 16px}
+  .sov-callout h5{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#000;margin-bottom:6px;font-family:var(--sans);font-weight:600}
+  .sov-callout p{font-size:12.5px;color:var(--muted);line-height:1.5}
+  .sov-source{font-size:11px;color:var(--muted);text-align:center;padding:14px 20px;border-top:1px solid var(--line)}
+  .sov-source b{color:var(--illus)}
+
+  /* LLM platform split */
+  .llm-split{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  .llm{text-align:center}
+  .llm .lp{font-size:12px;color:var(--muted);margin-bottom:12px;min-height:30px;display:flex;align-items:center;justify-content:center;letter-spacing:0.02em}
+  .llm .lpct{font-family:var(--serif);font-weight:300;font-size:32px;line-height:1;color:var(--illus);margin-bottom:12px}
+  .llm .lbar{height:4px;background:var(--line-strong)}
+  .llm .lbar i{display:block;height:100%;background:#000}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:1000px){
+    .sov-grid{grid-template-columns:1fr}
+    .sov-callouts{grid-template-columns:1fr}
+    .sov-bar-row .nm{width:104px}
+  }
+  @media(max-width:1000px){
+    .cards{grid-template-columns:1fr;max-width:520px;margin:0 auto}
+    .card .tagline{min-height:0}
+    .stat-row{grid-template-columns:1fr 1fr}
+    .report-grid{grid-template-columns:1fr}
+    .ai-grid{grid-template-columns:1fr 1fr 1fr}
+  }
+  @media(max-width:820px){
+    .wrap{padding:0 22px}
+    .matrix thead th .pname{font-size:16px}
+    .matrix th,.matrix td{padding:13px 10px}
+    .matrix td:first-child,.matrix th:first-child{width:30%}
+    .meta-row{gap:26px}
+  }
+  @media(max-width:620px){
+    .matrix{font-size:12.5px}
+    .matrix thead th{font-size:10px}
+    .hero{padding:54px 0 20px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="top">
+  <div class="wrap">
+    <div class="logo">bluebella</div>
+    <div class="prepared">SEO Partnership Proposal</div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:22px">Search &amp; AI Visibility &middot; Prepared for Bluebella</p>
+    <h1>Three packages, built to grow Bluebella <em>across every market.</em></h1>
+    <p class="lede">Clear, fixed-price monthly packages — scaling from technical foundations to full international SEO and AI search visibility. International growth is built in: hreflang, localisation and multi-market targeting feature from Package&nbsp;2 onward, and Package&nbsp;3 adds reporting on how Bluebella appears across every major AI platform.</p>
+    <div class="meta-row">
+      <div class="item"><div class="k">Engagement</div><div class="v">Monthly retainer</div></div>
+      <div class="item"><div class="k">Minimum term</div><div class="v">3 months</div></div>
+      <div class="item"><div class="k">Markets</div><div class="v">1 &rarr; 5+</div></div>
+      <div class="item"><div class="k">Pricing</div><div class="v">Fixed, all-inclusive</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING CARDS ============ -->
+<section class="pricing">
+  <div class="wrap">
+    <div class="cards">
+
+      <!-- PACKAGE 1 -->
+      <div class="card">
+        <div class="pkg-num">Package 01</div>
+        <h3>Foundation</h3>
+        <p class="tagline">Get the fundamentals right — technical health, on-page and content for your primary market.</p>
+        <div class="price"><span class="cur">£</span>1,200<small>per month</small></div>
+        <div class="divider"></div>
+        <div class="incl">What's included</div>
+        <ul class="feat">
+          <li class="tick"><b>Technical SEO</b> — monthly crawl, site-health &amp; fixes</li>
+          <li class="tick"><b>Indexing insights</b> — indexation monitoring &amp; coverage reporting</li>
+          <li class="tick">Keyword research &amp; mapping — primary market (UK)</li>
+          <li class="tick">On-page optimisation (titles, meta, H1s, copy) — up to <b>15 URLs / month</b></li>
+          <li class="tick">Collection (PLP) &amp; product (PDP) page optimisation</li>
+          <li class="tick">Internal linking improvements</li>
+          <li class="tick"><b>2 SEO content pieces / month</b> (briefs + drafts)</li>
+          <li class="tick">Monthly GA4 &amp; Search Console reporting</li>
+          <li class="tick">Monthly report + 30-min review call</li>
+        </ul>
+        <a class="cta" href="#">Choose Foundation</a>
+      </div>
+
+      <!-- PACKAGE 2 -->
+      <div class="card">
+        <div class="pkg-num">Package 02</div>
+        <h3>Growth + International</h3>
+        <p class="tagline">Everything in Foundation, plus international targeting and a heavier content &amp; authority push.</p>
+        <div class="price"><span class="cur">£</span>1,800<small>per month</small></div>
+        <div class="divider"></div>
+        <div class="incl">Everything in Package 01, plus</div>
+        <ul class="feat">
+          <li class="head">International SEO foundations</li>
+          <li class="tick">hreflang implementation &amp; validation</li>
+          <li class="tick">Country / language targeting + GSC international setup</li>
+          <li class="tick">Multi-market keyword research — <b>up to 3 markets</b> (e.g. UK, US, EU)</li>
+          <li class="head">Architecture &amp; feeds</li>
+          <li class="tick"><b>Website architecture</b> — internal linking optimisation based on semantic relevance</li>
+          <li class="tick"><b>Shopping feed optimisation</b> (Google Merchant Center / Shopping)</li>
+          <li class="tick">Deeper indexing insights — log-informed crawl priorities</li>
+          <li class="head">Scaled delivery</li>
+          <li class="tick">On-page optimisation — up to <b>30 URLs / month</b></li>
+          <li class="tick"><b>4 SEO content pieces / month</b></li>
+          <li class="tick">Competitor &amp; SERP tracking across markets</li>
+          <li class="tick">Monthly report + 60-min strategy review</li>
+        </ul>
+        <a class="cta" href="#">Choose Growth</a>
+      </div>
+
+      <!-- PACKAGE 3 -->
+      <div class="card flagship">
+        <span class="badge">Most popular</span>
+        <div class="pkg-num">Package 03</div>
+        <h3>International Performance + AI</h3>
+        <p class="tagline">Full multi-market international SEO, maximum content, and AI search visibility across every major platform.</p>
+        <div class="price"><span class="cur">£</span>2,800<small>per month</small></div>
+        <div class="divider"></div>
+        <div class="incl">Everything in Package 02, plus</div>
+
+        <ul class="feat" style="flex:none;margin-bottom:6px">
+          <li class="tick"><b>Full SEO audit (month 1)</b> — technical, on-page, content, architecture, indexation &amp; analytics deep-dive</li>
+        </ul>
+
+        <div class="ai-block">
+          <div class="ai-title">★ AI Visibility Reporting</div>
+          <div style="font-size:13px;color:#ffffffcc;margin-bottom:13px;line-height:1.5">Track Bluebella's presence, citations &amp; share of voice across:</div>
+          <div class="ai-platforms">
+            <span>ChatGPT</span>
+            <span>Google Gemini</span>
+            <span>Google AI Mode</span>
+            <span>AI Overviews</span>
+            <span>Anthropic (Claude)</span>
+          </div>
+        </div>
+
+        <ul class="feat">
+          <li class="head">Full international programme</li>
+          <li class="tick">Localisation strategy + international site architecture</li>
+          <li class="tick">Multi-currency / region UX guidance</li>
+          <li class="tick">hreflang at scale &amp; keyword research — <b>5+ markets</b></li>
+          <li class="head">Maximum delivery</li>
+          <li class="tick">On-page optimisation across the <b>full ranking footprint</b></li>
+          <li class="tick"><b>8 SEO content pieces / month</b> + localisation for key markets</li>
+          <li class="tick">Semantic internal linking at scale + <b>shopping feed management across markets</b></li>
+          <li class="tick">Digital PR &amp; active link-building outreach</li>
+          <li class="tick"><b>Weekly rank tracking</b> across all markets</li>
+          <li class="tick">Quarterly strategy workshops + dedicated account lead</li>
+          <li class="tick">Monthly report + bi-weekly check-ins</li>
+        </ul>
+        <a class="cta" href="#">Choose International</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVE DATA / TRACKING EXAMPLE ============ -->
+<section class="report">
+  <div class="wrap">
+    <p class="eyebrow" style="margin-bottom:16px">Live data &middot; Example monthly report</p>
+    <h2>A live look at Bluebella's search performance.</h2>
+    <p class="lede">Real organic data, pulled for bluebella.com — and a preview of the tracking you'll receive every month. This is the reporting that comes built into your package. Source: Google organic search.</p>
+
+    <!-- HERO STATS -->
+    <div class="stat-row">
+      <div class="stat">
+        <div class="snum">2,578</div>
+        <div class="slabel">Keywords ranking in the UK</div>
+      </div>
+      <div class="stat">
+        <div class="snum">229</div>
+        <div class="slabel">Keywords ranking in Google's top 3</div>
+      </div>
+      <div class="stat">
+        <div class="snum">522</div>
+        <div class="slabel">Keywords already in Google's top 10</div>
+      </div>
+      <div class="stat invert">
+        <div class="snum">903</div>
+        <div class="slabel">US keywords — largely stuck on pages 3&ndash;10. The international opportunity.</div>
+      </div>
+    </div>
+
+    <!-- INTERNATIONAL GAP + DISTRIBUTION -->
+    <div class="report-grid">
+      <div class="panel">
+        <div class="panel-h">UK vs US — the international gap</div>
+        <div class="bar-row"><span class="bl">UK 🇬🇧</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="bv">522 in top 10</span></div>
+        <div class="bar-row"><span class="bl">US 🇺🇸</span><div class="track"><div class="fill" style="width:5.7%"></div></div><span class="bv">30 in top 10</span></div>
+        <p class="panel-note">Same brand, same catalogue — the US (a far larger lingerie market) has 903 keywords already registering, but only 30 in Google's top 10 versus 522 in the UK. International SEO from Package&nbsp;2 onward is where the next step-change in traffic lives.</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h">Where Bluebella ranks today (UK)</div>
+        <div class="dist">
+          <div class="seg" style="width:8.9%;background:#000">229</div>
+          <div class="seg" style="width:11.4%;background:#454545">293</div>
+          <div class="seg" style="width:13.7%;background:#777">352</div>
+          <div class="seg" style="width:16.1%;background:#a6a6a6">416</div>
+          <div class="seg" style="width:49.9%;background:#d2d2d2;color:#000">1,288</div>
+        </div>
+        <div class="dist-legend">
+          <span class="li"><span class="sw" style="background:#000"></span><b>229</b>&nbsp;in top 3</span>
+          <span class="li"><span class="sw" style="background:#454545"></span><b>293</b>&nbsp;pos 4&ndash;10</span>
+          <span class="li"><span class="sw" style="background:#777"></span><b>352</b>&nbsp;pos 11&ndash;20</span>
+          <span class="li"><span class="sw" style="background:#a6a6a6"></span><b>416</b>&nbsp;pos 21&ndash;30</span>
+          <span class="li"><span class="sw" style="background:#d2d2d2"></span><b>1,288</b>&nbsp;pos 31+</span>
+        </div>
+        <p class="panel-note">768 keywords sit on pages 2&ndash;3 (positions 11&ndash;30) — the fastest, highest-ROI wins to move onto page&nbsp;1.</p>
+      </div>
+    </div>
+
+    <!-- RANK TRACKING EXAMPLE -->
+    <div class="panel full">
+      <div class="panel-h">Example: your weekly rank tracker</div>
+      <table class="dtable">
+        <thead>
+          <tr>
+            <th>Keyword</th>
+            <th class="r">Search volume</th>
+            <th class="r">Position</th>
+            <th class="r">30-day</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="kw">sexy lingerie</td><td class="r">60,500</td><td class="r"><span class="pos win">2</span></td><td class="r"><span class="delta up">1</span></td><td><span class="tag-op">Defend</span></td></tr>
+          <tr><td class="kw">sexy underwear</td><td class="r">27,100</td><td class="r"><span class="pos">18</span></td><td class="r"><span class="delta up">4</span></td><td><span class="tag-op">Striking distance</span></td></tr>
+          <tr><td class="kw">lingerie sets</td><td class="r">14,800</td><td class="r"><span class="pos">6</span></td><td class="r"><span class="delta up">2</span></td><td><span class="tag-op">Push to top 3</span></td></tr>
+          <tr><td class="kw">lingerie for women</td><td class="r">14,800</td><td class="r"><span class="pos win">2</span></td><td class="r"><span class="delta up">1</span></td><td><span class="tag-op">Defend</span></td></tr>
+          <tr><td class="kw">cup sizes bra chart</td><td class="r">12,100</td><td class="r"><span class="pos">10</span></td><td class="r"><span class="delta up">1</span></td><td><span class="tag-op">Push to top 5</span></td></tr>
+          <tr><td class="kw">lace bra</td><td class="r">6,600</td><td class="r"><span class="pos">9</span></td><td class="r"><span class="delta up">3</span></td><td><span class="tag-op">Push to top 3</span></td></tr>
+          <tr><td class="kw">see-through lingerie</td><td class="r">5,400</td><td class="r"><span class="pos win">1</span></td><td class="r"><span class="delta">&ndash;</span></td><td><span class="tag-op">Holds #1</span></td></tr>
+        </tbody>
+      </table>
+      <p class="panel-note">Live positions from Google organic search. 30-day movement is illustrative of the weekly rank tracking delivered in Package&nbsp;3 — every priority keyword, tracked and reported each week.</p>
+    </div>
+
+    <!-- COMPETITOR HEADROOM -->
+    <div class="panel full">
+      <div class="panel-h">Market headroom — keywords ranking vs rivals</div>
+      <div class="bar-row"><span class="bl">Pour Moi</span><div class="track"><div class="fill light" style="width:100%"></div></div><span class="bv">37,160</span></div>
+      <div class="bar-row"><span class="bl">Boux Avenue</span><div class="track"><div class="fill light" style="width:85%"></div></div><span class="bv">31,498</span></div>
+      <div class="bar-row"><span class="bl">Victoria's Secret</span><div class="track"><div class="fill light" style="width:83%"></div></div><span class="bv">30,785</span></div>
+      <div class="bar-row"><span class="bl"><b>Bluebella</b></span><div class="track"><div class="fill" style="width:6.9%"></div></div><span class="bv">2,578</span></div>
+      <p class="panel-note">Number of keywords each brand ranks for in UK Google. Direct lingerie competitors rank for 12&ndash;14&times; more keywords than Bluebella — the category terms are winnable, and that gap is the growth runway.</p>
+    </div>
+
+    <!-- AI VISIBILITY EXAMPLE — SHARE OF VOICE DASHBOARD -->
+    <p class="sublabel" style="margin-top:6px">Example: your monthly AI visibility report &mdash; <span style="color:var(--illus);font-weight:600">illustrative data only (shown in red)</span></p>
+    <div class="sov">
+      <div class="sov-head">
+        <div class="t">
+          <h3>Share of Voice</h3>
+          <span class="sub">Which brands dominate AI search visibility?</span>
+        </div>
+        <div class="r">
+          <span class="sov-pill">★ Example data only</span>
+          <span class="sov-month">June 2026</span>
+          <span class="sov-logo">bluebella</span>
+        </div>
+      </div>
+
+      <div class="sov-body">
+        <div class="sov-lbl">Brand visibility rankings</div>
+        <div class="sov-grid">
+
+          <!-- LEFT: ranking chart -->
+          <div class="sov-card">
+            <h4>Top 10 lingerie brands by share of voice</h4>
+            <div class="sov-bar-row"><span class="nm">Victoria's Secret</span><span class="bar"><i style="width:100%"></i></span><span class="vv">24.6%</span></div>
+            <div class="sov-bar-row"><span class="nm">Savage X Fenty</span><span class="bar"><i style="width:68%"></i></span><span class="vv">16.8%</span></div>
+            <div class="sov-bar-row"><span class="nm">Agent Provocateur</span><span class="bar"><i style="width:48%"></i></span><span class="vv">11.9%</span></div>
+            <div class="sov-bar-row"><span class="nm">Ann Summers</span><span class="bar"><i style="width:39%"></i></span><span class="vv">9.7%</span></div>
+            <div class="sov-bar-row focus"><span class="nm">Bluebella</span><span class="bar"><i style="width:34%"></i></span><span class="vv">8.4%</span></div>
+            <div class="sov-bar-row"><span class="nm">Boux Avenue</span><span class="bar"><i style="width:29%"></i></span><span class="vv">7.2%</span></div>
+            <div class="sov-bar-row"><span class="nm">Lounge</span><span class="bar"><i style="width:25%"></i></span><span class="vv">6.1%</span></div>
+            <div class="sov-bar-row"><span class="nm">Hunkemöller</span><span class="bar"><i style="width:21%"></i></span><span class="vv">5.3%</span></div>
+            <div class="sov-bar-row"><span class="nm">Pour Moi</span><span class="bar"><i style="width:18%"></i></span><span class="vv">4.4%</span></div>
+            <div class="sov-bar-row"><span class="nm">Honey Birdette</span><span class="bar"><i style="width:13%"></i></span><span class="vv">3.1%</span></div>
+          </div>
+
+          <!-- RIGHT: breakdown / families / sentiment -->
+          <div>
+            <div class="sov-card">
+              <h4 class="cap">Bluebella mention breakdown</h4>
+              <div class="sov-split"><div class="a" style="width:41%"></div><div class="b" style="width:59%"></div></div>
+              <div class="sov-split-legend">
+                <span class="li"><span class="sw" style="background:#000"></span>Brand name, 188 (41%)</span>
+                <span class="li"><span class="sw" style="background:#cfcfcf"></span>Product name, 271 (59%)</span>
+              </div>
+            </div>
+
+            <div class="sov-card">
+              <h4 class="cap">Top Bluebella product ranges</h4>
+              <ul class="sov-fam">
+                <li><span class="rank">1</span><span class="fnm">Marabel</span><span class="fct">64</span></li>
+                <li><span class="rank">2</span><span class="fnm">Emerson</span><span class="fct">52</span></li>
+                <li><span class="rank">3</span><span class="fnm">Nova</span><span class="fct">41</span></li>
+                <li><span class="rank">4</span><span class="fnm">Cassiopeia</span><span class="fct">33</span></li>
+                <li><span class="rank">5</span><span class="fnm">Kpresent</span><span class="fct">29</span></li>
+                <li><span class="rank">6</span><span class="fnm">Lyzz</span><span class="fct">24</span></li>
+                <li><span class="rank">7</span><span class="fnm">Isadora</span><span class="fct">19</span></li>
+              </ul>
+            </div>
+
+            <div class="sov-card">
+              <h4 class="cap">Sentiment</h4>
+              <div class="sov-sent"><span class="big">89.3%</span><span class="chip">+5.1pp vs category avg</span></div>
+              <p class="sov-sent-note">412 positive of 461 total concept associations. Lingerie category average sits at 84.2%.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LLM PLATFORM SPLIT -->
+        <div class="sov-card" style="margin-top:18px">
+          <h4 class="cap">Share of voice by AI platform</h4>
+          <div class="llm-split">
+            <div class="llm"><div class="lp">ChatGPT</div><div class="lpct">18%</div><div class="lbar"><i style="width:82%"></i></div></div>
+            <div class="llm"><div class="lp">Google Gemini</div><div class="lpct">12%</div><div class="lbar"><i style="width:55%"></i></div></div>
+            <div class="llm"><div class="lp">Google AI Mode</div><div class="lpct">9%</div><div class="lbar"><i style="width:41%"></i></div></div>
+            <div class="llm"><div class="lp">AI Overviews</div><div class="lpct">22%</div><div class="lbar"><i style="width:100%"></i></div></div>
+            <div class="llm"><div class="lp">Anthropic (Claude)</div><div class="lpct">7%</div><div class="lbar"><i style="width:32%"></i></div></div>
+          </div>
+        </div>
+
+        <!-- CALLOUTS -->
+        <div class="sov-callouts">
+          <div class="sov-callout"><h5>Bluebella climbs to #5</h5><p>Up from #7 last month (8.4% vs 6.9%), overtaking Boux Avenue and Lounge in AI share of voice.</p></div>
+          <div class="sov-callout"><h5>Product-led recall</h5><p>59% of mentions cite a range by name — Marabel and Emerson drive the strongest AI recall.</p></div>
+          <div class="sov-callout"><h5>Sentiment edge</h5><p>89.3% positive sentiment sits +5.1pp above the category average of 84.2% — the widest gap since tracking began.</p></div>
+        </div>
+      </div>
+
+      <div class="sov-source">Source: dotdwdigital AI Visibility Pipeline &middot; June 2026 &middot; ChatGPT, Gemini, Google AI Mode, AI Overviews &amp; Anthropic &middot; 16 brands tracked &middot; <b>Illustrative example data only — not live figures.</b></div>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:26px">3-month minimum term, monthly thereafter. The full SEO audit is included in month 1 of Package&nbsp;3. Organic figures: Google (live snapshot).</p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="note">
+      Prepared for Bluebella. Packages can be tailored or combined to fit priorities and budget — these three tiers are the recommended starting points.
+    </div>
+    <div class="sign">
+      <div class="logo">dotdwdigital</div>
+      <p>Wayne Burden &middot; <a href="mailto:wayne.burden@dotdw.co.uk">wayne.burden@dotdw.co.uk</a></p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
