@@ -1,0 +1,620 @@
+<title>Kinto Search Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap">
+<style>
+:root {
+    --kinto-gray: #999999;
+    --kinto-dark: #333333;
+    --kinto-text: #555555;
+    --kinto-light: #f5f5f3;
+    --kinto-border: #e5e5e3;
+    --kinto-white: #ffffff;
+    --green: #1e7a4f;
+    --green-light: #eef7f2;
+    --blue: #3a6ea5;
+    --blue-light: #eef3f9;
+    --amber: #b8860b;
+    --amber-light: #fdf8ed;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: var(--kinto-white); }
+body {
+    font-family: 'Work Sans', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--kinto-text);
+    background: var(--kinto-white);
+    font-size: 15px;
+}
+.container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+.hero {
+    background: var(--kinto-dark);
+    color: #fff;
+    padding: 3.5rem 0 3rem;
+}
+.hero .container { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+.hero img { height: 34px; filter: brightness(0) invert(1); display: block; margin-bottom: 1.25rem; }
+.hero h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-size: 2.6rem;
+    line-height: 1.15;
+    color: #fff;
+    text-wrap: balance;
+}
+.hero .sub { color: rgba(255,255,255,0.65); font-size: 0.95rem; margin-top: 0.5rem; font-weight: 300; }
+.hero .period {
+    text-align: right;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.55);
+    line-height: 2;
+}
+.overline {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--kinto-gray);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+.section { padding: 3.25rem 0; border-bottom: 1px solid var(--kinto-border); }
+.section:last-of-type { border-bottom: none; }
+.section h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-size: 1.85rem;
+    color: var(--kinto-dark);
+    margin-bottom: 1rem;
+    text-wrap: balance;
+}
+.section .lede { max-width: 46rem; margin-bottom: 1.75rem; font-weight: 300; font-size: 1.02rem; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 1px; background: var(--kinto-border); border: 1px solid var(--kinto-border); margin: 2rem 0; }
+.stat {
+    background: var(--kinto-white);
+    padding: 1.5rem 1.6rem 1.4rem;
+}
+.stat .label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--kinto-gray); font-weight: 600; line-height: 1.5; margin-bottom: 0.65rem; }
+.stat .value {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: 2.35rem;
+    line-height: 1.05;
+    color: var(--kinto-dark);
+    font-variant-numeric: tabular-nums;
+}
+.stat .value.pos { color: var(--green); }
+.stat .detail { font-size: 0.82rem; margin-top: 0.55rem; color: var(--kinto-text); font-weight: 300; }
+.timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-top: 1.75rem; }
+.tl-item { border-top: 2px solid var(--kinto-dark); padding-top: 0.9rem; }
+.tl-item .date { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--kinto-gray); font-weight: 600; }
+.tl-item h3 { font-family: 'Work Sans', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--kinto-dark); margin: 0.3rem 0 0.35rem; }
+.tl-item p { font-size: 0.85rem; font-weight: 300; }
+.fig { margin: 2.25rem 0 0.5rem; }
+.fig figcaption { font-size: 0.8rem; color: var(--kinto-gray); margin-top: 0.75rem; font-weight: 300; }
+.fig .fig-title { font-size: 0.95rem; font-weight: 600; color: var(--kinto-dark); margin-bottom: 0.15rem; }
+.fig .fig-sub { font-size: 0.8rem; color: var(--kinto-gray); margin-bottom: 1rem; font-weight: 300; }
+.chart-wrap { overflow-x: auto; }
+svg .bar:hover, svg .pt:hover { opacity: 0.75; }
+.legend { display: flex; gap: 1.5rem; font-size: 0.78rem; margin-bottom: 0.6rem; }
+.legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+table.data { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1.25rem; }
+table.data th {
+    text-align: left; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--kinto-gray); font-weight: 600; padding: 0.55rem 0.9rem 0.55rem 0;
+    border-bottom: 1px solid var(--kinto-dark);
+}
+table.data td { padding: 0.55rem 0.9rem 0.55rem 0; border-bottom: 1px solid var(--kinto-border); font-variant-numeric: tabular-nums; }
+table.data td.num, table.data th.num { text-align: right; }
+table.data td:first-child { color: var(--kinto-dark); }
+.tbl-wrap { overflow-x: auto; }
+.pill { display: inline-block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; padding: 0.18rem 0.6rem; border-radius: 3px; vertical-align: middle; }
+.pill.g { background: var(--green-light); color: var(--green); }
+.pill.b { background: var(--blue-light); color: var(--blue); }
+.callout {
+    background: var(--kinto-light);
+    border-left: 3px solid var(--kinto-dark);
+    padding: 1.4rem 1.75rem;
+    margin: 2rem 0 0;
+    font-size: 0.92rem;
+    font-weight: 300;
+    max-width: 52rem;
+}
+.callout strong { color: var(--kinto-dark); font-weight: 600; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+@media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+.next-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem; margin-top: 1.75rem; }
+.next-item { background: var(--kinto-light); padding: 1.4rem 1.5rem; border-radius: 4px; }
+.next-item .n {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.6rem; color: var(--kinto-gray); line-height: 1; margin-bottom: 0.5rem; font-weight: 500;
+}
+.next-item h3 { font-size: 0.92rem; font-weight: 600; color: var(--kinto-dark); margin-bottom: 0.35rem; }
+.next-item p { font-size: 0.83rem; font-weight: 300; }
+.footer { padding: 2.5rem 0 3.5rem; font-size: 0.78rem; color: var(--kinto-gray); font-weight: 300; }
+.footer h4 { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--kinto-gray); font-weight: 600; margin-bottom: 0.6rem; }
+@media print { .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+
+<div class="hero">
+    <div class="container">
+        <div>
+            <img src="data:image/webp;base64,UklGRqAjAABXRUJQVlA4WAoAAAA4AAAACQYAEgIASUNDUKgBAAAAAAGobGNtcwIQAABtbnRyUkdCIFhZWiAH3AABABkAAwApADlhY3NwQVBQTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9tYAAQAAAADTLWxjbXMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAAF9jcHJ0AAABTAAAAAx3dHB0AAABWAAAABRyWFlaAAABbAAAABRnWFlaAAABgAAAABRiWFlaAAABlAAAABRyVFJDAAABDAAAAEBnVFJDAAABDAAAAEBiVFJDAAABDAAAAEBkZXNjAAAAAAAAAAVjMmNpAAAAAAAAAAAAAAAAY3VydgAAAAAAAAAaAAAAywHJA2MFkghrC/YQPxVRGzQh8SmQMhg7kkYFUXdd7WtwegWJsZp8rGm/fdPD6TD//3RleHQAAAAAQ0MwAFhZWiAAAAAAAAD21gABAAAAANMtWFlaIAAAAAAAAG+iAAA49QAAA5BYWVogAAAAAAAAYpkAALeFAAAY2lhZWiAAAAAAAAAkoAAAD4QAALbPQUxQSBEXAAABHMVt2zjS/mMnuV6+ETEBpD4ntQRKIaNsSFFWlzuag+1THtJ0LRb3B71V25Nn27ZtkRAJSEACEioBCZWAhEqIhEpAAhKQEAfLeZ7X15G0WyH7vo1xRcQESIokSZIkgxBQBlJAWSgOZSEElGGQ73GRycg9PSImgP7f//F//B//x//xf/wf/8f/8X/8H//H//F//B//x//xf/wf/8f/8X/8H//H//F//B//x//xf/wf/8f/8X/8H//H//F//B//x//xf/wf//9bvZTamvTeO/73vfd+tXaU/AteKmfrHT773Wrhv0m4HK211ru01s6S/+Qp59XxQO2t5r8/cpWOf3Dcrfx5k+o18OzeDv5rg6soLO8z/TmTqky847gO/vuC6w2H4+Q/YPi4Jt51XOWviiQKr1L+bEn1xiurVN5Z3AyPT1Sby5fhZvjx3ZUO1/34Urn889kVlz2Y3i+dA29+V95VPGBZv8854TO/Cg8Yfn58a6XD/SifqcKyOuKBPTj53bgOvP9d91SD7ecReH2XBtOf31i68ciev1GGbfZzYxfWNztu/JAq+Q8DgddKC9QUT734CxWj4qdvg/JaqU38pPPkPwh0XJvWJw88eJZ445cqN35clfyngI5rsz6n4tkXB9ugN+Y68TP3448AHddmPXzj8SPH2vVC3BQ/96zxp+ParCcNvKDWUMuvk0Txs2vj2NNxbdaTFe94Bdqkl02CD6iNA0/HtVnPoXjLm8OsvgsLPqI2jjod12Y9FS86OMgmvSk3xXfUGnM6rs16Kl51cIzVNzkV33IeAafj2qyn4GUHR9ig9ywT37PnaNNxbdaT9W0wOMDKa6SOb3pxqOm4NuthxfsODq9GL8kNn1VroOm4NvsZeOPBwdXpJcvEl+05ynRcm/0I3rnH1uB34Btft8WYjmuznwNvLZGlmV7xUHzfkQNMx7XZT9LXQo2rmekN+cY3buGl49osqOPFS1QNpjc8FF955NjScW0WVPHmyjF10Rvyhdec/W6tlf/j0VrrXd8CekaWjmuzINZXQ4+oWegN88ALzt5qYbJN5by6Pg+4Oax0XJsNXXj5Fk6z0itWxcOnnIUcc2n3fBi0BJWOa7OhhNfPsdQrvSILHj2ug+mJqcp8EnCGlI5rs6Lbk/ZWy3892q2OxqJkXbApNdE75oHnTjmYnpzqrc/BzfGk49qsqMDtbJn+9/lSL2hrQrn9sN2ovf5ZSqH3PBRPnVemNzxEn4KRo0nHtdnR7UUy/ZN1OkFekx+3GdGnPvHQeWV6zyL6DOgRSzquzY4SfEqif/pUH/3PAsEjVTK97XE/AjgjSY5rsyRxMQsZpu4C9Q8CHnhir0xvzOd8AiSOBK7Nkhgehcn2dKH8x0AeeKBkeu+jPwCdg0jgtdnS6aGSeVEHuP4UyAr32pjePYk/DA4hgddmTcNBJYdZHSD9GXAovM/K9P6pqTfMHEACr82aMuwruczqQP4IqPA+K/2Q3NQZNIePwKvY02XXyGlWO6Q/ACqc60k/KDdn0Bw8Aq9iUdPsJrfZgcRfhW9tTD9rEl/QHDoCr2JRGdbKfqjaIUVfhW9J9PPm7gpaA0fgVbRSp1klz5edBF+F61HoZ67TE1DDRuBVLFW36uR7mCGFXoVnPenH5ssVjqAReBW7gnVxltRMIq/C8830k+fhSXPICLyKXRWrTt5PM+W4q3CsB/30zRE0B4zAq1jWaVXdUbdCDbsKxzfTz5+HH2gOF4FXsa3bSMl/MhtRV+BXD/qGzQ80BYvAq1jXNJIHULNCjrmsfnqir1imGwwOFYFXsS8YH09gtZKQSwq3jT4k324wOFAEXsW+ipHSI6uVcsDxgFct9C1PN5A4EXgVCzuM+jNoGqEG3IDXkehrFvWCK0oEXsXGmlF7SLWa8SbwKkzfMw0vqDEi8CpWdhmVh9A0Qom2E15P+qQsXpAjROBV7KwbpadUKwm2Aqda6ateXpTjQ+BVPAl6rBqBQy2pE830XasTjPAQeBVbGzbjOc3qDLUBnyPTlz3UByQ4BF7F2mDbn5OsZqQJfA6mb5vVB2pkcIdX8ZroNkKJswqfg+nrZvWhOS54wKt4FdeDDisJs6Q+BtP3zeoCg6OCB7yKZ9EeRNMIHGUDLgfTF87qAldQ8IBX8aSa1RlkDS4H0zfO6gJHSPCAV/GmktWMsQKXg+krZ3WhHBA84FU8KrqNcEQYTxeD6Ttn9YA7HnjAq3hWh9UdYRc8DqYvndUDajTwgFfxrmgaIcVXgUdN9K0PF5pigQe8ipfVrFp48fSgmb529YA7FHjAq3habDXD64LHQt+7ecARCDzgVbwtEiMcwVXgsdIXFw/KYcADXsXrKlZ3cA0PQp+chwNcUcADXsXzommEFFonHHb66KwOUGKAB7yKB3ZatchidTD5q1H2MEKAB7yKF8ZWM7IEDjN999MBzgDgAa/iiZEYocZVgcOTvvztQHn78YBXoU1WrHpcdQc3fXqedrh2Hw94FdplNI2QoqrCfvK3o+wAae/xgFehfVatrqiaDgp9/eZAth4PeBXaaKxGGlQn7Bt9/26HsvF4wKvQTiMxQg0pVrtBC5jUru87HvAqtNeyVQ+pBvu8AnTaoew6HvB602ajYYQUUKx2jdaw2/VNxwNeB2+3anUFVIP5pEVMdihbjge8Dqbtxmqk8cRqV1aBml3fcTzgdTDtNxIj1HBqMBdax2mGst94wOtg2nHZaoSTmikvRLHr240HvA6mLUfDCDmYKsxPWsnbDGmz8YDXwbTpqpUE0zSbtJTJTvZaVngdTLuO1Eg5lA6Yl7WgZoa007LC62Dad5cRaih1s06LyWrWNlpWeB1MGy9ZjUhKMC+rQc1M91lWeB1MO4+6EXIgiZnQek4r1F2WFV4H096rVhJHrGZpQapZ32RZ4XUwbT5SI+UwqrAWWtFphbTFssLrYNp+lxFqGA2ztCTV7NphWeF1MO2/ZDWjKMNaaE2nlW6wrPA6mAKAuhFKEF1mZVGaFY7txRNeB1MIVCsJIrXqtKisVvfu4gGvgykGaBqBQ+iA9bEqdFmBN1eH18EUBc3qDCGxmrSsyazuLYHXwRQGyWqGkFqd60K31b21KrwOpjig2wglgA4YKy9MsQJvrAyvgykSDisJILESWtlpVfcVq5fBFAo0jcDxo1Z5aU6re191OB1MwdCszvA5YDxoaZMVeFc1OB1M0ZCsZvhcVufa0G1VN1WG08EUDnQb4YieaZUWp1rJphpOBlNAFKs7eDKMb1pdNdI91eBzMEUETSOk2Dmt6vKIEfKOyvA5mGLitGqxc1vx8hxWbUd1H8IUFGw1YwfGN62vGvUNVeGy0/deE4kRjsgpVnWBxAj7idXF4MAoVnfkNKu0QNWqbKcGj4MpMGgaIQVONxq0wGzVdlNSD5MpNE6rFjgwbitE3ajvJoFDzRQbbDXjJlvlJTqNsJkSPBYKDhIj1LA5jZSWOFvlvSQeTgqPYtXDRozuNSI1OrcSq4Ob4oOGEVLUTKNzkW4j2UoN9pMjpFpdUQPjvEin0dhK00GmCGE10qApRkqLnI2wkyrsG4UIiRFqzJxGfZXIKm+kbjcoSLJVjxkxasvUjeo+SrAvUULDCClkutGxTJdR20fNTihMqtUVMjDmZapGfR9NM+U4YTXSiGEjpWXORnMbZZg3ihMSI9SAKUZ9ncgI2+g0U46UbDUCphq1hepGeRcNs0aRQt0IOV6aUV0oMSqbiGGtHCvVSuLlNioL1YzOTVTNLooVUiPlcOlGvFCHUdtEYpai5TJCDRc1ooUuRvcmGlaDoiVZjXCBbV8pMup7iGFdw4W6EXKw8C4Ze6iYcbxUKwmWYtSWqttgDzWrTvFCaqT8e4FYnRFzGeGMlWp0LNVllLZQt8oRk6xmrDSjslTNqGwhWFPEUDdC+VsBW/WYOawkkHipjv1VrK6YoWkEjhQxoqUuRnWDnUHTrM5I6duk7aDTqgRNspq/FDSrHDR0G6H8ykBRc1hJFPW1or81aBqBf9NrVu03vWQ1f9MjMcLxm16xun/To2mE9JveadV+X8iBw1YzhOZa5f11WpXAITHCEUFYq7K/itUZOcXq/nWhRQ5NI6QYuf+kYaseOqdVi5G2TcoOIisNHbbSCCpL1TZYN0KOHBIj1F8HbqszdLJVD5Fzm+Qt1Kzu0KFhhBQhxagtVTeiLVSswKFTra7fBtishg6rkUZIMrqXSm10D9G0ukOHxAg1QMioLxVs+yYSK6TQyVY9fOZK5S1WzVro0DBCCpBug5UqRm0TJTPl0KlWV/jkhWpbjIYVauiwGinHRzM6FuoyOnbRZTZDh8QINXraQnWjsouyGc7QSVYjPorRvVBqRLuIpply5FA3Qg6PbDTWKcFW99Flhit0qpWEBxlhnYpR30fJDjlySI2Uw2MYlWVqRtc+omHXQ+cyQg2P2+hcptvo3EjVDmfkJKsRHs1IlkmNykZitdMcONSNkKOjGM1VSjDmjUTNDiNyqpVERzJCWqRqNGknJQeQwCE1Ug4OUqO6SGJ0byUSB6iBcxnhjI5uJIs0jdpeSh40x02ymtHRjOYaJRiXvUTiAMphQ7cRSnAUI6Qlqla0mZIHDA6bw0qCg63qEt1GYzfR5QEjbGgagWODhtG9RGp0bSdWD5CwaVZncFxGWKEC42M70ekCEjXJagbHYXUs0GXF+4mGC0jQ0G2EEhtsJQs0jQZtqOIDEjSHlcQGDSNdnwzja0fR5QMSMzSNwLFxGeFYnsvq2FI8fUBiplm12ChWsjzTircUFSeQkGGrGRukRro6GcY37Sm6nEAihsQIR2zcRjgWR6zOXUXDCSRiitUdG9XqXhy1StsqqRNIwNA0QgoNtkJamgrjQduKDi+QgDmtWmhQtzqXpltdG4uaF0i8sNWMjdNqrkyCdd5ZJF4g4UJihCM0khWOhbmsJm0tHl4g4VKs7tCgbtXXhdXq2lvE0wskWmgaIYVGtUJalgrrtLkoqxdItJxWLTTYTJZlWg3aXZTVCyRYWI00NOi2Ai/KAetzf1FWL5BYITFCDY3DrC1KN+MNRlm9QGIlW/XQoGmlvCQF1jftMMrqBRIqNIyQQuOyQluSbnbsMcrqBRIq1eoKjWSmvCAF1pM2GWX1AokUViMNDepWaAvSzdo2o6xeIIFCYoQaGoeZ8nIUmPM+o6xeIIGSrXpo0LTCtRzDTGijUVYvkDihYYQUGqcZ0mJUmOetRlm9QOKkWl2hwWp2rwVPs057jbJ6gYQJq5FyZNBlhrIUDebHbqOsXiBRQpcRamgku7ESSc0mbTfK6gUSJclqhAaJGc6FuGFeNxxl9QIJEupGyKGR7JSX4YD5pB1HWb1AgqRaSWiQmOFeBZ52dc9RVi+QGCE1Ug6NZIdjES6YT9p0lNULJEYuI9TQILGbvAQF9nXbUVYvkBBJViM2kh2uFeBpN2nfUVYvkAihboQcGiR2OBbggn3decTDCyRCqpXERlI75c9XYD9p6xEPL5AAoWkEDg1qdri/HquDsvmIhxdIgDSrMzZY7XB+vBv2nXYf8fACiY9kNWODqgPkT3fCYd5/xMMLJDzoNkKJDRoOJn+4DIcXBQDx8AIJj8NKgqM4wP3deDpQDgHi4QUSHTSNwLFB4gDts3U4PCkGiIcXSHQ0qzM4WB3g+GgXHHaKAuLhBRIcyWoGB50eNH+yCo85DoiHF0hs0G2EEhzUHWDyB8vweFEgEA8vkNg4rCQ6sgcM/lxZPUwOBeLhBRIaNI2QgoOaB9xfiyc8FooF4uEFEhqnVYsOGh4g34oHPF4UDcTDCyQy2GqGR3YB+VI84HFyPBAPL5DAIDHCER3UXOD8UDdcFgoI4uEFEhjF6g4P6i5QP5PAZaOQIB5eIHFB0wjpQecmS+oC9SMJXA4KCmpcIHFxWrUHtU1Ghw/UTyRwqSksqHGBhAVbzfigywfq92GBz0pxQY0LJCpIjHA85zKijUTDB+Tr8IBPocigxgUSFcWqP6fvs6Q+IN+GB3wOjg1qXCBBQdMI+TFzn9HhBDd/mDzgUxMFBzUukKCoVvIUhm3fS9ScYPBnyQqnhcKDGhdITLAaIT2kbDW6nWDmj1IVTk8KEGpcICFBYiUPaUbXbuLhBHp8kgavQiFCjQvOkMhWyM/oRm03UVInQPsefMProCChxgU1ImhY9UcwjMt2oqxecPPHyANeJ4cJNS6oEVGtcDyhWqX9RNUNZv4UVeFVM8UJNS6oAcFqNfkBt5HShqLqBji/Awv8ZooUalxQ44HECs1fgnHfUiR+cPNHyAN+K8UKNS6o8ZDNkN01q7anSPxAj0/Q4LhStFDjghoO1M2GN1arsqlI/AA3/3hpwHGleKHGBTUcqhkuZw3WtKtoOIIeP1yDZ6GIocYFNRpomuFwlWB97ysejoA7/WBlwLNQzFDjghoN1U6zp2527ivi4Ql6/lR8wbVQ1FDjghoMNM0w2E+DedpYxMMTMMuPdCpcC8UNNS6owVDtMNhLgfmgnUU8XAE9/ThlwrdQ5FDjghoLNO1wO8lqd+4t4tsXIOlHKR3OL4odalxQY6E6wM0essKeNxeROAMa/xjphvdK0UONC2ooUHeAwXZZYX/T9iLxBr3Sj5AF7ivFDzUuqKFQPGBmq6pweGwwat4ASHq90uFeK0UQNS6okUDiAThN+IbHSTuMqj/gLq9WB/xrphiixgtqJLC6QM//3KlwWfcYHeoPmJVfKjXFA0emKKKGF9RAoNMHIOkf4TrhU3mTUZ4PAFTKCx03HjmY4ggeXlADgboTQI7/0yEKr412GfF4AoDZ0qtkUTxTaJveEfHwghoISb0Aep+F/5t8tA7Hk/cZkTwDwDjTS+Rr4qmVgol4eEGNAzr9PLfSTqP6FADzKk/jQxSP1UzhRDy8oMYB9bcbtNcoz8cA0PvMjymt48mDKaCIhxfUOGB9ubLbiPuD/qverbCzdLSOh1+0V++J+PaCGgZU3k1ouxG1Z/23825HdlFq64rH60FRRSReUMOA2psp7zjK83H//exXq6XwP5BKOZt0xTt2psAi8YIaBnS/2EFbjlje4X89+v888bYn7de7IvGCGgY8XuuiTUd06Mu898gUXSReUKOAkr7U4H1HfH+iRlv2tki8oEYBZX0lTbTxiA79PCNTiJF4QY0Cyq9UaO8Ry7fRRrv2vki8oEYB1ReqtPuIyvwwPVGckXhBjQKqr9MoAIiafpR50Ma9MRIvOKKA6ssIxQAl+SLamIKNxIvmKKCsbyIUBUSlfw5JtHfvjMQJNEcBZX2PiwKB6JifomfavZdG4gSao4B4vEWlWCCq8zP0Qvv31kicQHMUEMsr6EHhQFTnJ5iFdvC1kTiB5iggOl9gZIoIojp/vH7QHr43EifQHAaU59OEKSiI6vzReqFdfHEkTqA5DIivR+lB33uhiI7+Y0mmfXxzJE6gOQyIynjOzRQbRFl+Im2JdvLVkTiB5jggavqMWeiTLxYRn/OH6ZU2892ROIGmQCC+HjArffTlIqIiP4deibbzx+eXyOehywnyq2Q1qW8nJpo/ElESZ7PSZ89qUteEiGv/EeSgLf3x4wtP+sB8Npf0rrkZHvT6ZzPM9KG5TT+90pfPzfCghU3neLm7Mv1Vftwu5pUpaNPZX+uuTH+fc73VZlyZQper6OvM66C/10u79Z/pV00Uwbn199D7TPTXO5fapP/Pd2slUyiXduvj5n1m+i0+1avrQ2ZvB9Ov86k06epo9ussTL/al9Ka9K7/2Oz9amfJ9Ls+l/87/b//4//4P/6P/+P/+D/+j//j//g//o//4//4P/6P/+P/+D/+j//j//g//o//4//4P/6P/+P/+D/+j//j//g//o//4//4P/6P/+P/+D/+/+MbAFZQOCD2CQAA0AYBnQEqCgYTAj5JJI9FoqIhEm+0ACgEhLS3cLtPLH8A/AD9APrtgB+e+Ugdf1ZM2PczH8AfwD8APwA/f3v8CpNybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm5Nybk3JuTcm3697Oz02JuTb9e9nZ2gplr5W3Z2emxNyOlkPYheb5d+IGVJvuSaMJn5+Y5j5CvzHO+ZQ95ohMJaIsKMJaIp10Kvz8xyXZ2KWJVnNufuEdk7J2TsnZOyYd8z10QMmZdcGQqGjyLt60KBqFe3gVdHJToILgRsyc7J2Lj73FnAzGQMZAxkDGQL16zPu3CyMMZk/1quVqxtVwsk0YYwxhjDDFILd9yTGZdcGVuCL0P0pBbvuPDX8X3OQZENaK/LWVvV0fxPiYV/pxF0x+eURYU9bfazbrtGfWoo8SxBpDLm8WWQ93mVIlWUPeW2RfjmNd/r6bLJ8T4nxPieiqgNg3Aqb6IWk5XknYuSNcJNfNBM9C7GROJ06dRfck0MZnH8T4nop+P4nxPPqBoc6l8H4kpwmLuYtMkRVU7jXf6+myyfE+J8T4mEyWeuhXt4FXVa5BEzujCfZlQnOlfKFGQR0yHIknicT0XJvXRAzDGZx/E+JdIImWwm3EmWzsnSQ1AtjmZ3bX0ab1sm5Nybk3Atkvvtnt4FXPtBbUQMn2ZUJzpXynPxrNKe6Lptg3BpdNSIF2TpZajYm5NSZoCizSLE8LbJuTU2Mdmhq/1A1EDMYYwwxR9ZcIF2qoWe3gVdm9JtTXzfVfqAcfe+2dju3J1A3LdIkYYYzOP4nxPRcm9dEDJ9a1ThMYYwxhOQ5ElBsm2p8T4nxPhJCvs08FIgB/1uOSdk7FyRrhJr5ovDZIJbcUHCRAullqNibk3AxXhTDF1fAkrdd6IGYwxhNsd25OoG5bpEjDGGMMYT7MqEA//F2Lt4FXZlJNGGLt8BKk8JHhLmvfbbMVVcubGMdPYNwbgZ8i/UC6V+d77kmjDGGGMzj+J8T4nxPRVQGtjYC1AM+J8JIV9mxdvN9MwNGy0rXijvGdLLUbE3JuBivCmGLt8BKk8T4nxPhJoffck0YYwxdvgJT8hXehmgJUM+J8TCZLPXQtrY2Jt/R/bjkPG/roW6akQLsnSy1GxNyQN/JIgXZOydkxAltQDPifE+JhMlnm/6AKHTzV22Tcmqx0UKYT62WRuR4D0B1prGkl+50stRsTcm4GK8KYYu3wEqTxPifE8627HkX6gXZOydkw8S82AClIlZr4WUeUq6ydk6WAgsUpbZ0fxPhJoXFCC4nMQJbUAz4mFf6gah+oI6ZDkSTxOJ8T4mEyWNbY2xtjbGMLVDYDX3+vptfzwzQNk2JuTVY6KFMJ9bLI3JqbGOmXtDYkEt++5Jou4kEubG17MBqWzh5hanxPiedbdenVCWLcaMMYYwxdvgJUnRlbPX02xp0APPPcJNqW2yX33HrJvXRArmq/msrT5ei5N66IGYYzOP4nxLy/uQOmQ5FrXnYm5NyO9VTAjgF6bLDPifE+J6KqA2DbZjInE6dKOgB537FKa+b6r9QDj8HG4CAUwGpa0HmFXqBofO2oBnxMK/1A1EDJrNKe6WLMAK6rqqRKoGTMutFOXrZxeaicT4nxPieiqgNg3A0Xd0ab3HlGoFtSeuhbZlQnOlfKFMMYTbHduD5DkWte5CoEubG2MY6ewbg3A0Xd0ab3CD+zrr1e6BZZD2IXnAjBi969hAuydk7J2LkjXCTaluvv9fTa/nhmgeau2VjooUwn1ssjcm5HaxpJf7CRhbh+JKZlnxPhJoffck0YT/nb1qL4JorSVoKgQIYDST6icT4nxPifEuHVjH9ajKgaiBXMYdFoSktRi3h5H/BYagX/iu9JroytSyUqaot1k+J6MrZ61E3d9arLrRTl7PFPifE89A7lY/EhagKhk7J2TpbFOuvUCiBqJqJnpeVThMYYwxhjDGGMMYYwxhjDGGMMYYwxhjDGGMMXc2Me/am1NqbU2ptTam1Npjnh7zRD6/gIF2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2TsnZOydk7J2KAAA/rsQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVy49XVXUeXRoRuCweNrZ2Ia7k1JdIFx9c97RZkbyU90QH7joFDHeue94JolQadbwSO90+pe6fViyWCNNY4fCQGQqspDvckYhLoVd8e/uGB9jYDGGW3kdJpumumVzVl5Ke48y1/5xwEJMjeSnuSMTf/dClabSPCTrUhN2qHJzGvGSg+5Q958VMd4I6aJQ3uQ0Tf/dCOrVDkHcBDJkbyU9yGiaRPAcKu2kO5YACJ9iQDrnbuAoTV65VV/ig306u5X958UVtygwcFjx/Xgr//5eXAoPNNYvrvPio3wLDEO4Gy899xUBcst1X+uCODhklW8oOaC0aM+HwzNOVMBAgREUAGHKG0dwLQBACSBUgIq1sAS0oO4BCzRPJEExCCAQ+0j3kp44xNincC/yg7AEKGBbFUTAAKYQxuJ2AU4MJq8rUCUWn//y8uBSpBuyg2K8kuK+hW8MtptC2bVbeoB4F82AKQGq4N9Awe8+KmO9tkMlII4G5UUTfeavvAnm8jpRze/aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARVhJRroAAABFeGlmAABJSSoACAAAAAYAEgEDAAEAAAABAAAAGgEFAAEAAABWAAAAGwEFAAEAAABeAAAAKAEDAAEAAAACAAAAEwIDAAEAAAABAAAAaYcEAAEAAABmAAAAAAAAAN+TBADoAwAA35MEAOgDAAAGAACQBwAEAAAAMDIxMAGRBwAEAAAAAQIDAACgBwAEAAAAMDEwMAGgAwABAAAA//8AAAKgBAABAAAACgYAAAOgBAABAAAAEwIAAAAAAAA=" alt="KINTO">
+            <h1>Search Performance Report</h1>
+            <div class="sub">kinto-europe.com &nbsp;|&nbsp; Post-implementation review of the SEO audit programme</div>
+        </div>
+        <div class="period">
+            Reporting period: January to August 2026<br>
+            Changes live: April to June 2026<br>
+            Prepared: 25 August 2026
+        </div>
+    </div>
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Executive Summary</div>
+        <h2>The technical foundations from the audit are live, and Google's response is measurable</h2>
+        <p class="lede">Between April and June the development team delivered four of the audit's structural recommendations on the EU store: canonical product links, the removal of 9,539 redirect chains, an automated hreflang sitemap, and self-referencing canonicals on product variants with matching schema. The clearest result is that Google can now see far more of the catalogue. Search terms reaching product variant pages have grown six-fold, over 7,000 new keywords have appeared since the changes went live, non-brand impressions moved ahead of last year in August for the first time in 2026, and August conversion from organic traffic is 26% higher than last August.</p>
+        <div class="stat-grid">
+            <div class="stat">
+                <div class="label">Search terms reaching variant pages</div>
+                <div class="value pos">+499%</div>
+                <div class="detail">553 before the change, 3,313 after (Jun to Aug vs Feb to Apr)</div>
+            </div>
+            <div class="stat">
+                <div class="label">New keywords gained</div>
+                <div class="value pos">7,373</div>
+                <div class="detail">Queries the site now appears for that it did not before the changes</div>
+            </div>
+            <div class="stat">
+                <div class="label">Non-brand impressions, August</div>
+                <div class="value pos">+13% YoY</div>
+                <div class="detail">First year on year growth in 2026, after trailing by 24% in May</div>
+            </div>
+            <div class="stat">
+                <div class="label">Revenue per organic session</div>
+                <div class="value pos">+63%</div>
+                <div class="detail">&euro;1.82 in January to &euro;2.98 in July, conversion rate up 54%</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- WHAT CHANGED -->
+<div class="section">
+    <div class="container">
+        <div class="overline">The Programme</div>
+        <h2>Four structural changes, delivered in three months</h2>
+        <p class="lede">Every change below came directly from the audit's priority list. Because they are structural rather than cosmetic, their effects compound: cleaner crawling feeds better indexing, which feeds more rankings.</p>
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="date">7 April</div>
+                <h3>Redirect chains eliminated</h3>
+                <p>The search modal colour swatches were rebuilt to link directly to products, removing all 9,539 redirect chains on the EU store and freeing crawl budget for real pages.</p>
+            </div>
+            <div class="tl-item">
+                <div class="date">7 &amp; 23 April</div>
+                <h3>Canonical links and hreflang</h3>
+                <p>Collection pages now pass link equity to canonical product URLs, and an automated hreflang sitemap connects the EU store's four language versions and the UK store.</p>
+            </div>
+            <div class="tl-item">
+                <div class="date">28 May</div>
+                <h3>Variants made indexable</h3>
+                <p>Colour and size variants received self-referencing canonicals, giving Google a dedicated page for every variant for the first time.</p>
+            </div>
+            <div class="tl-item">
+                <div class="date">11 June</div>
+                <h3>Variant-aware schema</h3>
+                <p>Product schema and social metadata were updated so each variant page describes itself accurately to Google's shopping and AI systems.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VARIANT WIN -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Result 01 &nbsp;&middot;&nbsp; Variant Indexing <span class="pill g">Headline result</span></div>
+        <h2>The catalogue Google can rank has tripled in visibility</h2>
+        <p class="lede">This was the audit's largest identified opportunity: shoppers search by colour, size and material, but every variant URL pointed Google back to a single base product. Within days of the May change, Google began indexing variants. Impressions to variant pages have risen from around 3,000 a month to 80,000, and clicks have grown eight-fold.</p>
+
+        <figure class="fig">
+            <div class="fig-title">Monthly impressions to variant pages</div>
+            <div class="fig-sub">Google Search Console, kinto-europe.com, January to 21 August 2026</div>
+            <div class="chart-wrap">
+            <svg viewBox="0 0 960 300" width="100%" style="max-width:960px; font-family:'Work Sans',sans-serif;">
+                <!-- gridlines -->
+                <g stroke="#e5e5e3" stroke-width="1">
+                    <line x1="60" y1="250" x2="940" y2="250"/>
+                    <line x1="60" y1="175" x2="940" y2="175" stroke-dasharray="2 4"/>
+                    <line x1="60" y1="100" x2="940" y2="100" stroke-dasharray="2 4"/>
+                    <line x1="60" y1="25" x2="940" y2="25" stroke-dasharray="2 4"/>
+                </g>
+                <g font-size="11" fill="#999999" text-anchor="end">
+                    <text x="52" y="254">0</text>
+                    <text x="52" y="179">30K</text>
+                    <text x="52" y="104">60K</text>
+                    <text x="52" y="29">90K</text>
+                </g>
+                <!-- bars: scale 90000 -> 225px; x slots at 60 + i*110, width 62 -->
+                <g>
+                    <rect class="bar" x="84"  y="244.6" width="62" height="5.4"  rx="2" fill="#c9c9c7"><title>January: 2,172</title></rect>
+                    <rect class="bar" x="194" y="244.6" width="62" height="5.4"  rx="2" fill="#c9c9c7"><title>February: 2,160</title></rect>
+                    <rect class="bar" x="304" y="240.1" width="62" height="9.9"  rx="2" fill="#c9c9c7"><title>March: 3,976</title></rect>
+                    <rect class="bar" x="414" y="243.8" width="62" height="6.2"  rx="2" fill="#c9c9c7"><title>April: 2,490</title></rect>
+                    <rect class="bar" x="524" y="241.8" width="62" height="8.2"  rx="2" fill="#c9c9c7"><title>May: 3,280</title></rect>
+                    <rect class="bar" x="634" y="145.6" width="62" height="104.4" rx="2" fill="#1e7a4f"><title>June: 41,758</title></rect>
+                    <rect class="bar" x="744" y="49.7"  width="62" height="200.3" rx="2" fill="#1e7a4f"><title>July: 80,107</title></rect>
+                    <rect class="bar" x="854" y="67.2"  width="62" height="182.8" rx="2" fill="#1e7a4f" fill-opacity="0.55"><title>August 1 to 21: 73,107</title></rect>
+                </g>
+                <!-- change marker between May and June -->
+                <line x1="612" y1="12" x2="612" y2="250" stroke="#333333" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="606" y="14" font-size="10.5" fill="#333333" text-anchor="end" font-weight="600">Variants indexable, 28 May</text>
+                <!-- direct labels -->
+                <g font-size="11.5" fill="#333333" text-anchor="middle" font-weight="600">
+                    <text x="555" y="234">3.3K</text>
+                    <text x="665" y="138">41.8K</text>
+                    <text x="775" y="42">80.1K</text>
+                    <text x="885" y="60">73.1K*</text>
+                </g>
+                <!-- month labels -->
+                <g font-size="11" fill="#999999" text-anchor="middle">
+                    <text x="115" y="270">Jan</text><text x="225" y="270">Feb</text><text x="335" y="270">Mar</text>
+                    <text x="445" y="270">Apr</text><text x="555" y="270">May</text><text x="665" y="270">Jun</text>
+                    <text x="775" y="270">Jul</text><text x="885" y="270">Aug*</text>
+                </g>
+            </svg>
+            </div>
+            <figcaption>*August covers 1 to 21 August only. On its current pace August will be the strongest month yet at roughly 104,000 impressions.</figcaption>
+        </figure>
+
+        <div class="stat-grid">
+            <div class="stat">
+                <div class="label">Variant pages earning impressions</div>
+                <div class="value pos">1,589</div>
+                <div class="detail">Up from an average of 535 a month before the change</div>
+            </div>
+            <div class="stat">
+                <div class="label">Monthly clicks to variant pages</div>
+                <div class="value pos">1,533</div>
+                <div class="detail">July figure, up from an average of 175 before the change</div>
+            </div>
+            <div class="stat">
+                <div class="label">Search terms reaching variant pages</div>
+                <div class="value pos">3,313</div>
+                <div class="detail">553 in the pre-change period. Six times the search coverage</div>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div>
+                <h3 style="font-size:0.95rem; font-weight:600; color:var(--kinto-dark); margin-bottom:0.5rem;">Colour searches now land on colour pages</h3>
+                <p style="font-size:0.9rem; font-weight:300;">The exact behaviour the audit predicted is now visible in the data: 119 colour-modified search terms appeared for the first time, and several already rank at position 1.</p>
+                <div class="tbl-wrap">
+                <table class="data">
+                    <tr><th>New colour search term</th><th class="num">Position</th></tr>
+                    <tr><td>kinto brewer 2 cups - black</td><td class="num">1.0</td></tr>
+                    <tr><td>astar to go - wasserflasche - gelb 480 ml <span style="color:var(--kinto-gray)">(DE)</span></td><td class="num">1.0</td></tr>
+                    <tr><td>kinto - gobelet d'eau 550ml deep navy one size navy blue <span style="color:var(--kinto-gray)">(FR)</span></td><td class="num">1.0</td></tr>
+                    <tr><td>kinto water bottle 500ml green</td><td class="num">2.4</td></tr>
+                    <tr><td>kinto travel tumbler 350ml white</td><td class="num">2.5</td></tr>
+                    <tr><td>kinto travel tumbler 350ml sand beige</td><td class="num">2.9</td></tr>
+                </table>
+                </div>
+            </div>
+            <div>
+                <h3 style="font-size:0.95rem; font-weight:600; color:var(--kinto-dark); margin-bottom:0.5rem;">Size and model searches too</h3>
+                <p style="font-size:0.9rem; font-weight:300;">Variant pages are also capturing size-specific and model-specific demand that previously had no landing page.</p>
+                <div class="tbl-wrap">
+                <table class="data">
+                    <tr><th>Search term on variant pages</th><th class="num">Clicks</th><th class="num">Position</th></tr>
+                    <tr><td>kinto active bottle</td><td class="num">37</td><td class="num">3.8</td></tr>
+                    <tr><td>kinto water bottle 950ml</td><td class="num">29</td><td class="num">5.9</td></tr>
+                    <tr><td>kinto travel tumbler 350ml</td><td class="num">26</td><td class="num">3.5</td></tr>
+                    <tr><td>300ml water bottle</td><td class="num">13</td><td class="num">3.3</td></tr>
+                    <tr><td>unimug</td><td class="num">13</td><td class="num">4.9</td></tr>
+                    <tr><td>donabe induction</td><td class="num">43</td><td class="num">3.3</td></tr>
+                </table>
+                </div>
+            </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--kinto-gray); margin-top:1rem; font-weight:300;">Queries in these tables are exact strings from the Search Console API's full query set (up to 25,000 rows per period). Low-click queries may not appear in the Search Console interface, which displays at most 1,000 rows; to locate one, use a "queries containing" filter with the date range set to 1 June through 21 August 2026.</p>
+    </div>
+</div>
+
+<!-- NON BRAND -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Result 02 &nbsp;&middot;&nbsp; Non-Brand Reach</div>
+        <h2>Kinto is being found by people who were not searching for Kinto</h2>
+        <p class="lede">Brand demand is stable, which is expected for a loved brand. The growth is all in non-brand discovery: impressions for generic product searches rose from 146,000 in January to 207,000 in July, and non-brand searches now account for 70% of query-reported impressions, up from 57% in January. The seasonality-adjusted view is even clearer: against the same months last year, non-brand impressions went from 24% behind in May to level in July and 13% ahead in the first three weeks of August, the first year on year growth in 2026. This is the store starting to compete for new customers, not just serving existing ones.</p>
+
+        <figure class="fig">
+            <div class="fig-title">Monthly impressions, brand vs non-brand</div>
+            <div class="fig-sub">Google Search Console, kinto-europe.com, January to July 2026 (full months)</div>
+            <div class="legend">
+                <span><i style="background:#1e7a4f"></i> Non-brand searches</span>
+                <span><i style="background:#3a6ea5"></i> Brand searches</span>
+            </div>
+            <div class="chart-wrap">
+            <svg viewBox="0 0 960 290" width="100%" style="max-width:960px; font-family:'Work Sans',sans-serif;">
+                <g stroke="#e5e5e3" stroke-width="1">
+                    <line x1="60" y1="250" x2="880" y2="250"/>
+                    <line x1="60" y1="167" x2="880" y2="167" stroke-dasharray="2 4"/>
+                    <line x1="60" y1="84" x2="880" y2="84" stroke-dasharray="2 4"/>
+                </g>
+                <g font-size="11" fill="#999999" text-anchor="end">
+                    <text x="52" y="254">0</text>
+                    <text x="52" y="171">125K</text>
+                    <text x="52" y="88">250K</text>
+                </g>
+                <!-- x: 100 + i*126.6 (Jan..Jul), y = 250 - v/250000*166 -->
+                <!-- nonbrand: 146253,141566,206337,249050,179147,154027,207114 -->
+                <polyline fill="none" stroke="#1e7a4f" stroke-width="2.5" points="100,152.9 226,156 353,113 479,84.6 606,131 732,147.7 859,112.5"/>
+                <!-- brand: 108764,87258,90835,89969,97814,88764,87360 -->
+                <polyline fill="none" stroke="#3a6ea5" stroke-width="2.5" points="100,177.8 226,192.1 353,189.7 479,190.3 606,185.1 732,191.1 859,192"/>
+                <g fill="#1e7a4f">
+                    <circle class="pt" cx="100" cy="152.9" r="4"><title>Jan non-brand: 146,253</title></circle>
+                    <circle class="pt" cx="226" cy="156" r="4"><title>Feb non-brand: 141,566</title></circle>
+                    <circle class="pt" cx="353" cy="113" r="4"><title>Mar non-brand: 206,337</title></circle>
+                    <circle class="pt" cx="479" cy="84.6" r="4"><title>Apr non-brand: 249,050</title></circle>
+                    <circle class="pt" cx="606" cy="131" r="4"><title>May non-brand: 179,147</title></circle>
+                    <circle class="pt" cx="732" cy="147.7" r="4"><title>Jun non-brand: 154,027</title></circle>
+                    <circle class="pt" cx="859" cy="112.5" r="4.5" stroke="#ffffff" stroke-width="2"><title>Jul non-brand: 207,114</title></circle>
+                </g>
+                <g fill="#3a6ea5">
+                    <circle class="pt" cx="100" cy="177.8" r="4"><title>Jan brand: 108,764</title></circle>
+                    <circle class="pt" cx="226" cy="192.1" r="4"><title>Feb brand: 87,258</title></circle>
+                    <circle class="pt" cx="353" cy="189.7" r="4"><title>Mar brand: 90,835</title></circle>
+                    <circle class="pt" cx="479" cy="190.3" r="4"><title>Apr brand: 89,969</title></circle>
+                    <circle class="pt" cx="606" cy="185.1" r="4"><title>May brand: 97,814</title></circle>
+                    <circle class="pt" cx="732" cy="191.1" r="4"><title>Jun brand: 88,764</title></circle>
+                    <circle class="pt" cx="859" cy="192" r="4.5" stroke="#ffffff" stroke-width="2"><title>Jul brand: 87,360</title></circle>
+                </g>
+                <text x="890" y="116" font-size="11.5" fill="#1e7a4f" font-weight="600">207K</text>
+                <text x="890" y="196" font-size="11.5" fill="#3a6ea5" font-weight="600">87K</text>
+                <g font-size="11" fill="#999999" text-anchor="middle">
+                    <text x="100" y="272">Jan</text><text x="226" y="272">Feb</text><text x="353" y="272">Mar</text>
+                    <text x="479" y="272">Apr</text><text x="606" y="272">May</text><text x="732" y="272">Jun</text><text x="859" y="272">Jul</text>
+                </g>
+            </svg>
+            </div>
+            <figcaption>Non-brand impressions climbed as soon as the April crawling fixes went live, and July's 207K is 42% above January. Brand impressions are steady around 90K.</figcaption>
+        </figure>
+
+        <div class="callout">
+            <strong>Why impressions lead clicks.</strong> Impressions are the leading indicator: Google shows a page, measures engagement, then promotes it. The 7,373 new keywords currently average position 8 or below. The next phase of the roadmap, collection page headings and descriptions, exists precisely to convert this new visibility into top-3 positions and clicks. The 135 EU-market keywords the audit identified within striking distance of the top 3 are still there waiting for that on-page layer.
+        </div>
+    </div>
+</div>
+
+<!-- RICH RESULTS -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Result 03 &nbsp;&middot;&nbsp; Richer Listings</div>
+        <h2>Kinto listings now show prices where they used to show plain links</h2>
+        <p class="lede">The audit showed competitors winning attention with rich results while Kinto appeared as a plain blue link. Since the June schema update, that has begun to reverse, and Merchant Centre confirms it from Google's own shopping data. Free product listings had been in steep decline all year, down 95% year on year in January before the programme began. Since April they have recovered month after month, a climb with no seasonal precedent: over the same April to July stretch last year, free listing impressions were flat. August is the first month of year on year growth. The feed now carries 751 variant-level listings with colour and size in the title, in local languages, and those listings earned every free-listing click this year.</p>
+        <div class="stat-grid">
+            <div class="stat">
+                <div class="label">Free listing impressions since April</div>
+                <div class="value pos">+117%</div>
+                <div class="detail">1,224 in April to 2,655 in July, climbing every month (Merchant Centre)</div>
+            </div>
+            <div class="stat">
+                <div class="label">August, year on year</div>
+                <div class="value pos">+47%</div>
+                <div class="detail">First month of year on year impression growth in 2026, with clicks up 39% (Merchant Centre)</div>
+            </div>
+            <div class="stat">
+                <div class="label">Free listing click-through rate</div>
+                <div class="value pos">11.1%</div>
+                <div class="detail">Up from 2.5% in the same period last year, a 4.5x improvement</div>
+            </div>
+            <div class="stat">
+                <div class="label">Merchant listing impressions, August</div>
+                <div class="value pos">Record</div>
+                <div class="detail">2,619 in the first three weeks of August in Search Console, more than any full month in the past 15 months, including last December's Christmas peak</div>
+            </div>
+            <div class="stat">
+                <div class="label">Prices in search results</div>
+                <div class="value pos">Live</div>
+                <div class="detail">Travel Tumbler now shows &pound;32.07 directly in UK search results</div>
+            </div>
+            <div class="stat">
+                <div class="label">Shopping carousel presence</div>
+                <div class="value pos">4.9&#9733;</div>
+                <div class="detail">Kinto Travel Tumbler appears in Google's Popular Products unit with 4.9 star stockist ratings</div>
+            </div>
+        </div>
+        <div class="callout">
+            <strong>Verified live this week:</strong> a UK search for "kinto water bottle" returns kinto-europe.com at positions 1, 2, 6, 7, 10 and 12. For "kinto travel tumbler" the store holds four page-one results including a price-annotated product listing. The remaining gap is star ratings on Kinto's own results, which needs review schema, already scoped in the roadmap.
+        </div>
+    </div>
+</div>
+
+<!-- AI -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Result 04 &nbsp;&middot;&nbsp; AI Visibility</div>
+        <h2>AI assistants are sending Kinto more shoppers every month</h2>
+        <p class="lede">Search is expanding beyond the ten blue links. AI Overviews now appear on Kinto's category terms such as "best travel tumbler" and "best reusable water bottle", and AI assistants are becoming a real acquisition channel. The structured data shipped in June is exactly what these systems read: sessions referred by ChatGPT, Gemini, Perplexity, Claude and Copilot grew 66% between January and July, and August is tracking to be the strongest month this year.</p>
+
+        <figure class="fig">
+            <div class="fig-title">Sessions referred by AI assistants</div>
+            <div class="fig-sub">GA4, kinto-europe.com, January to 21 August 2026</div>
+            <div class="chart-wrap">
+            <svg viewBox="0 0 960 290" width="100%" style="max-width:960px; font-family:'Work Sans',sans-serif;">
+                <g stroke="#e5e5e3" stroke-width="1">
+                    <line x1="60" y1="250" x2="940" y2="250"/>
+                    <line x1="60" y1="150" x2="940" y2="150" stroke-dasharray="2 4"/>
+                    <line x1="60" y1="50" x2="940" y2="50" stroke-dasharray="2 4"/>
+                </g>
+                <g font-size="11" fill="#999999" text-anchor="end">
+                    <text x="52" y="254">0</text>
+                    <text x="52" y="154">400</text>
+                    <text x="52" y="54">800</text>
+                </g>
+                <!-- scale: 800 -> 200px ; h = v/4 px -->
+                <g>
+                    <rect class="bar" x="84"  y="142.3" width="62" height="107.7" rx="2" fill="#3a6ea5"><title>January: 431</title></rect>
+                    <rect class="bar" x="194" y="122.8" width="62" height="127.2" rx="2" fill="#3a6ea5"><title>February: 509</title></rect>
+                    <rect class="bar" x="304" y="129.8" width="62" height="120.2" rx="2" fill="#3a6ea5"><title>March: 481</title></rect>
+                    <rect class="bar" x="414" y="195"   width="62" height="55"    rx="2" fill="#3a6ea5"><title>April: 220</title></rect>
+                    <rect class="bar" x="524" y="133"   width="62" height="117"   rx="2" fill="#3a6ea5"><title>May: 468</title></rect>
+                    <rect class="bar" x="634" y="107.8" width="62" height="142.2" rx="2" fill="#3a6ea5"><title>June: 569</title></rect>
+                    <rect class="bar" x="744" y="71.5"  width="62" height="178.5" rx="2" fill="#3a6ea5"><title>July: 714</title></rect>
+                    <rect class="bar" x="854" y="96.5"  width="62" height="153.5" rx="2" fill="#3a6ea5" fill-opacity="0.55"><title>August 1 to 21: 614, tracking to roughly 906</title></rect>
+                </g>
+                <g font-size="11.5" fill="#333333" text-anchor="middle" font-weight="600">
+                    <text x="115" y="136">431</text>
+                    <text x="775" y="65">714</text>
+                    <text x="885" y="90">614*</text>
+                </g>
+                <g font-size="11" fill="#999999" text-anchor="middle">
+                    <text x="115" y="270">Jan</text><text x="225" y="270">Feb</text><text x="335" y="270">Mar</text>
+                    <text x="445" y="270">Apr</text><text x="555" y="270">May</text><text x="665" y="270">Jun</text>
+                    <text x="775" y="270">Jul</text><text x="885" y="270">Aug*</text>
+                </g>
+            </svg>
+            </div>
+            <figcaption>*August covers 1 to 21 August and is tracking to roughly 900 sessions, which would be the highest month this year. ChatGPT accounts for around 90% of AI referrals year to date.</figcaption>
+        </figure>
+    </div>
+</div>
+
+<!-- QUALITY -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Result 05 &nbsp;&middot;&nbsp; Traffic Quality</div>
+        <h2>Every organic session is worth more than it was in January</h2>
+        <p class="lede">Organic traffic follows a strong seasonal curve for a gifting-led brand, peaking in November and December, so within-year movements need care. Two views tell the same story. Within 2026, conversion and revenue per session have climbed every quarter. And in the one month where a clean year on year comparison exists, August, conversion from organic traffic is 26% higher than last August (2.82% vs 2.24%) and revenue per session is 13% higher (&euro;2.05 vs &euro;1.82). Visitors arriving through search are increasingly landing on the exact product, colour and size they wanted, and they buy more often.</p>
+        <div class="stat-grid">
+            <div class="stat">
+                <div class="label">Organic conversion rate, August</div>
+                <div class="value pos">+26% YoY</div>
+                <div class="detail">2.82% vs 2.24% last August, the cleanest seasonality-adjusted comparison available</div>
+            </div>
+            <div class="stat">
+                <div class="label">Revenue per organic session</div>
+                <div class="value pos">&euro;2.98</div>
+                <div class="detail">July figure, up from &euro;1.82 in January; August is 13% ahead of last August</div>
+            </div>
+            <div class="stat">
+                <div class="label">Average order value, organic</div>
+                <div class="value pos">&euro;82.40</div>
+                <div class="detail">Up from &euro;77.70 in January</div>
+            </div>
+            <div class="stat">
+                <div class="label">Average search position</div>
+                <div class="value pos">6.7</div>
+                <div class="detail">July average across all queries, improved from 7.8 in January</div>
+            </div>
+        </div>
+        <div class="callout">
+            <strong>The trajectory has turned.</strong> Year-on-year clicks were down 12.6% in July as the site worked through the index transition. In the first three weeks of August the gap closed to 3.2%, and impressions moved ahead of last year, up 3.2% year on year. The new variant pages are still climbing the rankings; their clicks compound as positions improve.
+        </div>
+    </div>
+</div>
+
+<!-- INTERNATIONAL -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Result 06 &nbsp;&middot;&nbsp; International Foundation</div>
+        <h2>The two stores are learning to stay out of each other's way</h2>
+        <p class="lede">Before April, the EU and UK stores were invisible to each other in search and competed head-on in UK results. The automated hreflang sitemap went live on 23 April, correctly formatted and fully reciprocal, and Google is beginning to consolidate: the EU store's generic rankings in UK results have reduced sharply since spring, while the UK store's impressions have doubled since January. That is the intended shape, with each store serving its own market.</p>
+        <div class="stat-grid">
+            <div class="stat">
+                <div class="label">Hreflang coverage</div>
+                <div class="value pos">609</div>
+                <div class="detail">EU URLs annotated across en, en-GB, fr, de, nl and x-default, refreshed automatically</div>
+            </div>
+            <div class="stat">
+                <div class="label">EU generic rankings in UK results</div>
+                <div class="value">409 &rarr; 149</div>
+                <div class="detail">The EU store is being progressively withdrawn where the UK store should serve</div>
+            </div>
+            <div class="stat">
+                <div class="label">Redirect chains removed</div>
+                <div class="value pos">9,539</div>
+                <div class="detail">EU store redirect chains eliminated at source in April</div>
+            </div>
+        </div>
+        <div class="callout">
+            <strong>One addition completes this.</strong> The hreflang sitemap currently covers products, collections and pages. Adding the homepage, the single most searched page for the brand term, will let Google finish consolidating brand searches to the right store in each country.
+        </div>
+    </div>
+</div>
+
+<!-- NEXT -->
+<div class="section">
+    <div class="container">
+        <div class="overline">The Next Phase</div>
+        <h2>The foundations are earning; the next layer converts visibility into clicks</h2>
+        <p class="lede">Everything delivered so far was infrastructure. The visibility it created is the raw material for the next phase, which is where the click and revenue growth compounds.</p>
+        <div class="next-grid">
+            <div class="next-item">
+                <div class="n">1</div>
+                <h3>Collection page on-page layer</h3>
+                <p>Headings, titles and descriptions for the priority collections in all four languages. This is the unlock for the 135 keywords already within striking distance of the top 3.</p>
+            </div>
+            <div class="next-item">
+                <div class="n">2</div>
+                <h3>Homepage into the hreflang sitemap</h3>
+                <p>Completes brand-search consolidation between the EU and UK stores in every market.</p>
+            </div>
+            <div class="next-item">
+                <div class="n">3</div>
+                <h3>Review schema</h3>
+                <p>Adds star ratings to Kinto's own listings, matching the treatment stockists and marketplaces already receive.</p>
+            </div>
+            <div class="next-item">
+                <div class="n">4</div>
+                <h3>Localised category content</h3>
+                <p>Native-language landing content for high-volume category terms in Germany, France and the Netherlands, such as trinkflasche, gourde isotherme and thermosfles.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- APPENDIX -->
+<div class="section">
+    <div class="container">
+        <div class="overline">Appendix</div>
+        <h2>Monthly data</h2>
+        <div class="tbl-wrap">
+        <table class="data">
+            <tr>
+                <th>Month (2026)</th>
+                <th class="num">Impressions</th>
+                <th class="num">Clicks</th>
+                <th class="num">Avg position</th>
+                <th class="num">Variant page impressions</th>
+                <th class="num">Variant page clicks</th>
+                <th class="num">Pages with impressions</th>
+                <th class="num">AI referral sessions</th>
+                <th class="num">Free listing impressions&dagger;</th>
+            </tr>
+            <tr><td>January</td><td class="num">409,453</td><td class="num">24,646</td><td class="num">7.8</td><td class="num">2,172</td><td class="num">217</td><td class="num">3,184</td><td class="num">431</td><td class="num">1,316</td></tr>
+            <tr><td>February</td><td class="num">370,861</td><td class="num">19,676</td><td class="num">7.5</td><td class="num">2,160</td><td class="num">201</td><td class="num">3,014</td><td class="num">509</td><td class="num">1,134</td></tr>
+            <tr><td>March</td><td class="num">429,130</td><td class="num">19,416</td><td class="num">6.4</td><td class="num">3,976</td><td class="num">149</td><td class="num">3,206</td><td class="num">481</td><td class="num">1,146</td></tr>
+            <tr><td>April</td><td class="num">459,701</td><td class="num">17,784</td><td class="num">6.3</td><td class="num">2,490</td><td class="num">127</td><td class="num">3,127</td><td class="num">220</td><td class="num">1,224</td></tr>
+            <tr><td>May</td><td class="num">405,852</td><td class="num">18,812</td><td class="num">6.7</td><td class="num">3,280</td><td class="num">180</td><td class="num">2,912</td><td class="num">468</td><td class="num">1,586</td></tr>
+            <tr><td>June</td><td class="num">386,089</td><td class="num">16,408</td><td class="num">6.4</td><td class="num">41,758</td><td class="num">795</td><td class="num">3,515</td><td class="num">569</td><td class="num">2,431</td></tr>
+            <tr><td>July</td><td class="num">426,063</td><td class="num">17,539</td><td class="num">6.7</td><td class="num">80,107</td><td class="num">1,533</td><td class="num">3,395</td><td class="num">714</td><td class="num">2,655</td></tr>
+            <tr><td>August (1-21)</td><td class="num">288,379</td><td class="num">13,552</td><td class="num">6.9</td><td class="num">73,107</td><td class="num">1,340</td><td class="num">3,290</td><td class="num">614</td><td class="num">2,633</td></tr>
+        </table>
+        </div>
+        <p style="font-size:0.78rem; color:var(--kinto-gray); margin-top:0.6rem; font-weight:300;">&dagger;Free listing impressions are Google Merchant Centre organic data; the August figure covers 1 to 25 August.</p>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="container">
+        <h4>Sources and method</h4>
+        <p>Google Search Console (property https://kinto-europe.com/), GA4 (KINTO Europe property), Google Merchant Centre organic performance exports, DataForSEO SERP and rankings data, and live page verification, all retrieved 25 August 2026. Brand searches are queries containing "kinto". Pre-change and post-change comparisons use 1 February to 22 April vs 1 June to 21 August. Variant pages are URLs containing a variant parameter. Organic revenue figures are GA4 Organic Search channel. Year-on-year comparisons use matching date ranges in 2025. GA4 year on year comparisons use August, the earliest month with complete tracking in both years, and compare rates rather than absolute session counts.</p>
+    </div>
+</div>
